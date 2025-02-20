@@ -1,0 +1,153 @@
+/* 모달 오버레이 (배경) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 모달 내용 */
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 700px;
+    height: 960px;
+}
+
+/* 모달 헤더 */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.coin-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.coin-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.coin-name {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.coin-symbol {
+    font-size: 12px;
+    color: gray;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* 뉴스 섹션 */
+.news-section {
+    margin: 10px 0;
+}
+
+.news-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.news-content {
+    font-size: 14px;
+    color: gray;
+}
+
+/* 채팅 버튼 */
+.chat-section {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.chat-btn {
+    border: none;
+    background: none;
+    color: gray;
+    cursor: pointer;
+}
+
+.chat-btn:hover {
+    color: black;
+}
+
+.chat-btn-on {
+    border: none;
+    background: none;
+    color: black;
+    cursor: pointer;
+}
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.chat-message {
+    background: #f8f8f8;
+    border: none;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+}
+
+/* 댓글 입력창 */
+.chat-input {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.chat-input input {
+    flex-grow: 1;
+    border: none;
+    font-size: 14px;
+}
+
+.gpt-send-btn {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    background-image: url("/public/gpt_send_button.png");
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* 닫기 버튼 */
+.close-btn {
+    margin-left: 660px;
+    width: 28px;
+    height: 28px;
+    background-color: white;
+    background-image: url("/public/close_button.png");
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
