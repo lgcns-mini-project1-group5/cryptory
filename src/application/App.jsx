@@ -2,7 +2,7 @@ import {createBrowserRouter, Outlet, RouterProvider, useNavigate} from "react-ro
 import MainView from "../presentation/pages/main/MainView.jsx";
 import MypageView from "../presentation/pages/mypage/MypageView.jsx";
 import ChartView from "../presentation/pages/chart/ChartView.jsx";
-import PostView from "../presentation/pages/chart/post/PostView.jsx";
+import PostListView from "../presentation/pages/chart/post/PostListView.jsx";
 import AdminMainView from "../presentation/pages/admin/AdminMainView.jsx";
 import AdminCoinView from "../presentation/pages/admin/adminCoin/AdminCoinView.jsx";
 import AdminDashboardView from "../presentation/pages/admin/adminDashboard/AdminDashboardView.jsx";
@@ -14,6 +14,9 @@ import NewsView from "../presentation/pages/main/news/NewsView.jsx";
 
 import "../presentation/styles/header-style.css"
 import LoginView from "../presentation/pages/login/LoginView.jsx";
+import PostCreateView from "../presentation/pages/chart/post/PostCreateView.jsx";
+import PostEditView from "../presentation/pages/chart/post/PostEditView.jsx";
+import PostView from "../presentation/pages/chart/post/PostView.jsx";
 
 const Layout = () => {
 
@@ -30,7 +33,7 @@ const Layout = () => {
     return (<div style={websiteForm}>
         <banner className="banner">
             <header className="header">
-                <h1 className="title">Cryptory</h1>
+                <h1 className="title" onClick={() => {navigate("/")}}>Cryptory</h1>
                 {(login) && <div className="user-info">
                     <span className="username">UserName</span>
                     <button className="logout-btn">Logout</button>
@@ -46,6 +49,8 @@ const Layout = () => {
 
 const AdminLayout = () => {
 
+    const navigate = useNavigate();
+
     const websiteForm = {
         width: 1920,
         height: 1080,
@@ -56,7 +61,7 @@ const AdminLayout = () => {
     return (<div style={websiteForm}>
         <banner className="banner">
             <header className="header">
-                <h1 className="title">Cryptory</h1>
+                <h1 className="title" onClick={() => {navigate("/admin")}}>Cryptory</h1>
                 <div className="user-info">
                     <span className="username">UserName</span>
                     <button className="logout-btn">Logout</button>
@@ -72,25 +77,27 @@ const router = createBrowserRouter([
         path: '/',
         element: <Layout/>,
         children: [
-            {path: "", element: <MainView/>},
-            {path: "coin", element: <CoinView/>},
-            {path: "news", element: <NewsView/>},
-            {path: "mypage", element: <MypageView/>},
-            {path: "coin/:coinId", element: <ChartView/>},
-            {path: "post/:postId", element: <PostView/>},
-            {path: "login", element: <LoginView/>},
+            { path: "", element: <MainView/> },
+            { path: "coin", element: <CoinView/> },
+            { path: "news", element: <NewsView/> },
+            { path: "mypage", element: <MypageView/> },
+            { path: "coin/:coinId", element: <ChartView/> },
+            { path: "post", element: <PostCreateView/> },
+            { path: "post/:postId", element: <PostView/> },
+            { path: "post/edit", element: <PostEditView/> },
+            { path: "login", element: <LoginView/> },
         ]
     },
     {
         path: '/admin',
         element: <AdminLayout />,
         children: [
-            { path: "", element: <AdminMainView/>},
-            { path: "coin", element: <AdminCoinView/>},
-            { path: "coin/:coinId", element: <AdminCoinManagementView/>},
-            { path: "dashboard", element: <AdminDashboardView/>},
-            { path: "user", element: <AdminUserView/>},
-            { path: "login", element: <AdminLoginView/>},
+            { path: "", element: <AdminMainView/> },
+            { path: "coin", element: <AdminCoinView/> },
+            { path: "coin/:coinId", element: <AdminCoinManagementView/> },
+            { path: "dashboard", element: <AdminDashboardView/> },
+            { path: "user", element: <AdminUserView/> },
+            { path: "login", element: <AdminLoginView/> },
         ]
     },
 ])

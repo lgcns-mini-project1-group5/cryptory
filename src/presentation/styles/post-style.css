@@ -1,0 +1,262 @@
+/* 게시판 스타일 */
+.content {
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+/* 네비게이션 스타일 */
+.nav {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: gray;
+    font-size: 16px;
+}
+
+.nav-link.active {
+    color: black;
+    font-weight: bold;
+}
+
+/* 유저 정보 스타일 */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.username {
+    color: gray;
+}
+
+.logout-btn {
+    border: none;
+    background: none;
+    color: gray;
+    cursor: pointer;
+}
+
+/* 글쓰기 폼 스타일 */
+.write-container {
+    max-width: 500px;
+    margin: 0px auto;
+    padding: 20px;
+}
+
+/* 유저 정보 아이콘 */
+.user-info-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.user-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 입력 폼 */
+.write-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px 0 5px;
+}
+
+.title-input, .content-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.content-input {
+    height: 120px;
+    resize: none;
+}
+
+/* 버튼 그룹 */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.cancel-btn, .submit-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: white;
+    border: 1px solid #999;
+    color: black;
+}
+
+.submit-btn {
+    background: gray;
+    border: none;
+    color: white;
+}
+
+.submit-btn:hover {
+    background: black;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.username {
+    font-size: 16px;
+    color: black;
+}
+
+.date {
+    margin-top: 5px;
+    font-size: 16px;
+    color: gray;
+}
+
+/* 게시글 컨테이너 */
+.post-container {
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.post-actions {
+    margin-top: 5px;
+    margin-right: -5px;
+    display: flex;
+    gap: 8px;
+}
+
+.edit-btn, .delete-btn {
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.edit-btn {
+    width: 80px;
+    height: 25px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 2px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.delete-btn {
+    width: 80px;
+    height: 25px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 2px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+/* 댓글 리스트 */
+.comment-list {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.comment-title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* 개별 댓글 */
+.comment {
+    width: 80%;
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.mycomment {
+    margin-left: 16%;
+    width: 80%;
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #7F7F7F;
+    margin-bottom: 10px;
+}
+
+.comment-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: gray;
+}
+
+/* 댓글 입력 폼 */
+.comment-form {
+    display: flex;
+    align-items: center;
+    max-width: 600px;
+    margin: 10px auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.comment-input {
+    flex-grow: 1;
+    border: none;
+    font-size: 14px;
+    resize: none;
+}
+
+.send-btn {
+    width: 28.5px;
+    height: 28.5px;
+    background-color: white;
+    background-image: url("/public/comment_upload.png");
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
