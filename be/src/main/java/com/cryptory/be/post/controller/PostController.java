@@ -1,9 +1,6 @@
 package com.cryptory.be.post.controller;
 
-import com.cryptory.be.post.dto.CreatePostDto;
-import com.cryptory.be.post.dto.PostDetailDto;
-import com.cryptory.be.post.dto.PostDto;
-import com.cryptory.be.post.dto.UpdatePostDto;
+import com.cryptory.be.post.dto.*;
 import com.cryptory.be.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +19,14 @@ public class PostController {
 
     private final PostService postService;
 
+    @GetMapping
+    public ResponseEntity<PostListDto> getPosts(@PathVariable("coinId") Long coinId,
+                                                  @RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "10") int size) {
+        PostListDto posts = postService.getPosts(coinId, page, size);
 
-//    @GetMapping
-//    public ResponseEntity<List<PostDto>> getPosts(@PathVariable("coinId") Long coinId) {
-//        List<PostDto> posts = postService.getPosts(coinId);
-//        return ResponseEntity.ok(posts);
-//    }
+        return ResponseEntity.ok(posts);
+    }
 
     @GetMapping("/{postId}")
     public ResponseEntity<PostDetailDto> getPost(@PathVariable("coinId") Long coinId,

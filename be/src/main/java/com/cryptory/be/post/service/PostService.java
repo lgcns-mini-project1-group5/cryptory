@@ -12,6 +12,9 @@ import com.cryptory.be.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,21 +30,27 @@ public class PostService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final PostFileRepository postFileRepository;
-    private final ModelMapper modelMapper;
     private final FileUtils fileUtils;
 
-//    public List<PostDto> getPosts(Long coinId) {
-//        List<Post> posts = postRepository.findAllByCoinId(coinId);
-//
-//        return posts.stream()
-//                .filter(Post::isNotDeleted)
-//                .map(post -> new PostDto(
-//                        post.getId(),
-//                        post.getTitle(),
-//                        post.getUser().getNickname(),
-//                        DateFormat.formatDate(post.getCreatedAt())
-//                )).toList();
-//    }
+
+    public PostListDto getPosts(Long coinId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Post> postsPage = postRepository.findAllByCoinId(coinId, pageable);
+
+        List<PostDto> posts = postsPage.stream()
+                .filter(Post::isNotDeleted)
+                .map(post -> new PostDto(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getUser().getNickname(),
+                        DateFormat.formatDate(post.getCreatedAt())
+                )).toList();
+
+        long totalItems = getTotalItems(coinId);
+        int totalPages = getTotalPages(coinId, size);
+
+        return new PostListDto(posts, totalItems, totalPages);
+    }
 
     @Transactional
     public PostDto createPost(Long coinId, String nickname, CreatePostDto createPostDto, List<MultipartFile> files) {
@@ -89,9 +98,13 @@ public class PostService {
         post.delete();
     }
 
+
+    @Transactional
     public PostDetailDto getPost(Long coinId, Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
+
+        post.increaseViewCnt();
 
         List<PostFileDto> postFiles = postFileRepository.findAllByPostId(postId).stream()
                 .map(postFile -> new PostFileDto(
@@ -101,7 +114,7 @@ public class PostService {
                         DateFormat.formatDate(postFile.getCreatedAt())
                 )).toList();
 
-        return new PostDetailDto(post.getTitle(), post.getBody(), post.getUser().getNickname(), DateFormat.formatDate(post.getCreatedAt()), postFiles);
+        return new PostDetailDto(post.getTitle(), post.getBody(), post.getUser().getNickname(), DateFormat.formatDate(post.getCreatedAt()), postFiles, post.getViewCnt(), post.getLikeCnt());
     }
 
     @Transactional
@@ -112,5 +125,14 @@ public class PostService {
         post.update(updatePostDto.getTitle(), updatePostDto.getBody());
 
         // todo: 파일 업데이트(클라이언트 요청에 따라)
+    }
+
+    private long getTotalItems(Long coinId) {
+        return postRepository.countByCoinId(coinId);  // 게시글 개수 반환
+    }
+
+    private int getTotalPages(Long coinId, int size) {
+        long totalItems = getTotalItems(coinId);  // 전체 아이템 개수
+        return (int) Math.ceil((double) totalItems / size);  // 전체 아이템 수로 총 페이지 수 계산
     }
 }

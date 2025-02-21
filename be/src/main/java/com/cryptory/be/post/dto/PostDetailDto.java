@@ -16,11 +16,17 @@ public class PostDetailDto {
     private String createdAt;
     private List<PostFileDto> files;
 
-    public PostDetailDto(String title, String body, String nickname, String createdAt, List<PostFileDto> postFiles) {
+    private Long viewCnt;
+    private Long likeCnt;
+
+    public PostDetailDto(String title, String body, String nickname, String createdAt, List<PostFileDto> postFiles, Long viewCnt, Long likeCnt) {
         this.title = title;
         this.body = body;
         this.nickname = nickname;
         this.createdAt = createdAt;
         this.files = postFiles;
+
+        this.viewCnt = viewCnt;
+        this.likeCnt = likeCnt;
     }
 }
