@@ -1,5 +1,6 @@
 package com.cryptory.be.post.controller;
 
+import com.cryptory.be.post.dto.CreatePostDto;
 import com.cryptory.be.post.dto.PostDto;
 import com.cryptory.be.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,16 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-//    @PostMapping
-//    public ResponseEntity<PostDto> createPost(@PathVariable("coinId") Long coinId) {
+    @PostMapping
+    public ResponseEntity<PostDto> createPost(@PathVariable("coinId") Long coinId,
+                                                @RequestBody CreatePostDto createPostDto) {
 //        PostDto post = postService.createPost(coinId);
-//        return ResponseEntity.ok(post);
-//    }
+        return ResponseEntity.ok().build();
+    }
 
+    @PutMapping("/{postId}")
+    public ResponseEntity<PostDto> deletePost(@PathVariable("coinId") Long coinId,
+                                              @PathVariable("postId") Long postId) {
+        postService.deletePost(coinId, postId);
+    }
 }

@@ -37,9 +37,15 @@ public class PostService {
                 )).toList();
     }
 
-//    @Transactional
-//    public PostDto createPost(Long coinId) {
-//
-//
-//    }
+    @Transactional
+    public void createPost(Long coinId) {
+    }
+
+    @Transactional
+    public void deletePost(Long coinId, Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
+
+        post.delete();
+    }
 }
