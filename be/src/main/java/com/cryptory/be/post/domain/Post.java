@@ -5,6 +5,7 @@ import com.cryptory.be.global.entity.BaseTimeEntity;
 import com.cryptory.be.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,7 +38,22 @@ public class Post extends BaseTimeEntity {
 //    @JoinColumn(name = "coin_id")
 //    private Coin coin;
 
+    @Builder
+    public Post(String title, String body, User user) {
+        this.title = title;
+        this.body = body;
+        this.user = user;
+
+        this.viewCnt = 0L;
+        this.likeCnt = 0L;
+        this.isDeleted = false;
+    }
+
     public void delete() {
         this.isDeleted = true;
+    }
+
+    public boolean isNotDeleted() {
+        return !this.isDeleted;
     }
 }

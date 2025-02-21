@@ -7,34 +7,41 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/posts/{coinId}/posts")
+@RequestMapping("/api/v1/coins/{coinId}/posts")
 public class PostController {
 
     private final PostService postService;
 
 
-    @GetMapping
-    public ResponseEntity<List<PostDto>> getPosts(@PathVariable("coinId") Long coinId) {
-        List<PostDto> posts = postService.getPosts(coinId);
-        return ResponseEntity.ok(posts);
-    }
+//    @GetMapping
+//    public ResponseEntity<List<PostDto>> getPosts(@PathVariable("coinId") Long coinId) {
+//        List<PostDto> posts = postService.getPosts(coinId);
+//        return ResponseEntity.ok(posts);
+//    }
 
     @PostMapping
-    public ResponseEntity<PostDto> createPost(@PathVariable("coinId") Long coinId,
-                                                @RequestBody CreatePostDto createPostDto) {
-//        PostDto post = postService.createPost(coinId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PostDto> createPost(Principal principal,
+                                              @PathVariable("coinId") Long coinId,
+                                              @RequestPart(value = "post") CreatePostDto createPostDto,
+                                              @RequestPart List<MultipartFile> files) {
+        files.forEach(file -> log.info("file: {}", file.getOriginalFilename()));
+        PostDto post = postService.createPost(coinId, principal.getName(), createPostDto, files);
+        return ResponseEntity.ok(post);
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<PostDto> deletePost(@PathVariable("coinId") Long coinId,
-                                              @PathVariable("postId") Long postId) {
+    public ResponseEntity<?> deletePost(@PathVariable("coinId") Long coinId,
+                                        @PathVariable("postId") Long postId) {
         postService.deletePost(coinId, postId);
+
+        return ResponseEntity.ok("정상적으로 삭제되었습니다.");
     }
 }

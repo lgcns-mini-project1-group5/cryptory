@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreatePostDto {
@@ -15,6 +17,4 @@ public class CreatePostDto {
 
     @NotBlank
     private String body;
-
-    private MultipartFile image;
 }
