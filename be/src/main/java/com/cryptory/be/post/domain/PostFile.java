@@ -24,7 +24,7 @@ public class PostFile extends BaseTimeEntity {
     private String storedFilename;  // 저장 파일명
 
     @Column(nullable = false)
-    private String storedUrl;
+    private String storedDir;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
@@ -34,10 +34,10 @@ public class PostFile extends BaseTimeEntity {
     private String fileType;
 
     @Builder
-    public PostFile(String originalFilename, String storedFilename, String storedUrl, Post post, String fileType) {
+    public PostFile(String originalFilename, String storedFilename, String storedDir, Post post, String fileType) {
         this.originalFilename = originalFilename;
         this.storedFilename = storedFilename;
-        this.storedUrl = storedUrl;
+        this.storedDir = storedDir;
         this.post = post;
         this.fileType = fileType;
     }

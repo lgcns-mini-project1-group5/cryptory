@@ -5,7 +5,9 @@ import com.cryptory.be.global.util.FileUtils;
 import com.cryptory.be.post.domain.Post;
 import com.cryptory.be.post.domain.PostFile;
 import com.cryptory.be.post.dto.CreatePostDto;
+import com.cryptory.be.post.dto.PostDetailDto;
 import com.cryptory.be.post.dto.PostDto;
+import com.cryptory.be.post.dto.PostFileDto;
 import com.cryptory.be.post.repository.PostFileRepository;
 import com.cryptory.be.post.repository.PostRepository;
 import com.cryptory.be.user.domain.User;
@@ -27,7 +29,7 @@ public class PostService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-    private final PostFileRepository postImageRepository;
+    private final PostFileRepository postFileRepository;
     private final ModelMapper modelMapper;
     private final FileUtils fileUtils;
 
@@ -65,12 +67,12 @@ public class PostService {
                 PostFile postFile = PostFile.builder()
                         .originalFilename(file.getOriginalFilename())
                         .storedFilename(storedFilename)
-                        .storedUrl(fileUtils.getFilePath(storedFilename))
+                        .storedDir(fileUtils.getFilePath(storedFilename))
                         .post(post)
                         .fileType(fileType)
                         .build();
 
-                postImageRepository.save(postFile);
+                postFileRepository.save(postFile);
 
             }
         }
@@ -89,5 +91,20 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
 
         post.delete();
+    }
+
+    public PostDetailDto getPost(Long coinId, Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
+
+        List<PostFileDto> postFiles = postFileRepository.findAllByPostId(postId).stream()
+                .map(postFile -> new PostFileDto(
+                        postFile.getId(),
+                        postFile.getOriginalFilename(),
+                        postFile.getStoredDir(),
+                        DateFormat.formatDate(postFile.getCreatedAt())
+                )).toList();
+
+        return new PostDetailDto(post.getTitle(), post.getBody(), post.getUser().getNickname(), DateFormat.formatDate(post.getCreatedAt()), postFiles);
     }
 }
