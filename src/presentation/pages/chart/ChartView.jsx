@@ -4,6 +4,7 @@ import NewsView from "../main/news/NewsView.jsx";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import PostListView from "./post/PostListView.jsx";
 import ModalView from "./prompt/ModalView.jsx";
+import CandleChartCell from "./CandleChartCell.jsx";
 
 export default function ChartView() {
 
@@ -26,27 +27,27 @@ export default function ChartView() {
     }, [])
 
     return (<div className="content">
-        <div className="nav">
-            <button className="btn-on" onClick={() => {
+        <div className="chart-nav">
+            <button className="chart-btn-on" onClick={() => {
                 navigate("/")
             }}>Coin
             </button>
-            <button className="btn" onClick={() => {
+            <button className="chart-btn" onClick={() => {
                 navigate("/")
             }}>News
             </button>
         </div>
 
-        <div className="user-info-section">
-            <img src={icon} alt="User" className="user-icon"/>
-            <div>
-                <p>{name}</p>
-                <p style={{color: "gray", marginTop: -15}}>{coinId}</p>
+        <div style={{display: 'flex'}}>
+            <img src={icon} alt="User" className="chart-coin-icon"/>
+            <div className="chart-coin-card-info">
+                <p className="chart-coin-card-name">{name}</p>
+                <p className="chart-coin-card-symbol">{coinId}</p>
             </div>
         </div>
         <div style={{display: "flex", justifyContent: "space-between", width: "650px"}}>
             <div style={{width: '110px', textAlign: 'right'}}>
-                <p style={{marginTop: -25}}>
+            <p style={{marginTop: -5, fontSize: '16px', color:"#252525"}}>
                     {price.toLocaleString()}원
                 </p>
                 <p style={{marginTop: -15}} className={`change ${change >= 0 ? "positive" : "negative"}`}>
@@ -56,15 +57,16 @@ export default function ChartView() {
             </div>
 
             <div style={{width: '110px', textAlign: 'right'}}>
-                <p style={{marginTop: -25}}>
+                <p style={{marginTop: -25, fontSize: '16px', color:"#252525"}}>
                     {price.toLocaleString()}원
                 </p>
-                <p style={{marginTop: -15, fontSize: "14px", color: "gray"}}>
+                <p style={{marginTop: -12, fontSize: "12px", color: "#6C757D"}}>
                     2025.02.21
                 </p>
             </div>
         </div>
 
+        <CandleChartCell/>
         <div style={{
             width: 650,
             height: 480,
@@ -79,9 +81,9 @@ export default function ChartView() {
         </div>
 
         {(type === "news") && <>
-            <div className="nav">
-                <button className="btn-on">News</button>
-                <button className="btn" onClick={() => {
+            <div className="chart-nav">
+                <button className="chart-btn-on">News</button>
+                <button className="chart-btn" onClick={() => {
                     setType("board")
                 }}>게시판
                 </button>
@@ -90,12 +92,12 @@ export default function ChartView() {
         </>}
 
         {(type === "board") && <>
-            <div className="nav">
-                <button className="btn" onClick={() => {
+            <div className="chart-nav">
+                <button className="chart-btn" onClick={() => {
                     setType("news")
                 }}>News
                 </button>
-                <button className="btn-on">게시판</button>
+                <button className="chart-btn-on">게시판</button>
             </div>
             <PostListView name={name} symbol={coinId} icon={icon} price={price} change={change}/>
         </>}

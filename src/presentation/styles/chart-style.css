@@ -1,22 +1,24 @@
-.btn {
+.chart-btn {
     border: none;
     background: none;
-    color: gray;
+    color: #C2C2C2;
     cursor: pointer;
+    font-size: 16px;
 }
 
-.btn:hover {
-    color: black;
+.chart-btn:hover {
+    color: #252525;
 }
 
-.btn-on {
+.chart-btn-on {
     border: none;
     background: none;
-    color: black;
+    color: #252525;
     cursor: pointer;
+    font-size: 16px;
 }
 
-.nav {
+.chart-nav {
     display: flex;
     justify-content: center;  /* 중앙 정렬 */
     gap: 40px;  /* 버튼 사이 간격 */
@@ -32,15 +34,42 @@
     color: #0080FF;
 }
 
+.chart-coin-icon {
+    width: 40px;
+    height: 40px;
+}
+
+
+
+.chart-coin-card-info {
+    flex-grow: 1;
+    margin-top: -16px;
+    margin-left: 10px;
+}
+
+.chart-coin-card-name {
+    font-size: 16px;
+    color: #212529;
+}
+
+.chart-coin-card-symbol {
+    margin-top: -15px;
+    font-size: 12px;
+    color: #6C757D;
+}
+
 /* 글쓰기 버튼 */
 .write-btn {
-    margin-left: 530px;
+    width: 75px;
+    margin-left: 480px;
     margin-bottom: 20px;
     background-color: white;
-    border: 1px solid #ddd;
-    padding: 6px 12px;
+    border: 1px solid #C2C2C2;
+    padding-top: 5px;
+    padding-bottom: 5px;
     border-radius: 8px;
     font-size: 12px;
+    color: #6C757D;
     cursor: pointer;
 }
 
@@ -59,22 +88,32 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    align-items: center;
 }
 
 .post-card {
+    width: 480px;
+    height: 80px;
     background: white;
     padding: 12px;
     border-radius: 8px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
+    border: 1px solid white;
+    margin-bottom: 20px;
 }
 
-.post-title {
+.post-card:hover {
+    background-color: #f8f8f8;
+}
+
+.post-card-title {
+    margin-top: 0;
     font-size: 14px;
-    margin-bottom: 8px;
+    color: #212529;
 }
 
 .post-footer {
+    margin-top: 40px;
     display: flex;
     justify-content: space-between;
     font-size: 12px;
@@ -82,5 +121,12 @@
 }
 
 .post-author {
+    color: #6C757D;
+    font-size: 16px;
     font-weight: bold;
 }
+
+.post-date {
+    font-size: 16px;
+}
+

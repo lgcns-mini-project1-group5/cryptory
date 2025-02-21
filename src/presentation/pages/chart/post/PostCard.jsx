@@ -8,7 +8,7 @@ export default function PostCard({ postId, title, author, date, icon, name, symb
 
     return (
         <div className="post-card" onClick={() => {navigate(`/post/${postId}`, {state: {name:name, symbol:symbol, icon:icon, price:price, change:change, author:author, date:date}})}}>
-            <p className="post-title">{title}</p>
+            <p className="post-card-title">{title}</p>
             <div className="post-footer">
                 <span className="post-author">{author}</span>
                 <span className="post-date">{date}</span>

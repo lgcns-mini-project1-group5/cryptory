@@ -30,7 +30,10 @@ export default function PostListView({ name, symbol, icon, price, change }) {
     }, [])
 
     return (<>
-        <button className="write-btn" onClick={() => {navigate("/post", {state: {name:name, symbol:symbol, icon:icon, price:price, change:change}})}}>글쓰기</button>
+        <button className="write-btn" onClick={() => {navigate("/post", {state: {name:name, symbol:symbol, icon:icon, price:price, change:change}})}}>
+            <img src="/public/write_post.png" alt="write post"/>
+            글쓰기
+        </button>
         <div className="board">
 
             {postData.map((post, index) => (

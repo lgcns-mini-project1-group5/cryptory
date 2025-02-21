@@ -47,27 +47,29 @@ export default function PostView() {
     }, [])
 
     return (<div className="content">
-        <div className="nav">
-            <button className="btn-on" onClick={() => {
+
+        <div className="post-nav">
+            <button className="post-btn-on" onClick={() => {
                 navigate("/")
             }}>Coin
             </button>
-            <button className="btn" onClick={() => {
+            <button className="post-btn" onClick={() => {
                 navigate("/")
             }}>News
             </button>
         </div>
+
         <div className="post-header">
             <div className="user-info-section">
                 <img src={icon} alt="User" className="user-icon"/>
                 <div>
-                    <p>{name}</p>
-                    <p style={{color: "gray", marginTop: -15}}>{symbol}</p>
+                    <p className="user-name">{name}</p>
+                    <p className="user-symbol">{symbol}</p>
                 </div>
             </div>
             <div style={{textAlign: "right"}}>
-                <div className="username">User1</div>
-                <div className="date">2025.02.19</div>
+                <div className="post-author-name">User1</div>
+                <div className="post-date">2025.02.19</div>
                 <div className="post-actions">
                     <button className="edit-btn" onClick={() => {navigate("/post/edit", {state: {name:name, symbol:symbol, icon:icon, price:price, change:change, author:author, date:date, _title:title, _content:content, postId:postId}})}}>수정</button>
                     <button className="delete-btn">삭제</button>

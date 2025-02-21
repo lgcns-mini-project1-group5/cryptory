@@ -38,11 +38,12 @@
 .user-info {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 30px;
 }
 
 .username {
     color: gray;
+    margin-left: -10px;
 }
 
 .logout-btn {
@@ -56,41 +57,41 @@
     color: black;
 }
 
-/* 뉴스 리스트 스타일 */
-.content {
-    max-width: 600px;
-    margin: 30px auto;
-}
+/*!* 뉴스 리스트 스타일 *!*/
+/*.content {*/
+/*    max-width: 600px;*/
+/*    margin: 30px auto;*/
+/*}*/
 
-.news-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+/*.news-list {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    gap: 12px;*/
+/*}*/
 
-/* 뉴스 카드 스타일 */
-.news-card {
-    background: white;
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
-}
+/*!* 뉴스 카드 스타일 *!*/
+/*.news-card {*/
+/*    background: white;*/
+/*    padding: 16px;*/
+/*    border-radius: 8px;*/
+/*    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);*/
+/*    border: 1px solid #ddd;*/
+/*}*/
 
-.news-title {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 4px;
-}
+/*.news-title {*/
+/*    font-size: 16px;*/
+/*    font-weight: bold;*/
+/*    margin-bottom: 4px;*/
+/*}*/
 
-.news-description {
-    font-size: 14px;
-    color: gray;
-    margin-bottom: 8px;
-}
+/*.news-description {*/
+/*    font-size: 14px;*/
+/*    color: gray;*/
+/*    margin-bottom: 8px;*/
+/*}*/
 
-.news-date {
-    font-size: 12px;
-    color: lightgray;
-    text-align: right;
-}
+/*.news-date {*/
+/*    font-size: 12px;*/
+/*    color: lightgray;*/
+/*    text-align: right;*/
+/*}*/
