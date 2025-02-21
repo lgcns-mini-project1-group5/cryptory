@@ -3,6 +3,7 @@ package com.cryptory.be.post.controller;
 import com.cryptory.be.post.dto.CreatePostDto;
 import com.cryptory.be.post.dto.PostDetailDto;
 import com.cryptory.be.post.dto.PostDto;
+import com.cryptory.be.post.dto.UpdatePostDto;
 import com.cryptory.be.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,5 +52,13 @@ public class PostController {
         postService.deletePost(coinId, postId);
 
         return ResponseEntity.ok("정상적으로 삭제되었습니다.");
+    }
+
+    @PatchMapping("/{postId}")
+    public ResponseEntity<?> updatePost(@PathVariable("coinId") Long coinId,
+                                              @PathVariable("postId") Long postId,
+                                              @RequestPart(value = "post", required = false) UpdatePostDto updatePostDto) {
+        postService.updatePost(coinId, postId, updatePostDto);
+        return ResponseEntity.ok("게시글을 업데이트했습니다.");
     }
 }

@@ -56,4 +56,10 @@ public class Post extends BaseTimeEntity {
     public boolean isNotDeleted() {
         return !this.isDeleted;
     }
+
+    public void update(String title, String body) {
+        this.title = title != null ? title : this.title;
+        this.body = body != null ? body : this.body;
+    }
+
 }

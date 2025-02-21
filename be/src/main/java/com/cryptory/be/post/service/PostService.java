@@ -4,10 +4,7 @@ import com.cryptory.be.global.util.DateFormat;
 import com.cryptory.be.global.util.FileUtils;
 import com.cryptory.be.post.domain.Post;
 import com.cryptory.be.post.domain.PostFile;
-import com.cryptory.be.post.dto.CreatePostDto;
-import com.cryptory.be.post.dto.PostDetailDto;
-import com.cryptory.be.post.dto.PostDto;
-import com.cryptory.be.post.dto.PostFileDto;
+import com.cryptory.be.post.dto.*;
 import com.cryptory.be.post.repository.PostFileRepository;
 import com.cryptory.be.post.repository.PostRepository;
 import com.cryptory.be.user.domain.User;
@@ -105,5 +102,15 @@ public class PostService {
                 )).toList();
 
         return new PostDetailDto(post.getTitle(), post.getBody(), post.getUser().getNickname(), DateFormat.formatDate(post.getCreatedAt()), postFiles);
+    }
+
+    @Transactional
+    public void updatePost(Long coinId, Long postId, UpdatePostDto updatePostDto) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        post.update(updatePostDto.getTitle(), updatePostDto.getBody());
+
+        // todo: 파일 업데이트(클라이언트 요청에 따라)
     }
 }
