@@ -25,12 +25,12 @@ export default function PostEditView() {
     return (
         <div className="write-container">
 
-            <div className="nav">
-                <button className="btn-on" onClick={() => {
+            <div className="post-nav">
+                <button className="post-btn-on" onClick={() => {
                     navigate("/")
                 }}>Coin
                 </button>
-                <button className="btn" onClick={() => {
+                <button className="post-btn" onClick={() => {
                     navigate("/")
                 }}>News
                 </button>
@@ -39,19 +39,21 @@ export default function PostEditView() {
             <div className="user-info-section">
                 <img src={icon} alt="User" className="user-icon"/>
                 <div>
-                    <p>{name}</p>
-                    <p style={{color: "gray", marginTop: -15}}>{symbol}</p>
+                    <p className="user-name">{name}</p>
+                    <p className="user-symbol">{symbol}</p>
                 </div>
             </div>
 
             <form onSubmit={handleSubmit} className="write-form">
-                <label className="form-label">TITLE</label>
-                <input
-                    type="text"
-                    className="title-input"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
+                <div style={{display: "flex"}}>
+                    <label className="form-label">TITLE</label>
+                    <input
+                        type="text"
+                        className="title-input"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                </div>
 
                 <label className="form-label">CONTENT</label>
                 <textarea

@@ -4,21 +4,32 @@
     margin: 30px auto;
 }
 
-/* 네비게이션 스타일 */
-.nav {
-    display: flex;
-    gap: 20px;
-}
-
-.nav-link {
-    text-decoration: none;
-    color: gray;
+.post-btn {
+    border: none;
+    background: none;
+    color: #C2C2C2;
+    cursor: pointer;
     font-size: 16px;
 }
 
-.nav-link.active {
-    color: black;
-    font-weight: bold;
+.post-btn:hover {
+    color: #252525;
+}
+
+.post-btn-on {
+    border: none;
+    background: none;
+    color: #252525;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.post-nav {
+    display: flex;
+    justify-content: center;  /* 중앙 정렬 */
+    gap: 40px;  /* 버튼 사이 간격 */
+    margin-top: 50px; /* 위쪽 여백 추가 */
+    margin-bottom: 40px;
 }
 
 /* 유저 정보 스타일 */
@@ -55,14 +66,22 @@
 }
 
 .user-icon {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
+    margin-right: 5px;
 }
 
 .user-name {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
+    color: #252525;
+}
+
+.user-symbol {
+    margin-top: -15px;
+    font-size: 12px;
+    color: #6C757D;
 }
 
 /* 입력 폼 */
@@ -72,21 +91,30 @@
 }
 
 .form-label {
-    font-size: 14px;
+    color: #666E7D;
+    font-size: 17px;
     font-weight: bold;
     margin: 10px 0 5px;
 }
 
-.title-input, .content-input {
-    width: 100%;
+.title-input {
+    width: 420px;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
+    margin-left: 15px;
+    color: #252525;
 }
 
 .content-input {
-    height: 120px;
+    width: 478px;
+    height: 250px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #6C757D;
     resize: none;
 }
 
@@ -99,7 +127,8 @@
 }
 
 .cancel-btn, .submit-btn {
-    padding: 8px 16px;
+    width: 95px;
+    height: 30px;
     border-radius: 4px;
     font-size: 14px;
     cursor: pointer;
@@ -107,8 +136,8 @@
 
 .cancel-btn {
     background: white;
-    border: 1px solid #999;
-    color: black;
+    border: 1px solid #C2C2C2;
+    color: #6C757D;
 }
 
 .submit-btn {
@@ -132,15 +161,16 @@
     gap: 10px;
 }
 
-.username {
+.post-author-name {
     font-size: 16px;
-    color: black;
+    color: #252525;
 }
 
-.date {
-    margin-top: 5px;
+.post-date {
+    margin-top: 3px;
+    margin-bottom: 3px;
     font-size: 16px;
-    color: gray;
+    color: #6C757D;
 }
 
 /* 게시글 컨테이너 */
@@ -156,8 +186,14 @@
 }
 
 .post-title {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
+    color: #252525;
+}
+
+.post-content {
+    font-size: 18px;
+    color: #6C757D;
 }
 
 .post-actions {
@@ -198,39 +234,60 @@
 /* 댓글 리스트 */
 .comment-list {
     max-width: 600px;
-    margin: 20px auto;
 }
 
 .comment-title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
+    color: #252525;
 }
 
 /* 개별 댓글 */
 .comment {
-    width: 80%;
+    width: 85%;
+    height: 80px;
     background: white;
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #FFFFFF;
+    margin-bottom: 20px;
 }
 
 .mycomment {
-    margin-left: 16%;
-    width: 80%;
+    margin-left: 11%;
+    width: 85%;
+    height: 80px;
     background: white;
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid #7F7F7F;
-    margin-bottom: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #C2C2C2;
+    margin-bottom: 20px;
 }
 
 .comment-footer {
+    margin-top: 40px;
     display: flex;
     justify-content: space-between;
     font-size: 12px;
     color: gray;
+}
+
+.comment-content {
+    margin-top: 0;
+    font-size: 14px;
+    color: #212529;
+}
+
+.comment-author {
+    color: #6C757D;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.comment-date {
+    font-size: 16px;
 }
 
 /* 댓글 입력 폼 */
@@ -238,10 +295,12 @@
     display: flex;
     align-items: center;
     max-width: 600px;
+    height: 60px;
     margin: 10px auto;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .comment-input {
@@ -249,6 +308,7 @@
     border: none;
     font-size: 14px;
     resize: none;
+    color: #C2C2C2;
 }
 
 .send-btn {

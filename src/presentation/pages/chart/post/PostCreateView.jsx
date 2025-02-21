@@ -20,33 +20,35 @@ export default function PostCreateView() {
     return (
         <div className="write-container">
 
-            <div className="nav">
-                <button className="btn-on" onClick={() => {
+            <div className="post-nav">
+                <button className="post-btn-on" onClick={() => {
                     navigate("/")
                 }}>Coin
                 </button>
-                <button className="btn" onClick={() => {
+                <button className="post-btn" onClick={() => {
                     navigate("/")
                 }}>News
                 </button>
             </div>
 
             <div className="user-info-section">
-                <img src={icon} alt="User" className="user-icon" />
+                <img src={icon} alt="User" className="user-icon"/>
                 <div>
-                    <p>{name}</p>
-                    <p style={{color:"gray", marginTop:-15}}>{symbol}</p>
+                    <p className="user-name">{name}</p>
+                    <p className="user-symbol">{symbol}</p>
                 </div>
             </div>
 
             <form onSubmit={handleSubmit} className="write-form">
-                <label className="form-label">TITLE</label>
-                <input
-                    type="text"
-                    className="title-input"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
+                <div style={{display: "flex"}}>
+                    <label className="form-label">TITLE</label>
+                    <input
+                        type="text"
+                        className="title-input"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                </div>
 
                 <label className="form-label">CONTENT</label>
                 <textarea
@@ -56,7 +58,18 @@ export default function PostCreateView() {
                 ></textarea>
 
                 <div className="button-group">
-                    <button type="button" className="cancel-btn" onClick={() => {navigate(`/coin/${symbol}`, {state: {name:name, icon:icon, price:price, change:change, prior:"board"}})}}>취소</button>
+                    <button type="button" className="cancel-btn" onClick={() => {
+                        navigate(`/coin/${symbol}`, {
+                            state: {
+                                name: name,
+                                icon: icon,
+                                price: price,
+                                change: change,
+                                prior: "board"
+                            }
+                        })
+                    }}>취소
+                    </button>
                     <button type="submit" className="submit-btn">등록</button>
                 </div>
             </form>

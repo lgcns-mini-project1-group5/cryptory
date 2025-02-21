@@ -56,71 +56,75 @@ export default function ModalView({ onClose, issueId, icon, name, symbol, price,
                 <button className="close-btn" onClick={onClose}/>
                 <div style={{display: "flex"}}>
                     <div className="user-info-section">
-                        <img src={icon} alt="User" className="user-icon"/>
-                        <div>
-                            <p>{name}</p>
-                            <p style={{color: "gray", marginTop: -15}}>{symbol}</p>
+                        <img src={icon} alt={name} className="coin-card-icon"/>
+                        <div className="coin-card-info">
+                            <p className="coin-card-name">{name}</p>
+                            <p className="coin-card-symbol">{symbol}</p>
                         </div>
                     </div>
-                    <div style={{marginLeft: "60px"}}>
+                    <div style={{marginLeft: "60px", color:"#6C757D", fontSize: "16px"}}>
                         <p>종가</p>
                         <p style={{marginTop: -15}}>전일 대비</p>
                     </div>
-                    <div style={{width: '110px', textAlign: 'right'}}>
+                    <div style={{width: '110px', textAlign: 'right', fontSize: "16px"}}>
                         <p>
                             {price.toLocaleString()}원
                         </p>
-                        <p style={{marginTop: -15}} className={`change ${change >= 0 ? "positive" : "negative"}`}>
+                        <p style={{marginTop: -15, fontSize: "16px"}} className={`change ${change >= 0 ? "positive" : "negative"}`}>
                             {change > 0 && <>+</>}
                             {change.toFixed(2)}%
                         </p>
                     </div>
                 </div>
-                <p style={{marginTop: -20}}>{issueDate}</p>
+                <p style={{marginTop: -20, marginLeft:10, color:"#6C757D", fontSize:18}}>{issueDate}</p>
 
                 {(type === "ChatGPT") && <>
-                    <div className="chat-section">
-                        <button className="chat-btn-on">ChatGPT</button>
-                        <button className="chat-btn" onClick={() => {
+                    <div className="prompt-nav">
+                        <button className="prompt-btn-on">ChatGPT</button>
+                        <button className="prompt-btn" onClick={() => {
                             setType("debate")
                         }}>토론방
                         </button>
                     </div>
-                    <div className="news-section">
-                        <h2 className="news-title">{title}</h2>
-                        <p className="news-content">{content}</p>
-                    </div>
-                    <div className="chat-messages">
-                        <button className="chat-message" onClick={() => {
-                            window.open(news1Link)
-                        }}>{news1}</button>
-                        <button className="chat-message" onClick={() => {
-                            window.open(news2Link)
-                        }}>{news2}</button>
+                    <div className="prompt-section">
+                        <div className="news-section">
+                            <h2 className="prompt-news-title">{title}</h2>
+                            <p className="prompt-news-content">{content}</p>
+                        </div>
+                        <div className="chat-messages">
+                            <button className="chat-message" onClick={() => {
+                                window.open(news1Link)
+                            }}>{news1}</button>
+                            <button className="chat-message" onClick={() => {
+                                window.open(news2Link)
+                            }}>{news2}</button>
+                        </div>
                     </div>
                     <form className="comment-form" onSubmit={handleSubmit}>
-                        <textarea
-                            className="comment-input"
-                            placeholder="궁금한 내용을 입력하세요!"
-                            value={prompt}
-                            onChange={(e) => setPrompt(e.target.value)}/>
+                            <textarea
+                                className="comment-input"
+                                placeholder="궁금한 내용을 입력하세요!"
+                                value={prompt}
+                                onChange={(e) => setPrompt(e.target.value)}/>
                         <button type="submit" className="gpt-send-btn"/>
                     </form>
                 </>
                 }
 
                 {(type === "debate") && <>
-                    <div className="chat-section">
-                        <button className="chat-btn" onClick={() => {
+                    <div className="prompt-nav">
+                        <button className="prompt-btn" onClick={() => {
                             setType("ChatGPT")
                         }}>ChatGPT
                         </button>
-                        <button className="chat-btn-on">토론방</button>
+                        <button className="prompt-btn-on">토론방</button>
                     </div>
-                    <div className="comment-list">
-                        {commentList.map((comment, index) =>
-                            <CommentCell key={index} {...comment} />
-                        )}
+                    <div className="prompt-section">
+                        <div className="comment-list">
+                            {commentList.map((comment, index) =>
+                                <CommentCell key={index} {...comment} />
+                            )}
+                        </div>
                     </div>
                     <form className="comment-form" onSubmit={handleSubmit}>
                         <textarea

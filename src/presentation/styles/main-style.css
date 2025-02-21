@@ -1,22 +1,24 @@
-.btn {
+.main-btn {
     border: none;
     background: none;
-    color: gray;
+    color: #C2C2C2;
     cursor: pointer;
+    font-size: 16px;
 }
 
-.btn:hover {
-    color: black;
+.main-btn:hover {
+    color: #252525;
 }
 
-.btn-on {
+.main-btn-on {
     border: none;
     background: none;
-    color: black;
+    color: #252525;
     cursor: pointer;
+    font-size: 16px;
 }
 
-.nav {
+.main-nav {
     display: flex;
     justify-content: center;  /* 중앙 정렬 */
     gap: 40px;  /* 버튼 사이 간격 */
@@ -32,34 +34,41 @@
 
 /* 코인 카드 스타일 */
 .coin-card {
+    height: 72px;
     display: flex;
     align-items: center;
     background: white;
     padding: 12px;
     border-radius: 8px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
+    border: 1px solid #FFFFFF;
     margin-bottom: 10px;
 }
 
-.coin-icon {
-    width: 32px;
-    height: 32px;
+.coin-card:hover {
+    background: #F2F2F2;
+}
+
+.coin-card-icon {
+    width: 40px;
+    height: 40px;
+    margin-left: 12px;
     margin-right: 12px;
 }
 
-.coin-info {
+.coin-card-info {
     flex-grow: 1;
 }
 
-.coin-name {
-    font-size: 14px;
-    font-weight: bold;
+.coin-card-name {
+    font-size: 16px;
+    color: #212529;
 }
 
-.coin-symbol {
+.coin-card-symbol {
+    margin-top: -15px;
     font-size: 12px;
-    color: gray;
+    color: #6C757D;
 }
 
 .trend-graph {
@@ -69,10 +78,11 @@
 
 .coin-price {
     text-align: right;
+    margin-right: 15px;
 }
 
 .price {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -85,7 +95,8 @@
 }
 
 .change {
-    font-size: 12px;
+    font-size: 10px;
+    margin-top: -10px;
 }
 
 /* 뉴스 카드 스타일 */
@@ -96,27 +107,31 @@
 }
 
 .news-card {
+    height: 130px;
     background: white;
     padding: 16px;
     border-radius: 8px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
+    border: 1px solid white;
 }
 
 .news-title {
+    margin-top: 0px;
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 4px;
+    color: #252525
 }
 
 .news-description {
-    font-size: 14px;
-    color: gray;
+    height: 65px;
+    font-size: 12px;
+    color: #6C757D;
     margin-bottom: 8px;
 }
 
 .news-date {
-    font-size: 12px;
-    color: lightgray;
+    font-size: 16px;
+    color: #C2C2C2;
     text-align: right;
 }

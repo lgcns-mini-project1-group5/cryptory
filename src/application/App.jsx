@@ -17,10 +17,14 @@ import LoginView from "../presentation/pages/login/LoginView.jsx";
 import PostCreateView from "../presentation/pages/chart/post/PostCreateView.jsx";
 import PostEditView from "../presentation/pages/chart/post/PostEditView.jsx";
 import PostView from "../presentation/pages/chart/post/PostView.jsx";
+import KakaoLoginLoad from "../presentation/pages/login/KakaoLoginLoad.jsx";
+import KakaoLogout from "../presentation/pages/login/KakaoLogout.jsx";
+import React, {useEffect, useState} from "react";
 
 const Layout = () => {
 
-    const login = sessionStorage.getItem("isLogin");
+    sessionStorage.setItem("token", "1234")
+    const login = sessionStorage.getItem("token");
     const navigate = useNavigate();
 
     const websiteForm = {
@@ -30,13 +34,37 @@ const Layout = () => {
         margin: 'auto',
     }
 
+    const [nickname, setNickname] = useState("")
+    const [profile, setProfile] = useState("")
+
+    useEffect(() => {
+        if (login) {
+            // axios
+            //     .get(`http://${rest_api_host}:${rest_api_port}/api/v2/board/${boardIdx}`, {headers: {"Authorization": `Bearer ${token}`}})
+            //     .then(res => {
+            //
+            //     })
+            //     .catch(err => {
+            //
+            //     });
+            setNickname("UserName")
+            setProfile("https://cryptologos.cc/logos/bitcoin-btc-logo.png")
+        }
+    }, []);
+
     return (<div style={websiteForm}>
         <banner className="banner">
             <header className="header">
                 <h1 className="title" onClick={() => {navigate("/")}}>Cryptory</h1>
                 {(login) && <div className="user-info">
-                    <span className="username">UserName</span>
-                    <button className="logout-btn">Logout</button>
+                    <img src={profile} alt={nickname} className="coin-icon"/>
+                    <span className="username" onClick={() => {
+                        navigate("/mypage")
+                    }}>UserName</span>
+                    <button className="logout-btn" onClick={() => {
+                        navigate("/kakaologout")
+                    }}>Logout
+                    </button>
                 </div>}
                 {(!login) && <div className="user-info">
                     <button className="logout-btn" onClick={() => {navigate("/login")}}>Login</button>
@@ -63,7 +91,7 @@ const AdminLayout = () => {
             <header className="header">
                 <h1 className="title" onClick={() => {navigate("/admin")}}>Cryptory</h1>
                 <div className="user-info">
-                    <span className="username">UserName</span>
+                    <span className="username" onClick={() => {navigate("/mypage")}}>UserName</span>
                     <button className="logout-btn">Logout</button>
                 </div>
             </header>
@@ -86,6 +114,8 @@ const router = createBrowserRouter([
             { path: "post/:postId", element: <PostView/> },
             { path: "post/edit", element: <PostEditView/> },
             { path: "login", element: <LoginView/> },
+            { path: "oauth2/callback", element: <KakaoLoginLoad/> },
+            { path: "kakaologout", element: <KakaoLogout/> },
         ]
     },
     {

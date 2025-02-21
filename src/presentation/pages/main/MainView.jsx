@@ -9,17 +9,17 @@ export default function MainView() {
 
     return (<div className="content">
         {(type === 'coin') && <>
-            <div className="nav">
-                <button className="btn-on">Coin</button>
-                <button className="btn" onClick={() => {setType("news")}}>News</button>
+            <div className="main-nav">
+                <button className="main-btn-on">Coin</button>
+                <button className="main-btn" onClick={() => {setType("news")}}>News</button>
             </div>
             <CoinView/>
         </>}
 
         {(type === 'news') && <>
-            <div className="nav">
-                <button className="btn" onClick={() => {setType("coin")}}>Coin</button>
-                <button className="btn-on">News</button>
+            <div className="main-nav">
+                <button className="main-btn" onClick={() => {setType("coin")}}>Coin</button>
+                <button className="main-btn-on">News</button>
             </div>
             <NewsView type={"main"}/>
         </>}
