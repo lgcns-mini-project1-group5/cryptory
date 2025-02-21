@@ -42,6 +42,7 @@ public class SecurityConfig {
     private final String[] whitelist = {
             "/", "/admin/login",
             "/oauth2/callback",
+            "/attach/files/**",
             "/css/**", "/error"
     };
 

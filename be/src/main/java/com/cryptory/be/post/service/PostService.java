@@ -59,15 +59,14 @@ public class PostService {
 
         if (files != null) {
             for (MultipartFile file : files) {
-                String storedFilename = fileUtils.saveFile(file);
-                log.info("storedFilename: {}", storedFilename);
-                String fileType = storedFilename.substring(storedFilename.lastIndexOf(".") + 1);
+                String storedDir = fileUtils.saveFile(file);
 
+                String fileType = storedDir.substring(storedDir.lastIndexOf(".") + 1);
 
                 PostFile postFile = PostFile.builder()
                         .originalFilename(file.getOriginalFilename())
-                        .storedFilename(storedFilename)
-                        .storedDir(fileUtils.getFilePath(storedFilename))
+                        .storedDir(storedDir)
+                        .storedFilename(fileUtils.getStoredFileName(storedDir))
                         .post(post)
                         .fileType(fileType)
                         .build();

@@ -18,7 +18,7 @@ public class FileUtils {
 
     // window, mac 바탕화면 경로 지정
     // S3 등 외부 저장소 사용 시 yml에 경로 설정
-     private static String getBaseDir() {
+     public static String getBaseDir() {
         String userHome = System.getProperty("user.home");
         String os = System.getProperty("os.name").toLowerCase();
 
@@ -64,7 +64,7 @@ public class FileUtils {
             File dest = new File(filePath);
             file.transferTo(dest);
 
-            return dateFolder + "/" + storedFilename; // 저장된 파일 경로 반환
+            return "/" + dateFolder + "/" + storedFilename;
         } catch (IOException e) {
             log.error("파일 저장 실패", e);
             throw new RuntimeException("파일 저장 중 오류 발생");
@@ -77,9 +77,9 @@ public class FileUtils {
         return file.exists() && file.delete();
     }
 
-    // 저장된 파일 경로 + 파일명 반환
-    public String getFilePath(String storedFilename) {
-        return Paths.get(getBaseDir(), storedFilename).toString();
+    // 파일명 반환
+    public String getStoredFileName(String storedDir) {
+        return storedDir.substring(storedDir.lastIndexOf("/") + 1);
     }
 
 }
