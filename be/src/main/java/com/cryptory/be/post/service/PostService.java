@@ -1,5 +1,6 @@
 package com.cryptory.be.post.service;
 
+import com.cryptory.be.global.util.DateFormat;
 import com.cryptory.be.post.domain.Post;
 import com.cryptory.be.post.dto.CreatePostDto;
 import com.cryptory.be.post.dto.PostDto;
@@ -12,6 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -22,11 +25,21 @@ public class PostService {
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
 
-    @Transactional
-    public PostDto createPost(String nickname, CreatePostDto writePostDto) {
+    public List<PostDto> getPosts(Long coinId) {
+        List<Post> posts = postRepository.findAllByCoinId(coinId);
 
-
-
-        return modelMapper.map(postRepository.save(post), PostDto.class);
+        return posts.stream()
+                .map(post -> new PostDto(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getUser().getNickname(),
+                        DateFormat.formatDate(post.getCreatedAt())
+                )).toList();
     }
+
+//    @Transactional
+//    public PostDto createPost(Long coinId) {
+//
+//
+//    }
 }
