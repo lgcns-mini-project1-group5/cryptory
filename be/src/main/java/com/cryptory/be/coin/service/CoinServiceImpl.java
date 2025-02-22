@@ -4,48 +4,54 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cryptory.be.chart.service.ChartService;
+import com.cryptory.be.coin.domain.Coin;
+import com.cryptory.be.coin.dto.CoinDetailDto;
+import com.cryptory.be.issue.service.IssueService;
+import com.cryptory.be.news.service.NewsService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.cryptory.be.coin.domain.Coin;
+
 import com.cryptory.be.coin.dto.CoinDto;
-import com.cryptory.be.coin.dto.CoinListResponse;
 import com.cryptory.be.coin.repository.CoinRepository;
 
 @Service
+@RequiredArgsConstructor
 public class CoinServiceImpl implements CoinService {
-	
-	@Autowired
-	private CoinRepository coinRepository;
+
+	private final CoinRepository coinRepository;
+	private final ModelMapper modelMapper;
+
+	private final NewsService newsService;
+	private final ChartService chartService;
+	private final IssueService issueService;
 
 	// 코인 목록 조회
 	@Override
-	public List<CoinListResponse> selectCoinList() {
-		
-		List<CoinListResponse> results = new ArrayList<>();
-		List<Coin> coinEntityList = coinRepository.findAll();
-		coinEntityList.forEach(dto -> results.add(new ModelMapper().map(dto, CoinListResponse.class)));
-		
-		return results;
+	public List<CoinDto> selectCoinList() {
+
+		return coinRepository.findAll().stream()
+				.filter(Coin::isDisplayed)
+				.map(coin -> modelMapper.map(coin, CoinDto.class))
+				.toList();
 	}
 
 	// 특정 코인 상세 조회
 	@Override
-	public CoinDto selectCoinDetail(long coinId) {
+	public CoinDetailDto selectCoinDetail(long coinId) {
 		return null;
 	}
 	
 	// 특정 코인 뉴스 조회
 	@Override
 	public ResponseEntity<String> getCoinNews(long coinId) {
-		
-		
-		
+
 		String query = "이더리움";
         //String encode = Base64.getEncoder().encodeToString(query.getBytes(StandardCharsets.UTF_8));
     

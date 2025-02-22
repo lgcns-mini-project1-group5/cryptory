@@ -1,21 +1,32 @@
 package com.cryptory.be.coin.dto;
 
 import com.cryptory.be.coin.domain.CoinSymbol;
-
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
+@Data
 public class CoinDto {
-	private Long crypto_id;
+    private Long coinId;
+
+    // 코인 이름
     private String name;
-    private Long crypto_color;
-    
-    // 심볼 정보
+
+    // 마켓 코드
+    private String code; // KRW-BTC
+
+    // 심볼 정보(색상, 이미지)
     private CoinSymbol coinSymbol;
-    
-    // 차트 리스트
-    
-    // 게시글 리스트
+
+    // 간략회된 차트
+
+
+    // 현재가
+    private double tradePrice;
+
+    // 전일 종가 대비 변화 금액
+    private Double changePrice;
+
+    // 전일 종가 대비 변화량
+    private Double changeRate;
 }

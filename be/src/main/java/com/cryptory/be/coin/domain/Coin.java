@@ -3,12 +3,13 @@ package com.cryptory.be.coin.domain;
 import com.cryptory.be.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
 @Table(name = "coins")
 public class Coin extends BaseTimeEntity {
 
@@ -16,28 +17,22 @@ public class Coin extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    
-    private String crypto_color;
-    
-    private boolean is_displayed;
-    
-    // 심볼 정보
-    @OneToOne
-    @JoinColumn(name = "symbol_id", unique = true)
-    private CoinSymbol coinSymbol;
-    
-    /*
-    // 차트 리스트
-    @JsonManagedReference
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "crypto_id")
-	private List<Chart> chartList;
-    
-    // 게시글 리스트
-    @JsonManagedReference
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "crypto_id")
-	private List<Post> postList;
-	*/
+    private String name;      // 한글 이름(비트코인, 이더리움)
+
+    private boolean isDisplayed;
+
+    private String code;    // 마켓 코드(KRW-BTC, KRW-ETH, KRW-XRP)
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "coin_symbol_id")
+    private CoinSymbol coinSymbol;  // 코인 심볼 관련 정보
+
+    @Builder
+    public Coin(String name, String code, CoinSymbol coinSymbol) {
+        this.name = name;
+        this.code = code;
+        this.coinSymbol = coinSymbol;
+
+        this.isDisplayed = true;
+    }
 }
