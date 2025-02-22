@@ -37,48 +37,28 @@ export default function ChartView() {
             }}>News
             </button>
         </div>
-
-        <div style={{display: 'flex'}}>
-            <img src={icon} alt="User" className="chart-coin-icon"/>
-            <div className="chart-coin-card-info">
-                <p className="chart-coin-card-name">{name}</p>
-                <p className="chart-coin-card-symbol">{coinId}</p>
+        <header>
+            <div style={{display: 'flex'}}>
+                <img src={icon} alt="User" className="chart-coin-icon"/>
+                <div className="chart-coin-card-info">
+                    <p className="chart-coin-card-name">{name}</p>
+                    <p className="chart-coin-card-symbol">{coinId}</p>
+                </div>
             </div>
-        </div>
-        <div style={{display: "flex", justifyContent: "space-between", width: "650px"}}>
-            <div style={{width: '110px', textAlign: 'right'}}>
-            <p style={{marginTop: -5, fontSize: '16px', color:"#252525"}}>
-                    {price.toLocaleString()}원
-                </p>
-                <p style={{marginTop: -15}} className={`change ${change >= 0 ? "positive" : "negative"}`}>
-                    {change > 0 && <>+</>}
-                    {change.toFixed(2)}%
-                </p>
+            <div style={{display: "flex", justifyContent: "space-between", width: "650px"}}>
+                <div style={{width: '110px', textAlign: 'right'}}>
+                <p style={{marginTop: -5, fontSize: '16px', color:"#252525"}}>
+                        {price.toLocaleString()}원
+                    </p>
+                    <p style={{marginTop: -15, fontSize:15}} className={`change ${change >= 0 ? "positive" : "negative"}`}>
+                        {change > 0 && <>+</>}
+                        {change.toFixed(2)}%
+                    </p>
+                </div>
             </div>
+        </header>
 
-            <div style={{width: '110px', textAlign: 'right'}}>
-                <p style={{marginTop: -25, fontSize: '16px', color:"#252525"}}>
-                    {price.toLocaleString()}원
-                </p>
-                <p style={{marginTop: -12, fontSize: "12px", color: "#6C757D"}}>
-                    2025.02.21
-                </p>
-            </div>
-        </div>
-
-        <CandleChartCell/>
-        <div style={{
-            width: 650,
-            height: 480,
-            border: "1px solid gray",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
-        }} onClick={() => {
-            setModalOpen(true);
-        }}>
-            chart
-        </div>
+        <CandleChartCell modalOpenFunc={(e) => {setIssueId(e); setModalOpen(true);}}/>
 
         {(type === "news") && <>
             <div className="chart-nav">

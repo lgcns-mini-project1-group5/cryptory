@@ -1,8 +1,12 @@
 import React, {useEffect, useState} from "react";
 import "../../../styles/prompt-style.css"
 import CommentCell from "../post/CommentCell.jsx";
+import {useNavigate} from "react-router-dom";
 
 export default function ModalView({ onClose, issueId, icon, name, symbol, price, change, issueDate }) {
+
+    const isLogin = sessionStorage.getItem("isLogin");
+    const navigate = useNavigate();
 
     const [type, setType] = useState("ChatGPT")
     const [prompt, setPrompt] = useState("")
@@ -79,13 +83,13 @@ export default function ModalView({ onClose, issueId, icon, name, symbol, price,
                 <p style={{marginTop: -20, marginLeft:10, color:"#6C757D", fontSize:18}}>{issueDate}</p>
 
                 {(type === "ChatGPT") && <>
-                    <div className="prompt-nav">
+                    {(issueId !== "new") && <div className="prompt-nav">
                         <button className="prompt-btn-on">ChatGPT</button>
                         <button className="prompt-btn" onClick={() => {
                             setType("debate")
                         }}>토론방
                         </button>
-                    </div>
+                    </div>}
                     <div className="prompt-section">
                         <div className="news-section">
                             <h2 className="prompt-news-title">{title}</h2>
@@ -100,14 +104,18 @@ export default function ModalView({ onClose, issueId, icon, name, symbol, price,
                             }}>{news2}</button>
                         </div>
                     </div>
-                    <form className="comment-form" onSubmit={handleSubmit}>
+                    {(isLogin === null) && <div className="comment-form">
+                        <p className="un-login-prompt"><a className="un-login-prompt-toLogin" onClick={() => {navigate("/login")}}>로그인</a> 후 이용할 수 있습니다</p>
+                    </div>}
+
+                    {(isLogin !== null) && <form className="comment-form" onSubmit={handleSubmit}>
                             <textarea
                                 className="comment-input"
                                 placeholder="궁금한 내용을 입력하세요!"
                                 value={prompt}
                                 onChange={(e) => setPrompt(e.target.value)}/>
                         <button type="submit" className="gpt-send-btn"/>
-                    </form>
+                    </form>}
                 </>
                 }
 
@@ -126,14 +134,19 @@ export default function ModalView({ onClose, issueId, icon, name, symbol, price,
                             )}
                         </div>
                     </div>
-                    <form className="comment-form" onSubmit={handleSubmit}>
+
+                    {(isLogin === null) && <div className="comment-form">
+                        <p className="un-login-prompt"><a className="un-login-prompt-toLogin" onClick={() => {navigate("/login")}}>로그인</a> 후 이용할 수 있습니다</p>
+                    </div>}
+
+                    {(isLogin !== null) && <form className="comment-form" onSubmit={handleSubmit}>
                         <textarea
                             className="comment-input"
                             placeholder="새로운 글을 입력하세요"
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}/>
                         <button type="submit" className="send-btn"/>
-                    </form>
+                    </form>}
                 </>}
 
 
