@@ -80,10 +80,10 @@ public class PrincipalUserDetails implements OAuth2User, UserDetails {
         return "";
     }
 
-    // 기본 인증, 인가에 필요한 주된 식별자 반환
+    // unique한 키가 필요한데, 추가 정보를 받지 않아서 uuid인 userId로 대체
     @Override
     public String getUsername() {
-        return user.getNickname();
+        return user.getUserId();
     }
 }
 

@@ -94,19 +94,6 @@ public class JwtProvider {
         return false;
     }
 
-    /*
-     * Jwts.parser() -> JwtParserBuilder 객체 반환을 통해 파싱과 검증 옵션 설정 가능
-     * verifyWith(secretKey) -> 검증을 위한 키 설정
-     * build() -> Jwt 파싱 작업할 수 있는 JwtParser 객체 반환(헤더, 페이로드, 서명 검증 및 파싱)
-     * parseSignedClaims(token) -> Jws<Claims> 객체. Jws는 서명 완료된 JWT를 나타냄
-     * getPayload() -> JWT 페이로드 반환
-     *
-     * public interface Jws<T> {
-     *     Header getHeader();    // JWT 헤더
-     *     T getPayload();        // JWT 페이로드
-     *     String getSignature(); // JWT 서명
-     * }
-     */
     private Claims parseClaims(String token) {
         try {
             return Jwts.parser().verifyWith(secretKey).build()
