@@ -19,15 +19,15 @@ public class UserService {
     private final ModelMapper modelMapper;
 
     // todo: 에러 처리
-    public UserInfoDto getUser(String nickname) {
-        User user = userRepository.findByNickname(nickname)
+    public UserInfoDto getUser(String userId) {
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
 
         return modelMapper.map(user, UserInfoDto.class);
     }
 
     @Transactional
-    public void deleteUser(String nickname) {
-        userRepository.deleteByNickname(nickname);
+    public void deleteUser(String userId) {
+        userRepository.deleteByUserId(userId);
     }
 }

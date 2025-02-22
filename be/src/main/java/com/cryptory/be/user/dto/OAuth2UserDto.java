@@ -13,7 +13,8 @@ public class OAuth2UserDto {
 
     private String nickname;
     private String imageUrl;
-    private String provider;
+    private String providerId;
+    private String providerName;
 
     public static OAuth2UserDto of(Map<String, Object> attributes, String registrationId) {
         if (registrationId.equalsIgnoreCase("kakao")) {
@@ -24,12 +25,15 @@ public class OAuth2UserDto {
     }
 
     private static OAuth2UserDto ofKakao(Map<String, Object> attributes, String registrationId) {
+        String providerId = String.valueOf(attributes.get("id"));
+
         Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
 
         return OAuth2UserDto.builder()
                 .nickname((String) properties.get("nickname"))
                 .imageUrl((String) properties.get("profile_image"))
-                .provider(registrationId.toUpperCase())
+                .providerId(providerId)
+                .providerName(registrationId.toUpperCase())
                 .build();
     }
 
@@ -37,7 +41,8 @@ public class OAuth2UserDto {
         return User.builder()
                 .nickname(nickname)
                 .imageUrl(imageUrl)
-                .provider(provider)
+                .providerId(providerId)
+                .providerName(providerName)
                 .build();
     }
 }
