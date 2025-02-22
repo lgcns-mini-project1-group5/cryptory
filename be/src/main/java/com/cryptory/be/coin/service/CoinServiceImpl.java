@@ -1,33 +1,22 @@
 package com.cryptory.be.coin.service;
 
 import java.net.URI;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.cryptory.be.chart.domain.Chart;
 import com.cryptory.be.chart.repository.ChartRepository;
-import com.cryptory.be.chart.service.ChartService;
 import com.cryptory.be.coin.domain.Coin;
 import com.cryptory.be.coin.dto.CoinDetailDto;
-import com.cryptory.be.issue.service.IssueService;
-import com.cryptory.be.news.service.NewsService;
-import com.cryptory.be.openapi.client.UpbitClient;
-import com.cryptory.be.openapi.dto.Candle;
-import com.cryptory.be.openapi.dto.Market;
-import com.cryptory.be.openapi.service.UpbitService;
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.cryptory.be.coin.dto.CoinNewsDto;
+import com.cryptory.be.global.util.DateFormat;
+import com.cryptory.be.openapi.dto.NaverNews;
+import com.cryptory.be.openapi.service.NaverService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 
 import com.cryptory.be.coin.dto.CoinDto;
@@ -38,54 +27,55 @@ import com.cryptory.be.coin.repository.CoinRepository;
 @RequiredArgsConstructor
 public class CoinServiceImpl implements CoinService {
 
+    private final NaverService naverService;
+
     private final CoinRepository coinRepository;
     private final ChartRepository chartRepository;
 
-    private final ModelMapper modelMapper;
 
     // 코인 목록 조회
     @Override
     public List<CoinDto> getCoins() {
         return coinRepository.findAll().stream()
                 .filter(Coin::isDisplayed)
-                .map(coin -> modelMapper.map(coin, CoinDto.class))
+                .map(coin -> CoinDto.builder()
+                        .coinId(coin.getId())
+                        .koreanName(coin.getKoreanName())
+                        .englishName(coin.getEnglishName())
+                        .code(coin.getCode())
+                        .coinSymbol(coin.getCoinSymbol())
+                        // TODO 현재가 api 호출하여 추가
+//                        .tradePrice(coin.getTradePrice())
+//                        .signedChangePrice(coin.getSignedChangePrice())
+//                        .signedChangeRate(coin.getSignedChangeRate())
+                        .build())
                 .toList();
     }
 
     // 특정 코인 상세 조회
     @Override
-    public CoinDetailDto getCoinDetail(long coinId) {
+    public CoinDetailDto getCoinDetail(Long coinId) {
         return null;
     }
 
     // 특정 코인 뉴스 조회
     @Override
-    public ResponseEntity<String> getCoinNews(long coinId) {
+    public List<CoinNewsDto> getCoinNews(Long coinId) {
+        Coin coin = coinRepository.findById(coinId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 코인이 없습니다."));
 
-        String query = "이더리움";
-        //String encode = Base64.getEncoder().encodeToString(query.getBytes(StandardCharsets.UTF_8));
+        List<NaverNews> naverNewsList = naverService.getNaverNews(coin.getKoreanName());
 
-        URI uri = UriComponentsBuilder.fromUriString("https://openapi.naver.com/")
-                .path("v1/search/news.json")
-                .queryParam("query", query)
-                .queryParam("display", 10)
-                .queryParam("start", 1)
-                .queryParam("sort", "sim")
-                .encode()
-                .build()
-                .toUri();
-
-        RequestEntity<Void> req = RequestEntity
-                .get(uri)
-                .header("X-Naver-Client-Id", "BCUvUSfJJO9MFsHgM4K0")
-                .header("X-Naver-Client-Secret", "OJ8wojDO42")
-                .build();
-
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> resp = restTemplate.exchange(req, String.class);
-
-        return resp;
-
+        return naverNewsList.stream()
+                .map(naverNews -> {
+                    try {
+                        return new CoinNewsDto(naverNews.getTitle(), naverNews.getLink(),
+                                naverNews.getDescription(), DateFormat.formatNewsDate(naverNews.getPubDate()));
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .toList();
     }
 
 }

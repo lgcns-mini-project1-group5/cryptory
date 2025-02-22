@@ -1,16 +1,20 @@
 package com.cryptory.be.coin.dto;
 
 import com.cryptory.be.coin.domain.CoinSymbol;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Data
 public class CoinDto {
     private Long coinId;
 
     // 코인 이름
-    private String name;
+    private String koreanName;
+
+    private String englishName;
 
     // 마켓 코드
     private String code; // KRW-BTC

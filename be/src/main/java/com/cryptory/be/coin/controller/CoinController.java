@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.cryptory.be.coin.dto.CoinDetailDto;
+import com.cryptory.be.coin.dto.CoinNewsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class CoinController {
 	
 	// 특정 코인 상세 조회
 	@GetMapping("/{coinId}")
-	public ResponseEntity<CoinDetailDto> getCoinDetail(@PathVariable("coinId") long coinId) {
+	public ResponseEntity<CoinDetailDto> getCoinDetail(@PathVariable("coinId") Long coinId) {
 		
 		CoinDetailDto selectedCoinDetail = coinService.getCoinDetail(coinId);
 		
@@ -50,8 +51,9 @@ public class CoinController {
 	
 	// 특정 코인 뉴스 조회 - 네이버 뉴스
 	@GetMapping("/{coinId}/news")
-	public ResponseEntity<String> searchCoinNews(@PathVariable("coinId") long coinId) {
-		return coinService.getCoinNews(coinId);
+	public ResponseEntity<List<CoinNewsDto>> searchCoinNews(@PathVariable("coinId") Long coinId) {
+		List<CoinNewsDto> coinNewsList = coinService.getCoinNews(coinId);
+		return ResponseEntity.ok(coinNewsList);
 	}
 
 }
