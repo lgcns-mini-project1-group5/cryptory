@@ -16,17 +16,14 @@ public class CoinDto {
     private String code; // KRW-BTC
 
     // 심볼 정보(색상, 이미지)
-    private CoinSymbol coinSymbol;
-
-    // 간략회된 차트
-
+    private CoinSymbol coinSymbol = null;
 
     // 현재가
     private double tradePrice;
 
     // 전일 종가 대비 변화 금액
-    private Double changePrice;
+    private Double signedChangePrice;
 
     // 전일 종가 대비 변화량
-    private Double changeRate;
+    private Double signedChangeRate;
 }

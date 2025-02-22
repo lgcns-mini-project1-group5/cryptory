@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import com.cryptory.be.coin.dto.CoinDto;
 
 public interface CoinService {
-	List<CoinDto> selectCoinList();
-	CoinDetailDto selectCoinDetail(long coinId);
-	public ResponseEntity<String> getCoinNews(long coinId);
+	List<CoinDto> getCoins();
+	CoinDetailDto getCoinDetail(long coinId);
+	ResponseEntity<String> getCoinNews(long coinId);
 }
