@@ -23,7 +23,8 @@ import React, {useEffect, useState} from "react";
 
 const Layout = () => {
 
-    sessionStorage.setItem("token", "1234")
+    //sessionStorage.setItem("token", "1234")
+
     const login = sessionStorage.getItem("token");
     const navigate = useNavigate();
 

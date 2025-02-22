@@ -6,6 +6,8 @@ import CommentCell from "./CommentCell.jsx";
 
 export default function PostView() {
 
+    const isLogin = sessionStorage.getItem("isLogin");
+
     const location = useLocation()
     const { name, symbol, icon, price, change, author, date } = location.state || {}
     const { postId } = useParams()
@@ -87,14 +89,18 @@ export default function PostView() {
             )}
         </div>
 
-        <form className="comment-form" onSubmit={handleSubmit}>
-        <textarea
-           className="comment-input"
-           placeholder="새로운 댓글을 입력하세요"
-           value={comment}
-           onChange={(e) => setComment(e.target.value)}/>
+        {(isLogin === null) && <div className="comment-form">
+            <p className="un-login-prompt"><a className="un-login-prompt-toLogin" onClick={() => {navigate("/login")}}>로그인</a> 후 이용할 수 있습니다</p>
+        </div>}
+
+        {(isLogin !== null) && <form className="comment-form" onSubmit={handleSubmit}>
+            <textarea
+               className="comment-input"
+               placeholder="새로운 댓글을 입력하세요"
+               value={comment}
+               onChange={(e) => setComment(e.target.value)}/>
             <button type="submit" className="send-btn"/>
-        </form>
+        </form>}
     </div>);
 }
 
