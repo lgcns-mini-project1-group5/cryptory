@@ -27,7 +27,7 @@ public class CoinController {
 	
 	// 코인 목록 조회
 	@GetMapping
-	public ResponseEntity<Object> openCoinList() throws Exception {
+	public ResponseEntity<Object> getCoins() throws Exception {
 		
 		List<CoinDto> coinList = coinService.getCoins();
 		
@@ -40,7 +40,7 @@ public class CoinController {
 	
 	// 특정 코인 상세 조회
 	@GetMapping("/{coinId}")
-	public ResponseEntity<CoinDetailDto> openCoinDetail(@PathVariable("coinId") long coinId) {
+	public ResponseEntity<CoinDetailDto> getCoinDetail(@PathVariable("coinId") long coinId) {
 		
 		CoinDetailDto selectedCoinDetail = coinService.getCoinDetail(coinId);
 		

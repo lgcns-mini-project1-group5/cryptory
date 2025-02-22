@@ -39,57 +39,9 @@ import com.cryptory.be.coin.repository.CoinRepository;
 public class CoinServiceImpl implements CoinService {
 
     private final CoinRepository coinRepository;
-    private final ModelMapper modelMapper;
-
     private final ChartRepository chartRepository;
 
-    private final UpbitService upbitService;
-
-    // 애플리케이션 시작 시 자동 db 저장
-    @PostConstruct
-    public void fetchInitialData() {
-        // 업비트에서 KRW로 거래되는 코인 목록 조회
-        List<Market> coins = upbitService.getCoinsFromUpbit();
-
-        // 코인 목록 저장
-        coinRepository.saveAll(coins.stream()
-                .map(coin -> Coin.builder()
-                        .koreanName(coin.getKoreanName())
-                        .englishName(coin.getEnglishName())
-                        .code(coin.getMarket())
-                        .build())
-                .toList());
-
-        /*
-         * 차트 데이터 가져오는 작업(원래는 저장되는 코인에 대한 차트를 모두 저장해야 함)
-         * 하지만 batch 사용 안하고, MVP 개발이므로 인기 코인 임의 5개 선정
-         * 원래는 모든 코인에 대한 차트 데이터 가져와야 함
-         * 모든 코인에 대한 차트 데이터 가져와서 저장하는 건 지금 필요 없고, 양이 너무 많음
-         */
-        String[] popularCoins = {"KRW-BTC", "KRW-ETH", "KRW-DOGE", "KRW-XRP", "KRW-ADA"};
-//		upbitService.getCharts("KRW-BTC").forEach(chart -> {
-//			log.info("chart: {}", chart);
-//		});
-
-        for (String coin : popularCoins) {
-            List<Candle> candles = upbitService.getCharts(coin);
-
-            chartRepository.saveAll(candles.stream()
-                    .map(candle -> Chart.builder()
-                            .date(candle.getCandleDateTime())
-                            .openingPrice(candle.getOpeningPrice())
-                            .highPrice(candle.getHighPrice())
-                            .lowPrice(candle.getLowPrice())
-                            .tradePrice(candle.getTradePrice())
-                            .changeRate(candle.getChangeRate())
-                            .changePrice(candle.getChangePrice())
-                            .coin(coinRepository.findByCode(candle.getMarket()))
-                            .build())
-                    .toList());
-        }
-
-        // TODO 이미지, 색깔 등록 필요
-    }
+    private final ModelMapper modelMapper;
 
     // 코인 목록 조회
     @Override
