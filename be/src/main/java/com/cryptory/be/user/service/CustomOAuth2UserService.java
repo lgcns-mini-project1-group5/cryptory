@@ -34,7 +34,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2UserDto oAuth2UserDto = OAuth2UserDto.of(attributes, registrationId);
 
-        Optional<User> findUser = userRepository.findByNickname(oAuth2UserDto.getNickname());
+        Optional<User> findUser = userRepository.findByProviderIdAndProviderName(oAuth2UserDto.getProviderId(), oAuth2UserDto.getProviderName());
 
         if(findUser.isEmpty()) {
             userRepository.save(oAuth2UserDto.toUser());
