@@ -53,8 +53,8 @@ public class PostService {
     }
 
     @Transactional
-    public PostDto createPost(Long coinId, String nickname, CreatePostDto createPostDto, List<MultipartFile> files) {
-        User user = userRepository.findByNickname(nickname)
+    public PostDto createPost(Long coinId, String userId, CreatePostDto createPostDto, List<MultipartFile> files) {
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
 
         Post post = postRepository.save(Post.builder()
