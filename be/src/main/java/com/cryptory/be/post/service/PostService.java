@@ -22,6 +22,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
 
+/*
     @Transactional
     public PostDto createPost(String nickname, CreatePostDto writePostDto) {
 
@@ -29,4 +30,5 @@ public class PostService {
 
         return modelMapper.map(postRepository.save(post), PostDto.class);
     }
+*/
 }
