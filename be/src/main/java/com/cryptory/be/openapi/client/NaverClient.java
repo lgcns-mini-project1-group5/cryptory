@@ -44,7 +44,7 @@ public class NaverClient {
     private final static String SORT = "sim"; // "date" 날짜순
 
 
-    public List<NaverNews> getNaverNews(String coinName) {
+    public List<NaverNews> getNaverNewsWithWord(String coinName) {
         String requestUrl = NAVER_NEWS_URL+ "?query=" + URLEncoder.encode(coinName, StandardCharsets.UTF_8)
                 + "&display=" + DISPLAY + "&start=" + START + "&sort=" + SORT;
 

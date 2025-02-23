@@ -16,8 +16,8 @@ public class NaverService {
 
     private final NaverClient naverClient;
 
-    public List<NaverNews> getNaverNews(String coinName) {
-        return naverClient.getNaverNews(coinName);
+    public List<NaverNews> getNaverNewsWithWord(String coinName) {
+        return naverClient.getNaverNewsWithWord(coinName);
     }
 
 }
