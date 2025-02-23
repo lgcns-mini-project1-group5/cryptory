@@ -25,8 +25,8 @@ public class IssueDetailResponseDto { //이슈 단건
     private Long issueId;
     private LocalDate date;
     private String title;
-    private String summaryContent;
-    private Long createdBy; // 또는 String createdByNickname
+    private String content;
+    private String createdBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String newsTitle; //유지

@@ -3,19 +3,23 @@ package com.cryptory.be.init;
 import com.cryptory.be.chart.domain.Chart;
 import com.cryptory.be.chart.repository.ChartRepository;
 import com.cryptory.be.coin.domain.Coin;
+import com.cryptory.be.coin.domain.CoinSymbol;
+import com.cryptory.be.coin.domain.CoinSymbolEnum;
 import com.cryptory.be.coin.repository.CoinRepository;
 import com.cryptory.be.openapi.dto.Candle;
 import com.cryptory.be.openapi.dto.Market;
 import com.cryptory.be.openapi.service.UpbitService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-public class InitDateLoad {
+public class InitDataLoad {
 
     private final UpbitService upbitService;
 
@@ -30,11 +34,17 @@ public class InitDateLoad {
 
         // 코인 목록 저장
         coinRepository.saveAll(coins.stream()
-                .map(coin -> Coin.builder()
-                        .koreanName(coin.getKoreanName())
-                        .englishName(coin.getEnglishName())
-                        .code(coin.getMarket())
-                        .build())
+                .map(coin -> {
+                    CoinSymbolEnum coinSymbolEnum = CoinSymbolEnum.fromMarket(coin.getMarket());
+                    CoinSymbol coinSymbol = coinSymbolEnum.toCoinSymbol();
+
+                    return Coin.builder()
+                            .koreanName(coin.getKoreanName())
+                            .englishName(coin.getEnglishName())
+                            .code(coin.getMarket())
+                            .coinSymbol(coinSymbol)
+                            .build();
+                })
                 .toList());
 
         /*
@@ -62,6 +72,5 @@ public class InitDateLoad {
                     .toList());
         }
 
-        // TODO 이미지, 색깔 등록 필요
     }
 }

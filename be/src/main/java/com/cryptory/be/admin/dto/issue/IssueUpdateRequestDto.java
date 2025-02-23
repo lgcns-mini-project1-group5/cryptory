@@ -21,7 +21,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class IssueUpdateRequestDto {
     private String title;
-    private String summaryContent;
+    private String content;
     private String newsTitle;
     private  String source;
 }

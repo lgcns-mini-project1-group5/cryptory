@@ -6,11 +6,18 @@ import com.cryptory.be.chart.repository.ChartRepository;
 import com.cryptory.be.coin.domain.Coin;
 import com.cryptory.be.coin.repository.CoinRepository;
 import com.cryptory.be.issue.domain.Issue;
+import com.cryptory.be.issue.domain.IssueComment;
+import com.cryptory.be.issue.repository.IssueCommentRepository;
+import com.cryptory.be.issue.repository.IssueRepository;
+import com.cryptory.be.user.domain.User;
+import com.cryptory.be.user.dto.PrincipalUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +41,6 @@ import java.util.NoSuchElementException;
 public class AdminIssueServiceImpl implements AdminIssueService {
 
     private final CoinRepository coinRepository;
-    // issue와 issueComment 리포지토리는 추후 생성된다고 가정하고 작성했음
     private final IssueRepository issueRepository;
     private final IssueCommentRepository issueCommentRepository;
     private final ChartRepository chartRepository;
@@ -45,21 +51,37 @@ public class AdminIssueServiceImpl implements AdminIssueService {
         Pageable pageable = PageRequest.of(page, size, sorting);
 
         // 특정 코인에 대한 이슈만 조회, 삭제되지 않은 ISSUE만 조회
-        Page<Issue> issues = issueRepository.findByCoin_idAndIsDeletedFalse(coinId, pageable);
+        Page<Issue> issues = issueRepository.findByCoinIdAndIsDeletedFalse(coinId, pageable);
         return issues.map(this::convertToIssueListResponseDto);
     }
 
     @Transactional
     @Override
     public Long createIssue(Long coinId, IssueCreateRequestDto requestDto) {
+        Coin coin = coinRepository.findById(coinId)
+                .orElseThrow(() -> new NoSuchElementException("해당 코인을 찾을 수 없습니다. ID: " + coinId));
 
-        Chart chart = chartRepository.findById(requestDto.getChartId())
-                .orElseThrow(() -> new NoSuchElementException("해당 차트를 찾을 수 없습니다. ID: " + requestDto.getChartId());
+        // date와 coinId로 chart 조회
+        Chart chart = chartRepository.findByDateAndCoinId(requestDto.getDate().toString(), coinId.longValue())
+                .orElseThrow(() -> new NoSuchElementException("해당 날짜와 코인에 대한 차트를 찾을 수 없습니다. Date: " + requestDto.getDate() + ", Coin ID: " + coinId));
+
+        // 일반 로그인으로 로그인한 관리자 객체 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalUserDetails principalDetails = (PrincipalUserDetails) authentication.getPrincipal(); // PrincipalUserDetails로 캐스팅
+        User adminUser = principalDetails.getUser();
 
         Issue newIssue = Issue.builder()
+                .date(requestDto.getDate())
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
-                .chart(chart)
+                .newsTitle(requestDto.getNewsTitle())
+                .source(requestDto.getSource())
+                .type("MANUAL") // 관리자가 생성 이슈니까
+                .user(adminUser) // 작성자 설정 (관리자)
+                .coin(coin)      // coin 설정
+                .chart(chart) // chart 설정
+                .requestCount(0L)
+                .isDeleted(false)
                 .build();
 
         // issueRepository 생성 필요, 현재 기준 없음
@@ -68,26 +90,111 @@ public class AdminIssueServiceImpl implements AdminIssueService {
 
     @Override
     public IssueDetailResponseDto getIssueDetails(Long issueId) {
-        return null;
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() -> new NoSuchElementException("해당 이슈를 찾을 수 없습니다. ID: " + issueId));
+
+        return convertToIssueDetailResponseDto(issue);
     }
 
+    @Transactional
     @Override
     public void updateIssue(Long issueId, IssueUpdateRequestDto requestDto) {
-
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() -> new NoSuchElementException("해당 이슈를 찾을 수 없습니다. ID: " + issueId));
+        // 수정 가능한 필드만 업데이트
+        if(requestDto.getTitle() != null){
+            issue.setTitle(requestDto.getTitle());
+        }
+        if (requestDto.getContent() != null) {
+            issue.setContent(requestDto.getContent()); // setContent 사용
+        }
+        if (requestDto.getNewsTitle() != null) {
+            issue.setNewsTitle(requestDto.getNewsTitle()); // setNewsTitle 사용
+        }
+        if (requestDto.getSource() != null) {
+            issue.setSource(requestDto.getSource()); // setSource 사용
+        }
     }
 
+    @Transactional
     @Override
     public void deleteIssues(List<Long> ids) {
-
+        issueRepository.softDeleteByIds(ids);
     }
 
     @Override
     public Page<IssueCommentListResponseDto> getIssueComments(Long issueId, int page, int size, String sort) {
-        return null;
+        Sort sorting = parseSort(sort);
+        Pageable pageable = PageRequest.of(page, size, sorting);
+        Page<IssueComment> comments = issueCommentRepository.findCommentsByIssueId(issueId, pageable);
+        return comments.map(this::convertToIssueCommentListResponseDto);
     }
 
+    @Transactional
     @Override
     public void deleteIssueComment(Long commentId) {
+        IssueComment comment = issueCommentRepository.findById(commentId)
+                .orElseThrow(() -> new NoSuchElementException("해당 토론방 댓글을 찾을 수 없습니다. ID: " + commentId));
+        comment.delete();
+    }
 
+    // Issue -> IssueListResponseDto 변환
+    private IssueListResponseDto convertToIssueListResponseDto(Issue issue) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalUserDetails principalDetails = (PrincipalUserDetails) authentication.getPrincipal();
+        User adminUser = principalDetails.getUser();
+
+        return IssueListResponseDto.builder()
+                .issueId(issue.getId())
+                .date(issue.getDate())
+                .title(issue.getTitle())
+                .createdBy(adminUser.getId())
+                .createdAt(issue.getCreatedAt())
+                .updatedAt(issue.getUpdatedAt())
+                .build();
+    }
+
+    // Issue -> IssueDetailResponseDto 변환
+    private IssueDetailResponseDto convertToIssueDetailResponseDto(Issue issue) {
+        return IssueDetailResponseDto.builder()
+                .issueId(issue.getId())
+                .date(issue.getDate())
+                .title(issue.getTitle())
+                .content(issue.getContent())
+                .createdBy(issue.getUser().getNickname())
+                .createdAt(issue.getCreatedAt())
+                .updatedAt(issue.getUpdatedAt())
+                .newsTitle(issue.getNewsTitle())
+                .source(issue.getSource())
+                .type(issue.getType())
+                .isDeleted(issue.isDeleted())
+                .build();
+    }
+
+    // IssueComment -> IssueCommentListResponseDto 변환
+    private IssueCommentListResponseDto convertToIssueCommentListResponseDto(IssueComment comment) {
+        return IssueCommentListResponseDto.builder()
+                .commentId(comment.getId())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .isDeleted(comment.isDeleted())
+                .userId(comment.getUser().getId())
+                .build();
+    }
+
+
+    private Sort parseSort(String sort) {
+        if (sort == null || sort.isEmpty()) {
+            return Sort.by("createdAt").descending(); // 기본 정렬 (생성일 내림차순)
+        }
+
+        String[] parts = sort.split(",");
+        String property = parts[0];
+        Sort.Direction direction = Sort.Direction.ASC;
+        if (parts.length > 1 && "desc".equalsIgnoreCase(parts[1])) {
+            direction = Sort.Direction.DESC;
+        }
+
+        return Sort.by(direction, property);
     }
 }

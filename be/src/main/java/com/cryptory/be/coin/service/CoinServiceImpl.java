@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.cryptory.be.chart.domain.Chart;
@@ -15,13 +16,14 @@ import com.cryptory.be.coin.domain.Coin;
 import com.cryptory.be.coin.dto.CoinDetailDto;
 import com.cryptory.be.coin.dto.CoinNewsDto;
 import com.cryptory.be.global.util.DateFormat;
+import com.cryptory.be.issue.dto.IssueDto;
+import com.cryptory.be.issue.repository.IssueRepository;
 import com.cryptory.be.openapi.dto.NaverNews;
 import com.cryptory.be.openapi.dto.Ticker;
 import com.cryptory.be.openapi.service.NaverService;
 import com.cryptory.be.openapi.service.UpbitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 
@@ -38,6 +40,7 @@ public class CoinServiceImpl implements CoinService {
 
     private final CoinRepository coinRepository;
     private final ChartRepository chartRepository;
+    private final IssueRepository issueRepository;
 
 
     // 코인 목록 조회
@@ -98,7 +101,29 @@ public class CoinServiceImpl implements CoinService {
 
         // 코인 하나의 현재가(Ticker) 반환
         Ticker coinTicker = upbitService.getTickers(coin.getCode()).get(0);
-
+        
+        // 이슈 목록 조회
+        // 방법 A. 코인에 연관관계 매핑해서 조회
+        List<IssueDto> issues = issueRepository.findAllByCoinId(coin.getId()).stream()
+        		.map(issue -> IssueDto.builder()
+        				.issueId(issue.getId())
+        				.chartId(issue.getChart().getId())
+                        .date(issue.getChart().getDate())
+                        .build())
+        		.toList();
+        // 방법 B. 차트 ID로 조회
+        /*
+        List<IssueDto> issues = charts.stream()
+                .map(chart -> issueRepository.findByChartId(chart.getChartId()))
+                .filter(Objects::nonNull) // null 값 제거
+                .map(issue -> IssueDto.builder()
+                        .issueId(issue.getId())
+                        .chartId(issue.getChart().getId())
+                        .date(issue.getChart().getDate())
+                        .build())
+                .toList();
+        */
+        
         return CoinDetailDto.builder()
                 .coinId(coin.getId())
                 .koreanName(coin.getKoreanName())
@@ -110,9 +135,9 @@ public class CoinServiceImpl implements CoinService {
                 .signedChangePrice(coinTicker.getSignedChangePrice())
                 .timestamp(DateFormat.formatTradeTime(coinTicker.getTradeDate(), coinTicker.getTradeTime()))
                 .chartList(charts)
+                .issueList(issues)
                 .build();
 
-        // TODO 이슈 목록 조회(코인에 연관관계 매핑해서 조회할지, 차트 ID로 조회할지)
     }
 
     // 특정 코인 뉴스 조회

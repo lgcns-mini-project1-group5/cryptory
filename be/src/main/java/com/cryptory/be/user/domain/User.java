@@ -54,4 +54,12 @@ public class User extends BaseTimeEntity {
     public void deny() {
         this.isDenied = true;
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateImage(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

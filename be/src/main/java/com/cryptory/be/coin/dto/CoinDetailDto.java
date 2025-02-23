@@ -2,6 +2,8 @@ package com.cryptory.be.coin.dto;
 
 import com.cryptory.be.chart.dto.ChartDto;
 import com.cryptory.be.coin.domain.CoinSymbol;
+import com.cryptory.be.issue.dto.IssueDto;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -25,7 +27,6 @@ public class CoinDetailDto {
     // 차트 리스트(차트 ID, 날짜, 시가, 종가, 고가, 저가, 변화율)
     private List<ChartDto> chartList;
 
-    // TODO 이슈 리스트 추가
     // 이슈 리스트(이슈 넘버, 차트 넘버, 날짜)
-//    private List<IssueDto> issueList;
+    private List<IssueDto> issueList;
 }
