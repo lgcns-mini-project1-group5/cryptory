@@ -20,7 +20,7 @@ public class CoinDto {
     private String code; // KRW-BTC
 
     // 심볼 정보(색상, 이미지)
-    private CoinSymbol coinSymbol = null;
+    private CoinSymbol coinSymbol;
 
     // 현재가
     private double tradePrice;

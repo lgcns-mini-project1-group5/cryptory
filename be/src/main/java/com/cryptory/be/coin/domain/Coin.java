@@ -30,12 +30,12 @@ public class Coin extends BaseTimeEntity {
     private CoinSymbol coinSymbol;  // 코인 심볼 관련 정보
 
     @Builder
-    public Coin(String koreanName, String englishName, String code) {
+    public Coin(String koreanName, String englishName, String code, CoinSymbol coinSymbol) {
         this.koreanName = koreanName;
         this.englishName = englishName;
         this.code = code;
 
-        this.coinSymbol = null;
+        this.coinSymbol = coinSymbol;
 
         this.isDisplayed = true;
     }
