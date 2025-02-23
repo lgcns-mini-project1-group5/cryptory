@@ -1,13 +1,10 @@
 package com.cryptory.be.coin.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.cryptory.be.coin.dto.CoinDetailDto;
+import com.cryptory.be.coin.dto.CoinNewsDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,42 +16,40 @@ import com.cryptory.be.coin.dto.CoinDto;
 import com.cryptory.be.coin.service.CoinService;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/coins")
 @RequiredArgsConstructor
 public class CoinController {
 
 	private final CoinService coinService;
 	
 	// 코인 목록 조회
-	@GetMapping("/coins")
-	public ResponseEntity<Object> openCoinList() throws Exception {
+	@GetMapping
+	public ResponseEntity<List<CoinDto>> getCoins() throws Exception {
 		
-		List<CoinDto> coinList = coinService.selectCoinList();
+		List<CoinDto> coinList = coinService.getCoins();
 		
 		try {
-			return new ResponseEntity<>(coinList, HttpStatus.OK);
+			return ResponseEntity.ok(coinList);
 		} catch (Exception e) {
-			return new ResponseEntity<>("코인 목록 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 	
 	// 특정 코인 상세 조회
-	@GetMapping("/coins/{coinId}")
-	public ResponseEntity<Object> openCoinDetail(@PathVariable("coinId") long coinId) {
+	@GetMapping("/{coinId}")
+	public ResponseEntity<CoinDetailDto> getCoinDetail(@PathVariable("coinId") Long coinId) {
 		
-		CoinDetailDto selectedCoinDetail = coinService.selectCoinDetail(coinId);
+		CoinDetailDto selectedCoinDetail = coinService.getCoinDetail(coinId);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(selectedCoinDetail);
+		return ResponseEntity.ok(selectedCoinDetail);
 		
 	}
 	
 	// 특정 코인 뉴스 조회 - 네이버 뉴스
-	@GetMapping("/coins/{coinId}/news")
-	public ResponseEntity<String> searchCoinNews(@PathVariable("coinId") long coinId) {
-		return coinService.getCoinNews(coinId);
+	@GetMapping("/{coinId}/news")
+	public ResponseEntity<List<CoinNewsDto>> searchCoinNews(@PathVariable("coinId") Long coinId) {
+		List<CoinNewsDto> coinNewsList = coinService.getCoinNews(coinId);
+		return ResponseEntity.ok(coinNewsList);
 	}
-	
-	
-	// TODO 특정 코인 이슈 목록 조회
 
 }

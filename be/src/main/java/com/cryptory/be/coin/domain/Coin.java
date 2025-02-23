@@ -17,7 +17,9 @@ public class Coin extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;      // 한글 이름(비트코인, 이더리움)
+    private String koreanName;
+
+    private String englishName;
 
     private boolean isDisplayed;
 
@@ -28,10 +30,12 @@ public class Coin extends BaseTimeEntity {
     private CoinSymbol coinSymbol;  // 코인 심볼 관련 정보
 
     @Builder
-    public Coin(String name, String code, CoinSymbol coinSymbol) {
-        this.name = name;
+    public Coin(String koreanName, String englishName, String code) {
+        this.koreanName = koreanName;
+        this.englishName = englishName;
         this.code = code;
-        this.coinSymbol = coinSymbol;
+
+        this.coinSymbol = null;
 
         this.isDisplayed = true;
     }
