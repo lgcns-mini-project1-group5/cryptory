@@ -4,10 +4,7 @@ import com.cryptory.be.user.dto.UserInfoDto;
 import com.cryptory.be.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -28,5 +25,11 @@ public class UserController {
     public ResponseEntity<?> deleteUser(Principal principal) {
         userService.deleteUser(principal.getName());
         return ResponseEntity.ok("delete success");
+    }
+
+    @PatchMapping("/me/nickname")
+    public ResponseEntity<?> updateNickname(Principal principal, @RequestBody String nickname) {
+        userService.updateNickname(principal.getName(), nickname);
+        return ResponseEntity.ok("update success");
     }
 }

@@ -30,4 +30,12 @@ public class UserService {
     public void deleteUser(String userId) {
         userRepository.deleteByUserId(userId);
     }
+
+    @Transactional
+    public void updateNickname(String userId, String nickname) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+
+        user.updateNickname(nickname);
+    }
 }
