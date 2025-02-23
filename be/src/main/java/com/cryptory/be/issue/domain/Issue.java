@@ -78,21 +78,29 @@ public class Issue extends BaseTimeEntity {
         this.chart = chart;
     }
 
-    // @Setter 추가 안하고 수정이 필요한 필드만 setter를 만들었음
-    public void setTitle(String title) {
-        this.title = title;
+    public void update(String title, String content, String newsTitle, String source) {
+        if (title != null && title.isBlank()) {
+            throw new IllegalArgumentException("제목은 비어 있을 수 없습니다.");
+        }
+        if (content != null && content.isBlank()) {
+            throw new IllegalArgumentException("내용은 비어 있을 수 없습니다.");
+        }
+
+        if (title != null) {
+            this.title = title;
+        }
+        if (content != null) {
+            this.content = content;
+        }
+        if (newsTitle != null) {
+            this.newsTitle = newsTitle;
+        }
+        if (source != null) {
+            this.source = source;
+        }
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void delete() {
+        this.isDeleted = true;
     }
-
-    public void setNewsTitle(String newsTitle) {
-        this.newsTitle = newsTitle;
-    }
-
-    public void setSource(String source){
-        this.source = source;
-    }
-
 }

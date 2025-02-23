@@ -101,25 +101,20 @@ public class AdminIssueServiceImpl implements AdminIssueService {
     public void updateIssue(Long issueId, IssueUpdateRequestDto requestDto) {
         Issue issue = issueRepository.findById(issueId)
                 .orElseThrow(() -> new NoSuchElementException("해당 이슈를 찾을 수 없습니다. ID: " + issueId));
-        // 수정 가능한 필드만 업데이트
-        if(requestDto.getTitle() != null){
-            issue.setTitle(requestDto.getTitle());
-        }
-        if (requestDto.getContent() != null) {
-            issue.setContent(requestDto.getContent()); // setContent 사용
-        }
-        if (requestDto.getNewsTitle() != null) {
-            issue.setNewsTitle(requestDto.getNewsTitle()); // setNewsTitle 사용
-        }
-        if (requestDto.getSource() != null) {
-            issue.setSource(requestDto.getSource()); // setSource 사용
+        try {
+            issue.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getNewsTitle(), requestDto.getSource());
+        } catch (IllegalArgumentException e) {
+            // 유효성 검사 실패
+            throw e;
         }
     }
 
     @Transactional
     @Override
     public void deleteIssues(List<Long> ids) {
-        issueRepository.softDeleteByIds(ids);
+        List<Issue> issues = issueRepository.findAllById(ids);
+        issues.forEach(Issue::delete);
+        //issueRepository.softDeleteByIds(ids);
     }
 
     @Override

@@ -81,7 +81,9 @@ public class AdminIssueController {
             return ResponseEntity.ok().build();
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Issue id = " + issueId + "를 찾을 수 없습니다.");
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // 400 Bad Request, 에러 메시지
+        }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
         }
     }
