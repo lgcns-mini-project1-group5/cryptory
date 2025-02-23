@@ -21,7 +21,7 @@ import lombok.extern.jackson.Jacksonized;
 @AllArgsConstructor
 @Jacksonized
 public class CoinListResponseDto {
-    private Integer cryptoId;
+    private Long cryptoId;
     private String name;
     private String symbol;
     private String logoUrl;

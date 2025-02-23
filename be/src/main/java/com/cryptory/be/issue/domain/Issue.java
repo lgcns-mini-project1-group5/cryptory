@@ -5,6 +5,7 @@ import com.cryptory.be.global.entity.BaseTimeEntity;
 import com.cryptory.be.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,4 +27,11 @@ public class Issue extends BaseTimeEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "chart_id")
     private Chart chart;
+
+    @Builder
+    public Issue(String title, String content, Chart chart) {
+        this.title = title;
+        this.content = content;
+        this.chart = chart;
+    }
 }

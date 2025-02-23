@@ -1,5 +1,7 @@
 package com.cryptory.be.admin.service;
 
+import java.util.List;
+
 /**
  * packageName    : com.cryptory.be.admin.service
  * fileName       : AdminPostCommentService
@@ -12,4 +14,9 @@ package com.cryptory.be.admin.service;
  * 2/22/25         조영상        최초 생성
  */
 public interface AdminPostCommentService {
+    // 게시글 강제 삭제
+    void deletePosts(List<Long> ids);
+
+    // 댓글 강제 삭제
+    void deleteComment(Long commentId);
 }

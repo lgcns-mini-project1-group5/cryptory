@@ -21,9 +21,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Jacksonized
 public class IssueCommentListResponseDto { //이슈 코멘트
-    private Integer commentId;
+    private Long commentId;
     private String content;
     private LocalDateTime createdAt;
     private boolean isDeleted;
-    private Integer userId; // 또는 String userNickname
+    private Long userId; // 또는 String userNickname
 }

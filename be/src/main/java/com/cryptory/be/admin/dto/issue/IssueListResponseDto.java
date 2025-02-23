@@ -23,10 +23,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Jacksonized
 public class IssueListResponseDto { //이슈 목록
-    private Integer issueId;
+    private Long issueId;
     private LocalDate date;
     private String title;
-    private Integer createdBy; // 또는 String createdBy (닉네임)
+    private Long createdBy; // 또는 String createdBy (닉네임)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

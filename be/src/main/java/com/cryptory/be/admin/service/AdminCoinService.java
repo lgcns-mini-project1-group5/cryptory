@@ -20,8 +20,8 @@ public interface AdminCoinService {
     Page<CoinListResponseDto> getCoinList(String keyword, int page, int size, String sort);
 
     // 특정 코인 상세 정보 조회
-    CoinDetailResponseDto getCoinDetails(Integer coinId);
+    CoinDetailResponseDto getCoinDetails(Long coinId);
 
     // 코인 메인 페이지 노출 여부 변경
-    void updateDisplaySetting(Integer coinId, boolean isDisplayed);
+    void updateDisplaySetting(Long coinId, boolean isDisplayed);
 }

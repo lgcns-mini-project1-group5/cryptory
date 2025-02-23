@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Jacksonized
 public class CoinTrafficDto {
-    private Integer coinId;
+    private Long coinId;
     private String coinName;
     private String symbol;
     private Long traffic;

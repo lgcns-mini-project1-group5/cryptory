@@ -21,7 +21,7 @@ import lombok.extern.jackson.Jacksonized;
 @AllArgsConstructor
 @Jacksonized
 public class UserListResponseDto {
-    private Integer userId;
+    private Long userId;
     private String nickname;
     private String providerId; // 카카오 ID
     private String role;

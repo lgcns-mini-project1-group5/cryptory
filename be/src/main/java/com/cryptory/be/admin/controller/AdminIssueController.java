@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * packageName    : com.cryptory.be.admin.controller
@@ -28,95 +29,135 @@ import java.util.Map;
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
 public class AdminIssueController {
+
     private final AdminIssueService adminIssueService;
-    private final AdminPostCommentService adminPostCommentService;
+    private final AdminPostCommentService adminPostCommentService; // 게시글/댓글 삭제를 위한 서비스
 
     // 특정 코인의 이슈 목록 조회
     @GetMapping("/coins/{coinId}/issues")
-    public ResponseEntity<Page<IssueListResponseDto>> getIssueList(
-            @PathVariable Integer coinId,
+    public ResponseEntity<?> getIssueList(
+            @PathVariable Long coinId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String sort) {
 
-        Page<IssueListResponseDto> issues = adminIssueService.getIssueList(coinId, page, size, sort);
-        return ResponseEntity.ok(issues);
+        try {
+            Page<IssueListResponseDto> issues = adminIssueService.getIssueList(coinId, page, size, sort);
+            return ResponseEntity.ok(issues);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
+        }
     }
 
     // 특정 코인의 이슈 생성
     @PostMapping("/coins/{coinId}/issues")
-    public ResponseEntity<Void> createIssue(@PathVariable Integer coinId, @RequestBody IssueCreateRequestDto requestDto) {
-        Integer newIssueId = adminIssueService.createIssue(coinId, requestDto);
-        return ResponseEntity.created(URI.create("/api/v1/admin/issues/" + newIssueId)).build(); // 201 Created, Location 헤더
+    public ResponseEntity<?> createIssue(@PathVariable Long coinId, @RequestBody IssueCreateRequestDto requestDto) {
+        try {
+            Long newIssueId = adminIssueService.createIssue(coinId, requestDto);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
+        }
     }
 
     // 이슈 상세 조회
     @GetMapping("/issues/{issueId}")
-    public ResponseEntity<IssueDetailResponseDto> getIssueDetails(@PathVariable Integer issueId) {
-        IssueDetailResponseDto issue = adminIssueService.getIssueDetails(issueId);
-        return ResponseEntity.ok(issue);
+    public ResponseEntity<?> getIssueDetails(@PathVariable Long issueId) {
+        try {
+            IssueDetailResponseDto issue = adminIssueService.getIssueDetails(issueId);
+            return ResponseEntity.ok(issue);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Issue id = " + issueId + "를 찾을 수 없습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
+        }
     }
 
     // 이슈 수정
     @PutMapping("/issues/{issueId}")
-    public ResponseEntity<Void> updateIssue(@PathVariable Integer issueId, @RequestBody IssueUpdateRequestDto requestDto) {
-        adminIssueService.updateIssue(issueId, requestDto);
-        return ResponseEntity.ok().build();
-    }
-
-    // 이슈 삭제 (체크박스 활용한 일괄삭제 가능, 논리적 삭제임)
-    @PatchMapping("/issues")
-    public ResponseEntity<Void> deleteIssues(@RequestParam("ids") List<Integer> ids, @RequestBody Map<String, Boolean> body){
-        if (body.containsKey("isDeleted") && body.get("isDeleted")) {
-            adminIssueService.deleteIssues(ids);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> updateIssue(@PathVariable Long issueId, @RequestBody IssueUpdateRequestDto requestDto) {
+        try {
+            adminIssueService.updateIssue(issueId, requestDto);
+            return ResponseEntity.ok().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Issue id = " + issueId + "를 찾을 수 없습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
         }
     }
 
-    // 토론방 댓글 목록 조회
+    // 이슈 삭제 (일괄, 논리적 삭제)
+    @PatchMapping("/issues")
+    public ResponseEntity<?> deleteIssues(@RequestParam("ids") List<Long> ids, @RequestBody Map<String, Boolean> body) {
+        try {
+            if (body.containsKey("isDeleted") && body.get("isDeleted")) {
+                adminIssueService.deleteIssues(ids);
+                return ResponseEntity.ok("성공적으로 삭제되었습니다."); // 204 No Content
+            } else {
+                return ResponseEntity.badRequest().body("isDeleted 필드는 true여야 합니다.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
+        }
+    }
+
+    // 이슈 코멘트 목록 조회
     @GetMapping("/issues/{issueId}/comments")
-    public ResponseEntity<Page<IssueCommentListResponseDto>> getIssueComments(
-            @PathVariable Integer issueId,
+    public ResponseEntity<?> getIssueComments(
+            @PathVariable Long issueId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String sort) {
-
-        Page<IssueCommentListResponseDto> comments = adminIssueService.getIssueComments(issueId, page, size, sort);
-        return ResponseEntity.ok(comments);
-    }
-
-    // 토론방 댓글 삭제 (논리적 삭제)
-    @PatchMapping("/issue-commmets/{commentId}")
-    public ResponseEntity<Void> deleteIssueComment(@PathVariable Integer commentId, @RequestBody Map<String, Boolean> body) {
-        if (body.containsKey("isDeleted") && body.get("idDeleted")) {
-            adminIssueService.deleteIssueComment(commentId);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.badRequest().build();
+        try {
+            Page<IssueCommentListResponseDto> comments = adminIssueService.getIssueComments(issueId, page, size, sort);
+            return ResponseEntity.ok(comments);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
         }
     }
 
-    // 게시글 강제 삭제 (일괄, 논리적 삭제)
+    // 이슈 코멘트 삭제 (논리적 삭제)
+    @PatchMapping("/issue-comments/{commentId}")
+    public ResponseEntity<?> deleteIssueComment(@PathVariable Long commentId, @RequestBody Map<String, Boolean> body) {
+        try{
+            if (body.containsKey("isDeleted") && body.get("isDeleted")) {
+                adminIssueService.deleteIssueComment(commentId);
+                return ResponseEntity.ok("성공적으로 삭제되었습니다.");
+            } else {
+                return ResponseEntity.badRequest().body("isDeleted 필드는 true여야 합니다.");
+            }
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
+        }
+    }
+
+    // 게시글 삭제 (일괄, 논리적 삭제)
     @PatchMapping("/posts")
-    public ResponseEntity<Void> deletePosts(@RequestParam("ids") List<Integer>, @RequestBody Map<String, Boolean> body) {
-        if(body.containsKey("isDeleted") && body.get("idDeleted")) {
-            adminPostCommentService.deletePosts(ids);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> deletePosts(@RequestParam("ids") List<Long> ids,  @RequestBody Map<String, Boolean> body) {
+        try{
+            if (body.containsKey("isDeleted") && body.get("isDeleted")) {
+                adminPostCommentService.deletePosts(ids);
+                return ResponseEntity.ok("성공적으로 삭제되었습니다.");
+            } else {
+                return ResponseEntity.badRequest().body("isDeleted 필드는 true여야 합니다.");
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
         }
     }
 
-    // 게시물 댓글 강제 삭제 (논리적 삭제)
+    // 댓글 삭제 (논리적 삭제)
     @PatchMapping("/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Integer commentId, @RequestBody Map<String, Boolean> body){
-        if (body.containsKey("isDeleted") && body.get("isDeleted")) {
-            adminPostCommentService.deleteComment(commentId);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId, @RequestBody Map<String, Boolean> body) {
+        try{
+            if (body.containsKey("isDeleted") && body.get("isDeleted")) {
+                adminPostCommentService.deleteComment(commentId);
+                return ResponseEntity.ok("성공적으로 삭제되었습니다.");
+            } else {
+                return ResponseEntity.badRequest().body("isDeleted 필드는 true여야 합니다.");
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
         }
     }
 }

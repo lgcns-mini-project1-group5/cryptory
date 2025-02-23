@@ -22,11 +22,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Jacksonized
 public class IssueDetailResponseDto { //이슈 단건
-    private Integer issueId;
+    private Long issueId;
     private LocalDate date;
     private String title;
     private String summaryContent;
-    private Integer createdBy; // 또는 String createdByNickname
+    private Long createdBy; // 또는 String createdByNickname
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String newsTitle; //유지

@@ -1,5 +1,10 @@
 package com.cryptory.be.admin.service;
 
+import com.cryptory.be.admin.dto.issue.*;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+
 /**
  * packageName    : com.cryptory.be.admin.service
  * fileName       : AdminIssueService
@@ -12,4 +17,24 @@ package com.cryptory.be.admin.service;
  * 2/22/25         조영상        최초 생성
  */
 public interface AdminIssueService {
+    // 이슈 목록 조회
+    Page<IssueListResponseDto> getIssueList(Long coinId, int page, int size, String sort);
+
+    // 이슈 생성
+    Long createIssue(Long coinId, IssueCreateRequestDto requestDto);
+
+    // 이슈 상세 조회
+    IssueDetailResponseDto getIssueDetails(Long issueId);
+
+    /// 이슈 수정
+    void updateIssue(Long issueId, IssueUpdateRequestDto requestDto);
+
+    // 이슈 삭제
+    void deleteIssues(List<Long> ids);
+
+    // 토론방 댓글 목록 조회
+    Page<IssueCommentListResponseDto> getIssueComments(Long issueId, int page, int size, String sort);
+
+    // 토론방 댓글 삭제
+    void deleteIssueComment(Long commentId);
 }

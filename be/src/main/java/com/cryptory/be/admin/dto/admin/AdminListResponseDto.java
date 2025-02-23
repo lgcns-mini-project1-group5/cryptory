@@ -21,7 +21,7 @@ import lombok.extern.jackson.Jacksonized;
 @AllArgsConstructor
 @Jacksonized
 public class AdminListResponseDto {
-    private Integer userId;
+    private Long userId;
     private String nickname;
     private String role;
     private boolean isDenied;

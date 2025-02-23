@@ -24,7 +24,9 @@ import java.time.LocalDate;
 public class IssueCreateRequestDto { //이슈 등록
     private LocalDate date;
     private String title;
+    private String content;
     private String summaryContent;
     private String newsTitle;
     private String source;
+    private Long chartId;
 }

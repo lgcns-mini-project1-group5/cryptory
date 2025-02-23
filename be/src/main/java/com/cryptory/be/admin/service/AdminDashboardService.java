@@ -1,5 +1,7 @@
 package com.cryptory.be.admin.service;
 
+import com.cryptory.be.admin.dto.dashboard.DashboardStatsResponseDto;
+
 /**
  * packageName    : com.cryptory.be.admin.service
  * fileName       : AdminDashboardService
@@ -12,4 +14,5 @@ package com.cryptory.be.admin.service;
  * 2/22/25         조영상        최초 생성
  */
 public interface AdminDashboardService {
+    DashboardStatsResponseDto getDashboardStats(String period, String startDate, String endDate);
 }
