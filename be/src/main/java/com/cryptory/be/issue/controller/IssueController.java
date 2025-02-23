@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,8 +65,8 @@ public class IssueController {
 
 
     // 이슈 내 코멘트 삭제
-	@DeleteMapping("/{issueId}/comments/{commentId}")
-    public ResponseEntity<?> deletePost(@PathVariable("coinId") Long coinId,
+	@PutMapping("/{issueId}/comments/{commentId}")
+    public ResponseEntity<?> deleteIssueComment(@PathVariable("coinId") Long coinId,
     									@PathVariable("issueId") Long issueId,
                                         @PathVariable("commentId") Long issueCommentId) {
         issueService.deleteIssueComment(issueId, issueCommentId);
