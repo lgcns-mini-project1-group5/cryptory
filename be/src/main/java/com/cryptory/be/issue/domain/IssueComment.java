@@ -31,6 +31,8 @@ public class IssueComment extends BaseTimeEntity {
 
     private String content;
     
+    private boolean isDeleted;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -43,11 +45,20 @@ public class IssueComment extends BaseTimeEntity {
     public IssueComment(String content, User user) {
         this.content = content;
         this.user = user;
-
+        
+        this.isDeleted = false;
     }
     
     public void update(String content) {
     	this.content = content != null ? content : this.content;
+    }
+    
+    public void delete() {
+        this.isDeleted = true;
+    }
+    
+    public boolean isNotDeleted() {
+        return !this.isDeleted;
     }
 
 }

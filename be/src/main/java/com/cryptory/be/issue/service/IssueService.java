@@ -14,6 +14,7 @@ import com.cryptory.be.issue.dto.CreateIssueCommentDto;
 import com.cryptory.be.issue.dto.IssueCommentDto;
 import com.cryptory.be.issue.dto.UpdateIssueCommentDto;
 import com.cryptory.be.issue.repository.IssueCommentRepository;
+import com.cryptory.be.post.domain.Post;
 import com.cryptory.be.user.domain.User;
 import com.cryptory.be.user.repository.UserRepository;
 
@@ -30,7 +31,8 @@ public class IssueService {
 	// 특정 이슈 상세 조회 - 토론방 코멘트 전체 조회
 	public List<IssueCommentDto> getIssueComments(Long issueId) {
 
-        return issueCommentRepository.findByIssueId(issueId).stream()
+        return issueCommentRepository.findAllByIssueId(issueId).stream()
+        		.filter(IssueComment::isNotDeleted)
         		.map(issueComment -> modelMapper.map(issueComment, IssueCommentDto.class))
         		.toList();
     }
@@ -66,7 +68,10 @@ public class IssueService {
 	// 이슈 내 코멘트 삭제
 	@Transactional
     public void deleteIssueComment(Long issueId, Long issueCommentId) {
-        issueCommentRepository.deleteById(issueCommentId);
+		IssueComment issueComment = issueCommentRepository.findById(issueCommentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 코멘트를 찾을 수 없습니다."));
+
+        issueComment.delete();
     }
 
 }
