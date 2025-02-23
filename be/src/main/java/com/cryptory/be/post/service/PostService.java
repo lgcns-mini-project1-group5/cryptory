@@ -1,5 +1,7 @@
 package com.cryptory.be.post.service;
 
+import com.cryptory.be.coin.domain.Coin;
+import com.cryptory.be.coin.repository.CoinRepository;
 import com.cryptory.be.global.util.DateFormat;
 import com.cryptory.be.global.util.FileUtils;
 import com.cryptory.be.post.domain.Post;
@@ -29,6 +31,7 @@ public class PostService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final CoinRepository coinRepository;
     private final PostFileRepository postFileRepository;
     private final FileUtils fileUtils;
 
@@ -58,10 +61,14 @@ public class PostService {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
 
+        Coin coin = coinRepository.findById(coinId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 코인을 찾을 수 없습니다."));
+
         Post post = postRepository.save(Post.builder()
                 .title(createPostDto.getTitle())
                 .body(createPostDto.getBody())
                 .user(user)
+                .coin(coin)
                 .build());
 
         if (files != null) {
