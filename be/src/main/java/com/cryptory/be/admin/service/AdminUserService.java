@@ -23,15 +23,15 @@ public interface AdminUserService {
     Page<UserListResponseDto> getUserList(String keyword, int page, int size, String sort);
 
     // 사용자 차단/차단해제
-    void blockUser(Integer userId, UserBlockRequestDto requestDto);
+    void blockUser(Long userId, UserBlockRequestDto requestDto);
 
     // *********관리자 관련********
     // 관리자 목록 조회
     Page<AdminListResponseDto> getAdminList(int page, int size, String sort);
 
     // 관리자 차단/차단해제
-    void blockAdmin(Integer userId, UserBlockRequestDto requestDto);
+    void blockAdmin(Long userId, UserBlockRequestDto requestDto);
 
     // 관리자 생성
-    Integer createAdmin(AdminCreateRequestDto requestDto);
+    Long createAdmin(AdminCreateRequestDto requestDto);
 }

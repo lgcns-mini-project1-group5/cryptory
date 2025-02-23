@@ -50,7 +50,7 @@ public class AdminUserController {
 
     // 사용자 차단/차단 해제
     @PatchMapping("/{userId}/block")
-    public ResponseEntity<?> blockUser(@PathVariable Integer userId, @RequestBody UserBlockRequestDto requestDto) {
+    public ResponseEntity<?> blockUser(@PathVariable Long userId, @RequestBody UserBlockRequestDto requestDto) {
         try{
             adminUserService.blockUser(userId, requestDto);
             return ResponseEntity.ok().build();
@@ -80,7 +80,7 @@ public class AdminUserController {
 
     // 관리자 차단/차단 해제
     @PatchMapping("/admins/{userId}/block")
-    public ResponseEntity<?> blockAdmin(@PathVariable Integer userId, @RequestBody UserBlockRequestDto requestDto){
+    public ResponseEntity<?> blockAdmin(@PathVariable Long userId, @RequestBody UserBlockRequestDto requestDto){
         try{
             adminUserService.blockAdmin(userId, requestDto);
             return ResponseEntity.ok().build();
