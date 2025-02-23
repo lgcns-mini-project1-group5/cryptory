@@ -27,9 +27,6 @@ public class IssueService {
 	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
 	
-    // TODO 이슈 목록 조회(코인 상세 페이지 들어갈 때 필요) - api는 필요 없음
-
-	
 	// 특정 이슈 상세 조회 - 토론방 코멘트 전체 조회
 	public List<IssueCommentDto> getIssueComments(Long issueId) {
 

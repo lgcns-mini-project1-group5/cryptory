@@ -23,7 +23,7 @@ import com.cryptory.be.issue.service.IssueService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/issues") // coinId와 chartId를 PathVariable로 받아야 하는지 확인 필요
+@RequestMapping("/api/v1/coins/{coinId}/issues")
 public class IssueController {
 	
 	private final IssueService issueService;
@@ -34,7 +34,8 @@ public class IssueController {
 
     // 특정 이슈 상세 조회 - 토론방 코멘트 전체 조회
 	@GetMapping("/{issueId}/comments")
-    public ResponseEntity<List<IssueCommentDto>> getIssueComments(@PathVariable("issueId") Long issueId) {
+    public ResponseEntity<List<IssueCommentDto>> getIssueComments(@PathVariable("coinId") Long coinId, 
+    																@PathVariable("issueId") Long issueId) {
         
 		List<IssueCommentDto> issueComments = issueService.getIssueComments(issueId);
 
@@ -44,6 +45,7 @@ public class IssueController {
     // 이슈 내 코멘트 등록
 	@PostMapping("/{issueId}/comments")
 	public ResponseEntity<IssueCommentDto> createIssueComment(Principal principal,
+											@PathVariable("coinId") Long coinId,
 											@PathVariable("issueId") Long issueId,
 								            @RequestPart(value = "issueComment") CreateIssueCommentDto createIssueCommentDto) {
 		IssueCommentDto issueComment = issueService.createIssueComment(issueId, principal.getName(), createIssueCommentDto);
@@ -52,7 +54,8 @@ public class IssueController {
 
     // 이슈 내 코멘트 수정
 	@PatchMapping("/{issueId}/comments/{commentId}")
-    public ResponseEntity<?> updateIssueComment(@PathVariable("issueId") Long issueId,
+    public ResponseEntity<?> updateIssueComment(@PathVariable("coinId") Long coinId,
+    											@PathVariable("issueId") Long issueId,
                                               @PathVariable("commentId") Long issueCommentId,
                                               @RequestPart(value = "issueComment", required = false) UpdateIssueCommentDto updateIssueCommentDto) {
         issueService.updateIssueComment(issueId, issueCommentId, updateIssueCommentDto);
@@ -62,7 +65,8 @@ public class IssueController {
 
     // 이슈 내 코멘트 삭제
 	@DeleteMapping("/{issueId}/comments/{commentId}")
-    public ResponseEntity<?> deletePost(@PathVariable("issueId") Long issueId,
+    public ResponseEntity<?> deletePost(@PathVariable("coinId") Long coinId,
+    									@PathVariable("issueId") Long issueId,
                                         @PathVariable("commentId") Long issueCommentId) {
         issueService.deleteIssueComment(issueId, issueCommentId);
         return ResponseEntity.ok("정상적으로 삭제되었습니다.");
