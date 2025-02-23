@@ -23,7 +23,7 @@ public class Post extends BaseTimeEntity {
 
     private String body;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -38,10 +38,11 @@ public class Post extends BaseTimeEntity {
     private Coin coin;
 
     @Builder
-    public Post(String title, String body, User user) {
+    public Post(String title, String body, User user, Coin coin) {
         this.title = title;
         this.body = body;
         this.user = user;
+        this.coin = coin;
 
         this.viewCnt = 0L;
         this.likeCnt = 0L;

@@ -32,8 +32,8 @@ public class IssueComment extends BaseTimeEntity {
     private String content;
     
     private boolean isDeleted;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
     
