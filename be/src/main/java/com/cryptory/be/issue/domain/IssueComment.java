@@ -42,10 +42,11 @@ public class IssueComment extends BaseTimeEntity {
     private Issue issue;
     
     @Builder
-    public IssueComment(String content, User user) {
+    public IssueComment(String content, User user, Issue issue) {
         this.content = content;
         this.user = user;
-        
+        this.issue = issue;
+
         this.isDeleted = false;
     }
     
