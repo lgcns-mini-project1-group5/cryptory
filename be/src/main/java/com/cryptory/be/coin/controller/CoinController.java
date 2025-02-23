@@ -1,14 +1,10 @@
 package com.cryptory.be.coin.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.cryptory.be.coin.dto.CoinDetailDto;
 import com.cryptory.be.coin.dto.CoinNewsDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,14 +24,14 @@ public class CoinController {
 	
 	// 코인 목록 조회
 	@GetMapping
-	public ResponseEntity<Object> getCoins() throws Exception {
+	public ResponseEntity<List<CoinDto>> getCoins() throws Exception {
 		
 		List<CoinDto> coinList = coinService.getCoins();
 		
 		try {
 			return ResponseEntity.ok(coinList);
 		} catch (Exception e) {
-			return new ResponseEntity<>("코인 목록 조회 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 	
