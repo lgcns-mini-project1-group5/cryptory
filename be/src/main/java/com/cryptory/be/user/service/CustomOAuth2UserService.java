@@ -37,8 +37,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Optional<User> findUser = userRepository.findByProviderIdAndProviderName(oAuth2UserDto.getProviderId(), oAuth2UserDto.getProviderName());
 
         if(findUser.isEmpty()) {
-            userRepository.save(oAuth2UserDto.toUser());
-            return new PrincipalUserDetails(oAuth2UserDto.toUser(), attributes);
+            User user = userRepository.save(oAuth2UserDto.toUser());
+            return new PrincipalUserDetails(user, attributes);
         }
 
         // todo: isDenied == true 일 때 예외처리
