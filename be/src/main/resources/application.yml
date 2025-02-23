@@ -21,6 +21,9 @@ logging.level:
 file:
   base-dir: /
 
+naver:
+  client-id: ${NAVER_CLIENT_ID}
+  secret: ${NAVER_SECRET}
 
 #  # security logging
 #  org.springframework.security: DEBUG

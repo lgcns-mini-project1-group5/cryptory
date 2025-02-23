@@ -4,13 +4,13 @@ import com.cryptory.be.coin.domain.Coin;
 import com.cryptory.be.global.entity.BaseTimeEntity;
 import com.cryptory.be.issue.domain.Issue;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
+@Builder
 @Table(name = "charts")
 public class Chart extends BaseTimeEntity {
 
@@ -33,9 +33,6 @@ public class Chart extends BaseTimeEntity {
     // 종가
     private Double tradePrice;
 
-    // 누적 거래량
-    private Double tradeVolume;
-
     // 전일 종가 대비 변화량
     private Double changeRate;
 
@@ -48,7 +45,7 @@ public class Chart extends BaseTimeEntity {
 
     // TODO 차트와 이슈 관계 추가
     // 차트 하나에 이슈 한개
-    @OneToOne(mappedBy = "chart")
-    private Issue issue;
+//    @OneToOne(mappedBy = "chart")
+//    private Issue issue;
 
 }
