@@ -60,7 +60,7 @@ public class User extends BaseTimeEntity {
         admin.isDenied = false;
         admin.userId = userId;
         admin.nickname = nickname;
-        admin.password = encodedPassword
+        admin.password = encodedPassword;
         admin.role = Role.ADMIN;
         return admin;
     }
