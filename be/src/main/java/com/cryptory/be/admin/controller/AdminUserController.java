@@ -50,19 +50,19 @@ public class AdminUserController {
     }
 
     // 사용자 차단/차단 해제
-    @PatchMapping("/{userId}/block")
+    @PatchMapping("/{userId}")
     public ResponseEntity<?> blockUser(@PathVariable Long userId, @RequestBody UserBlockRequestDto requestDto) {
-        try {
-            adminUserService.blockUser(userId, requestDto);
-            return ResponseEntity.ok().build();
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User id: " + userId + "가 존재하지 않습니다.");
-        } catch (Exception e) {
+
+        try{
+            boolean isDenied = adminUserService.blockUser(userId, requestDto);
+            return ResponseEntity.ok().body(Map.of("isDenied", isDenied));
+        }catch (NoSuchElementException e){
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("User id: " + userId + "가 존재하지 않습니다.");
+        }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
         }
 
     }
-
 
     // 관리자 목록 조회
     @GetMapping("/admins")
@@ -80,14 +80,14 @@ public class AdminUserController {
     }
 
     // 관리자 차단/차단 해제
-    @PatchMapping("/admins/{userId}/block")
-    public ResponseEntity<?> blockAdmin(@PathVariable Long userId, @RequestBody UserBlockRequestDto requestDto) {
-        try {
-            adminUserService.blockAdmin(userId, requestDto);
-            return ResponseEntity.ok().build();
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User id: " + userId + "가 존재하지 않습니다.");
-        } catch (Exception e) {
+    @PatchMapping("/admins/{userId}")
+    public ResponseEntity<?> blockAdmin(@PathVariable Long userId, @RequestBody UserBlockRequestDto requestDto){
+        try{
+            boolean idDenied = adminUserService.blockAdmin(userId, requestDto);
+            return ResponseEntity.ok().body(Map.of("isDenied", idDenied));
+        }catch (NoSuchElementException e){
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("User id: " + userId + "가 존재하지 않습니다.");
+        }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
         }
     }

@@ -28,7 +28,6 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final IssueCommentRepository issueCommentRepository;
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
 
     // 특정 이슈 상세 조회 - 토론방 코멘트 전체 조회
     public List<IssueCommentDto> getIssueComments(Long issueId) {

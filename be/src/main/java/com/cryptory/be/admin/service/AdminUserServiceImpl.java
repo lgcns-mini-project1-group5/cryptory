@@ -55,13 +55,12 @@ public class AdminUserServiceImpl implements AdminUserService{
 
     @Transactional
     @Override
-    public void blockUser(Long userId, UserBlockRequestDto requestDto) {
+    public boolean blockUser(Long userId, UserBlockRequestDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("해당 사용자를 찾을 수 없습니다 ID: " + userId));
 
-        if(requestDto.isBlocked()) {
-            user.deny();
-        }
+        user.deny(requestDto.isDenied());
+        return user.isDenied();
     }
 
     @Override
@@ -75,8 +74,8 @@ public class AdminUserServiceImpl implements AdminUserService{
 
     @Transactional
     @Override
-    public void blockAdmin(Long userId, UserBlockRequestDto requestDto) {
-        blockUser(userId, requestDto);
+    public boolean blockAdmin(Long userId, UserBlockRequestDto requestDto) {
+        return blockUser(userId, requestDto);
     }
 
     // 관리자 생성 코드 -> 일단 암호화 적용했는데 이게 맞나??

@@ -21,5 +21,5 @@ import lombok.extern.jackson.Jacksonized;
 @AllArgsConstructor
 @Jacksonized
 public class UserBlockRequestDto {
-    private boolean isBlocked;
+    private boolean isDenied;
 }
