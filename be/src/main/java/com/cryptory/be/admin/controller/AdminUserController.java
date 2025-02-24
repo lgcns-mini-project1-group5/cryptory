@@ -5,6 +5,7 @@ import com.cryptory.be.admin.dto.admin.AdminListResponseDto;
 import com.cryptory.be.admin.dto.user.UserBlockRequestDto;
 import com.cryptory.be.admin.dto.user.UserListResponseDto;
 import com.cryptory.be.admin.service.AdminUserService;
+import com.cryptory.be.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,7 @@ public class AdminUserController {
         try {
             Page<UserListResponseDto> users = adminUserService.getUserList(keyword, page, size, sort);
             return ResponseEntity.ok(users);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
         }
 
@@ -51,9 +52,10 @@ public class AdminUserController {
     // 사용자 차단/차단 해제
     @PatchMapping("/{userId}")
     public ResponseEntity<?> blockUser(@PathVariable Long userId, @RequestBody UserBlockRequestDto requestDto) {
+
         try{
             boolean isDenied = adminUserService.blockUser(userId, requestDto);
-            return ResponseEntity.ok().build(Map.of("isDenied", isDenied));
+            return ResponseEntity.ok().body(Map.of("isDenied", isDenied));
         }catch (NoSuchElementException e){
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("User id: " + userId + "가 존재하지 않습니다.");
         }catch (Exception e){
@@ -68,10 +70,10 @@ public class AdminUserController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String sort) {
-        try{
+        try {
             Page<AdminListResponseDto> admins = adminUserService.getAdminList(page, size, sort);
             return ResponseEntity.ok(admins);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
         }
 
@@ -82,7 +84,7 @@ public class AdminUserController {
     public ResponseEntity<?> blockAdmin(@PathVariable Long userId, @RequestBody UserBlockRequestDto requestDto){
         try{
             boolean idDenied = adminUserService.blockAdmin(userId, requestDto);
-            return ResponseEntity.ok().build(Map.of("isDenied", idDenied));
+            return ResponseEntity.ok().body(Map.of("isDenied", idDenied));
         }catch (NoSuchElementException e){
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("User id: " + userId + "가 존재하지 않습니다.");
         }catch (Exception e){
@@ -92,12 +94,14 @@ public class AdminUserController {
 
     // 관리자 생성
     @PostMapping("/admins")
-    public ResponseEntity<?> createAdmin(@RequestBody AdminCreateRequestDto requestDto) {
-        try{
-            adminUserService.createAdmin(requestDto);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
-        }
+    public ApiResponse<?> createAdmin(@RequestBody AdminCreateRequestDto requestDto) {
+
+        adminUserService.createAdmin(requestDto);
+        return new ApiResponse<>(HttpStatus.CREATED, "관리자를 생성했습니다.");
+    }
+
+    @GetMapping("/hello")
+    public ResponseEntity<?> hello() {
+        return ResponseEntity.ok("hello");
     }
 }

@@ -38,12 +38,12 @@ public class OAuth2UserDto {
     }
 
     public User toUser() {
-        return User.builder()
-                .nickname(nickname)
-                .imageUrl(imageUrl)
-                .providerId(providerId)
-                .providerName(providerName)
-                .build();
+        return User.createOAuth2User(
+                nickname,
+                imageUrl,
+                providerId,
+                providerName
+        );
     }
 }
 
