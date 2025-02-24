@@ -26,7 +26,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("생성된 access token: {}", access);
 
         Cookie cookie = new Cookie("accessToken", access);
-        cookie.setHttpOnly(true);
+//        cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(10);     // 쿠키 유효기간 10초
 
