@@ -1,7 +1,7 @@
 import React from "react";
 import "../../../styles/post-style.css"
 
-export default function CommentCell({ content, author, date }) {
+export default function CommentCell({ content, author, date, editButton }) {
     const loginUser = "my"
 
     return (<>

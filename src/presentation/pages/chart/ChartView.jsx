@@ -11,7 +11,7 @@ export default function ChartView() {
     const location = useLocation()
 
     const { coinId } = useParams()
-    const { icon, name, price, change, prior } = location.state || {}
+    const { icon, name, symbol, price, change, changePrice, prior } = location.state || {}
 
     const [type, setType] = useState("news");
     const [issueId, setIssueId] = useState(0);
@@ -42,27 +42,38 @@ export default function ChartView() {
                 <img src={icon} alt="User" className="chart-coin-icon"/>
                 <div className="chart-coin-card-info">
                     <p className="chart-coin-card-name">{name}</p>
-                    <p className="chart-coin-card-symbol">{coinId}</p>
+                    <p className="chart-coin-card-symbol">{symbol}</p>
                 </div>
             </div>
             <div style={{display: "flex", justifyContent: "space-between", width: "650px"}}>
                 <div style={{width: '110px', textAlign: 'right'}}>
-                <p style={{marginTop: -5, fontSize: '16px', color:"#252525"}}>
+                    <p style={{marginTop: -5, fontSize: '16px', color:"#252525"}}>
                         {price.toLocaleString()}원
                     </p>
-                    <p style={{marginTop: -15, fontSize:15}} className={`change ${change >= 0 ? "positive" : "negative"}`}>
-                        {change > 0 && <>+</>}
-                        {change.toFixed(2)}%
-                    </p>
+                    <div style={{display: "flex", gap: '10px'}}>
+                        <p style={{marginTop: -15, fontSize: 10}}
+                           className={`change ${change >= 0 ? "positive" : "negative"}`}>
+                            {change > 0 && <>+</>}
+                            {changePrice.toLocaleString()}원
+                        </p>
+                        <p style={{marginTop: -15, fontSize: 10}}
+                           className={`change ${change >= 0 ? "positive" : "negative"}`}>
+                            ({change > 0 && <>+</>}
+                            {change.toFixed(2)}%)
+                        </p>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <CandleChartCell modalOpenFunc={(e) => {setIssueId(e); setModalOpen(true);}}/>
+        <CandleChartCell coinId={coinId} modalOpenFunc={(e) => {
+            setIssueId(e);
+            setModalOpen(true);
+        }}/>
 
         {(type === "news") && <>
             <div className="chart-nav">
-                <button className="chart-btn-on">News</button>
+            <button className="chart-btn-on">News</button>
                 <button className="chart-btn" onClick={() => {
                     setType("board")
                 }}>게시판
@@ -79,9 +90,9 @@ export default function ChartView() {
                 </button>
                 <button className="chart-btn-on">게시판</button>
             </div>
-            <PostListView name={name} symbol={coinId} icon={icon} price={price} change={change}/>
+            <PostListView coinId={coinId} name={name} symbol={symbol} icon={icon} price={price} change={change}/>
         </>}
 
-        {modalOpen && <ModalView onClose={() => {setModalOpen(false)}} issueId={issueId} icon={icon} name={name} symbol={coinId} price={price} change={change} issueDate={issueDate}/>}
+        {modalOpen && <ModalView onClose={() => {setModalOpen(false)}} coinId={coinId} issueId={issueId} icon={icon} name={name} symbol={coinId} price={price} change={change} issueDate={issueDate}/>}
     </div>)
 }

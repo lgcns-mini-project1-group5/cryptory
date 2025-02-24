@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import Chart from 'react-apexcharts';
 import "../../styles/chart-style.css"
 import {qunit} from "globals";
+import axios from "axios";
 
 function aggregateDataToMonthly(data) {
     const aggregatedData = [];
@@ -237,7 +238,10 @@ const tempMarker = [
     {"date":"2024-12-26","open":127179750,"close":126171750,"high":130054500,"low":124848000, "issueId": 2},
 ];
 
-export default function CandleChartCell({ modalOpenFunc }) {
+export default function CandleChartCell({ coinId, modalOpenFunc }) {
+
+    const rest_api_host = import.meta.env.VITE_REST_API_HOST;
+    const rest_api_port = import.meta.env.VITE_REST_API_PORT;
 
     const generateData = (data) => {
         let result = [];
@@ -281,8 +285,8 @@ export default function CandleChartCell({ modalOpenFunc }) {
     }
 
     const [markers, setMarkers] = useState(generateMarker(tempMarker))
-    const maxLength = tempMarker.length;
-    const originalData = generateData(tempData)
+    const [maxLength, setMaxLength] = useState(tempMarker.length);
+    const [originalData, setOriginalData] = useState(generateData(tempData))
 
     const last30DaysStart = new Date(originalData[150].date).getTime();
     const last30DaysEnd = new Date(originalData[179].date).getTime();
@@ -318,7 +322,7 @@ export default function CandleChartCell({ modalOpenFunc }) {
 
                     let temp = true
                     markers.forEach((marker) => {
-                        if (marker.x === tempDate.getTime()) { temp = false; }
+                        if (marker.x - 86400000 * 5 <= tempDate.getTime() && marker.x + 86400000 * 5 >= tempDate.getTime()) { temp = false; }
                     })
                     if (temp && markers.length <= maxLength) {
                         setMarkers([...markers, generateMarker([{"date":formattedDate,"open":originalData[dataPointIndex].y[0],
@@ -369,6 +373,30 @@ export default function CandleChartCell({ modalOpenFunc }) {
             points: markers
         },
     };
+
+    useEffect(() => {
+        axios
+            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}`, {headers: {"Content-Type": "application/json"}})
+            .then(res => {
+                let tempChart = []
+                res.data.chartList.map((item) => {
+                    tempChart.push({"date":item.date,"open":item.openingPrice,"close":item.tradePrice,"high":item.highPrice,"low":item.lowPrice});
+                })
+                setOriginalData(tempChart)
+
+                let tempIssue = []
+                res.data.issueList.map((item) => {
+
+                })
+                setMarkers(tempIssue)
+                setMaxLength(tempIssue.length)
+
+            })
+            .catch(err => {
+
+            });
+    }, [])
+
     return (
         <div id="chart">
             <Chart options={options} series={options.series} type="candlestick" height={350} />

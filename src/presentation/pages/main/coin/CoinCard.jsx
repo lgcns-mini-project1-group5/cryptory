@@ -2,11 +2,11 @@ import React from "react";
 import "../../../styles/main-style.css"
 import {useNavigate} from "react-router-dom";
 
-export default function CoinCard({icon, name, symbol, price, change}) {
+export default function CoinCard({coinId, icon, name, symbol, price, change, changePrice}) {
     const navigate = useNavigate();
 
     return (
-        <div className="coin-card" onClick={() => {navigate(`/coin/${symbol}`, {state: {name:name, icon:icon, price:price, change:change}})}}>
+        <div className="coin-card" onClick={() => {navigate(`/coin/${coinId}`, {state: {name:name, symbol:symbol, icon:icon, price:price, change:change, changePrice:changePrice}})}}>
             <img src={icon} alt={name} className="coin-card-icon" />
             <div className="coin-card-info">
                 <p className="coin-card-name">{name}</p>

@@ -3,6 +3,9 @@ import "../../styles/login-style.css"
 
 export default function LoginView() {
 
+    const rest_api_host = import.meta.env.VITE_REST_API_HOST;
+    const rest_api_port = import.meta.env.VITE_REST_API_PORT;
+
     const kakao_button_style = {
         width: "200px",
         height: "40px",
@@ -14,13 +17,14 @@ export default function LoginView() {
     }
 
     const kakaoLogin = () => {
-        axios.get("http://localhost:8080/kakaoLogin")
-            .then(res => {
-                window.location.href = res.data
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        window.location.href = `http://${rest_api_host}:${rest_api_port}/oauth2/authorization/kakao`
+        // axios.get()
+        //     .then(res => {
+        //
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //     });
     }
 
     return (<div className="login-section">
