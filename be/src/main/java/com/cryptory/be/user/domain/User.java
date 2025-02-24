@@ -39,14 +39,14 @@ public class User extends BaseTimeEntity {
 
     private boolean isDenied;
 
-    @Column(nullable = true) // 관리자용 패스워드
+    @Column // 관리자용 패스워드
     private String password;
 
-    @Builder
     public User(String nickname, String imageUrl, String providerId, String providerName) {
-        this.role = Role.USER;
+        this.role = Role.USER; // OAuth2 로그인 시 기본 역할은 USER
         this.isDenied = false;
         this.userId = UUID.randomUUID().toString();
+        this.password = "";
 
         this.nickname = nickname;
         this.imageUrl = imageUrl;
@@ -54,15 +54,28 @@ public class User extends BaseTimeEntity {
         this.providerName = providerName;
     }
 
-    // 관리자 생성시 사용되는 정적 팩토리 메서드
-    public static User createAdmin(String userId, String encodedPassword, String nickname) {
-        User admin = new User();
-        admin.isDenied = false;
-        admin.userId = userId;
-        admin.nickname = nickname;
-        admin.password = encodedPassword;
-        admin.role = Role.ADMIN;
-        return admin;
+
+    public User(String userId, String password) {
+        this.role = Role.ADMIN; // 관리자 회원가입 시 기본 역할은 ADMIN
+        this.isDenied = false;
+        this.nickname = "";
+        this.imageUrl = "";
+        this.providerId = "";
+        this.providerName = "";
+
+        this.userId = userId;
+        this.password = password;
+    }
+
+    @Builder(builderClassName = "OAuth2UserBuilder", builderMethodName = "oauth2UserBuilder")
+    public static User createOAuth2User(String nickname, String imageUrl, String providerId, String providerName) {
+        return new User(nickname, imageUrl, providerId, providerName);
+    }
+
+    // 관리자 회원가입을 위한 빌더
+    @Builder(builderClassName = "AdminUserBuilder", builderMethodName = "adminUserBuilder")
+    public static User createAdminUser(String userId, String password) {
+        return new User(userId, password);
     }
 
     public void deny() {

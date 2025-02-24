@@ -80,7 +80,8 @@ public class PrincipalUserDetails implements OAuth2User, UserDetails {
         return "";
     }
 
-    // unique한 키가 필요한데, 추가 정보를 받지 않아서 uuid인 userId로 대체
+    // OAuth2: 유니크한 키가 필요한데, 추가 정보를 받지 않아서 uuid인 userId로 대체
+    // 일반 로그인: 관리자 아이디도 유니크한 userId
     @Override
     public String getUsername() {
         return user.getUserId();
@@ -89,5 +90,6 @@ public class PrincipalUserDetails implements OAuth2User, UserDetails {
     public User getUser() {
         return user;
     }
+
 }
 
