@@ -20,12 +20,14 @@ import PostView from "../presentation/pages/chart/post/PostView.jsx";
 import KakaoLoginLoad from "../presentation/pages/login/KakaoLoginLoad.jsx";
 import KakaoLogout from "../presentation/pages/login/KakaoLogout.jsx";
 import React, {useEffect, useState} from "react";
+import axios from "axios";
 
 const Layout = () => {
 
-    //sessionStorage.setItem("token", "1234")
+    const rest_api_host = import.meta.env.VITE_REST_API_HOST;
+    const rest_api_port = import.meta.env.VITE_REST_API_PORT;
 
-    const login = sessionStorage.getItem("token");
+    const login = sessionStorage.getItem("isLogin");
     const navigate = useNavigate();
 
     const websiteForm = {
@@ -39,17 +41,20 @@ const Layout = () => {
     const [profile, setProfile] = useState("")
 
     useEffect(() => {
+
         if (login) {
-            // axios
-            //     .get(`http://${rest_api_host}:${rest_api_port}/api/v2/board/${boardIdx}`, {headers: {"Authorization": `Bearer ${token}`}})
-            //     .then(res => {
-            //
-            //     })
-            //     .catch(err => {
-            //
-            //     });
-            setNickname("UserName")
-            setProfile("https://cryptologos.cc/logos/bitcoin-btc-logo.png")
+            axios
+                .get(`http://${rest_api_host}:${rest_api_port}/api/v1/users/me`, {headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
+                .then(res => {
+                    setNickname(res.data.userId);
+                    setProfile(res.data.imageUrl)
+                    sessionStorage.setItem("name", res.data.userId)
+                })
+                .catch(err => {
+                    setNickname("UserName")
+                    setProfile("https://cryptologos.cc/logos/bitcoin-btc-logo.png")
+                });
+
         }
     }, []);
 

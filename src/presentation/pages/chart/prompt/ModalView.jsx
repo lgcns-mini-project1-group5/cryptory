@@ -2,8 +2,12 @@ import React, {useEffect, useState} from "react";
 import "../../../styles/prompt-style.css"
 import CommentCell from "../post/CommentCell.jsx";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
-export default function ModalView({ onClose, issueId, icon, name, symbol, price, change, issueDate }) {
+export default function ModalView({ onClose, coinId, issueId, icon, name, symbol, price, change, issueDate }) {
+
+    const rest_api_host = import.meta.env.VITE_REST_API_HOST;
+    const rest_api_port = import.meta.env.VITE_REST_API_PORT;
 
     const isLogin = sessionStorage.getItem("isLogin");
     const navigate = useNavigate();
@@ -29,30 +33,112 @@ export default function ModalView({ onClose, issueId, icon, name, symbol, price,
     };
 
     useEffect(() => {
-        // axios
-        //     .get(`http://${rest_api_host}:${rest_api_port}/api/v2/board/${boardIdx}`, {headers: {"Authorization": `Bearer ${token}`}})
-        //     .then(res => {
-        //
-        //     })
-        //     .catch(err => {
-        //
-        //     });
-        setTitle("트럼프 대통령 당선, 비트코인 가격 상승 촉발")
-        setContent("도널드 트럼프 전 미국 대통령의 당선이 공식 인증된 1월 6일, 비트코인 " +
-            "가격은 10만 달러 선을 재돌파하며 큰 폭의 상승을 보였습니다. 트럼프 " +
-            "당선인은 선거 기간 동안 미국을 '암호화폐의 수도'로 만들겠다는 공약을 " +
-            "내세웠으며, 이러한 친암호화폐 정책 기대감이 투자자들의 심리를 " +
-            "자극했습니다. 그러나 취임 이후 구체적인 정책 부재와 경제 불확실성으로 인해 비트코인 가격은 하락세로 전환되어, 2월 18일 기준 9만5,507달러로 최고점 대비 14% 하락하였습니다.")
-        setNews1("'트럼프 당선' 공식 인증에 비트코인 상승…10만달러선 탈환")
-        setNews1Link("https://www.naver.com")
-        setNews2("이제 '트럼프 트레이드'는 금?…달러·비트코인은 주춤")
-        setNews2Link("https://www.naver.com")
-        setCommentList([
-            { content: "비트코인 게시판 내용 1", author: "User1", date: "2025.02.18"},
-            { content: "비트코인 게시판 내용 2", author: "User2", date: "2025.02.19"},
-            { content: "내가 쓴 비트코인 게시판 내용 1", author: "my", date: "2025.02.19"},
-        ])
+        axios
+            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/issues/${issueId}`, {headers: {"Content-Type": "application/json"}})
+            .then(res => {
+                setTitle(res.data.title)
+                setContent(res.data.summaryContent)
+                setNews1(res.data.newsTitle)
+                setNews1Link(res.data.source)
+            })
+            .catch(err => {
+                setTitle("트럼프 대통령 당선, 비트코인 가격 상승 촉발")
+                setContent("도널드 트럼프 전 미국 대통령의 당선이 공식 인증된 1월 6일, 비트코인 " +
+                    "가격은 10만 달러 선을 재돌파하며 큰 폭의 상승을 보였습니다. 트럼프 " +
+                    "당선인은 선거 기간 동안 미국을 '암호화폐의 수도'로 만들겠다는 공약을 " +
+                    "내세웠으며, 이러한 친암호화폐 정책 기대감이 투자자들의 심리를 " +
+                    "자극했습니다. 그러나 취임 이후 구체적인 정책 부재와 경제 불확실성으로 인해 비트코인 가격은 하락세로 전환되어, 2월 18일 기준 9만5,507달러로 최고점 대비 14% 하락하였습니다.")
+                setNews1("'트럼프 당선' 공식 인증에 비트코인 상승…10만달러선 탈환")
+                setNews1Link("https://www.naver.com")
+                setNews2("이제 '트럼프 트레이드'는 금?…달러·비트코인은 주춤")
+                setNews2Link("https://www.naver.com")
+            });
+
+
     }, []);
+
+    const getCommentList = () => {
+        axios
+            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/issues/${issueId}/comments`, {headers: {"Content-Type": "application/json"}})
+            .then(res => {
+                let tempList = [];
+                res.data.comments.map(item => {
+                    tempList.push({ content: item.content, author: item.nickname, date: item.createdAt})
+                });
+                setCommentList(tempList);
+            })
+            .catch((err) => {
+                setCommentList([
+                    { content: "비트코인 게시판 내용 1", author: "User1", date: "2025.02.18"},
+                    { content: "비트코인 게시판 내용 2", author: "User2", date: "2025.02.19"},
+                    { content: "내가 쓴 비트코인 게시판 내용 1", author: "my", date: "2025.02.19"},
+                ])
+            })
+    }
+
+    const commentPost = () => {
+        axios
+            .post(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/issues/${issueId}/comments`,
+                {
+                    params: {"content": prompt},
+                    headers: {"Content-Type": "application/json", "Authorization": `Bearer ${sessionStorage.getItem("token")}`}
+                })
+            .then(res => {
+                alert("등록되었습니다.")
+                setCommentList([...commentList, { content: res.data.content, author: res.data.nickname, date: res.data.createdAt, commentId: res.data.id}]);
+            })
+            .catch((err) => {
+                setCommentList([
+                    { content: "비트코인 게시판 내용 1", author: "User1", date: "2025.02.18", commentId: 1},
+                    { content: "비트코인 게시판 내용 2", author: "User2", date: "2025.02.19", commentId: 2},
+                    { content: "내가 쓴 비트코인 게시판 내용 1", author: "my", date: "2025.02.19", commentId: 3},
+                ])
+            })
+    }
+
+    const commentEdit = (id) => {
+        axios
+            .patch(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/issues/${issueId}/comments/${id}`,
+                {
+                    params: {"content": prompt},
+                    headers: {"Content-Type": "application/json", "Authorization": `Bearer ${sessionStorage.getItem("token")}`}
+                })
+            .then(res => {
+                alert("수정되었습니다.")
+                let tempCommentList = [];
+                commentList.map((item) => {
+                    if (item.commentId === id) {
+                        tempCommentList.push({ content: prompt, author: item.author, date: item.date, commentId: item.commentId})
+                    } // 수정 필요
+                    else { tempCommentList.push(item) }
+                })
+                setCommentList(tempCommentList);
+            })
+            .catch((err) => {
+
+            })
+    }
+
+    const commentDelete = (id) => {
+        axios
+            .put(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/issues/${issueId}/comments/${id}`,
+                {
+                    headers: {"Content-Type": "application/json", "Authorization": `Bearer ${sessionStorage.getItem("token")}`}
+                })
+            .then(res => {
+                alert("삭제되었습니다.")
+                let tempCommentList = [];
+                commentList.map((item) => {
+                    if (item.commentId !== id) {
+                        tempCommentList.push(item)
+                    }
+                })
+                setCommentList(tempCommentList);
+            })
+            .catch((err) => {
+
+            })
+    }
 
     return (
         <div className="modal-overlay">
@@ -86,7 +172,8 @@ export default function ModalView({ onClose, issueId, icon, name, symbol, price,
                     {(issueId !== "new") && <div className="prompt-nav">
                         <button className="prompt-btn-on">ChatGPT</button>
                         <button className="prompt-btn" onClick={() => {
-                            setType("debate")
+                            getCommentList();
+                            setType("debate");
                         }}>토론방
                         </button>
                     </div>}
@@ -96,12 +183,12 @@ export default function ModalView({ onClose, issueId, icon, name, symbol, price,
                             <p className="prompt-news-content">{content}</p>
                         </div>
                         <div className="chat-messages">
-                            <button className="chat-message" onClick={() => {
+                            {(news1.length > 0) && <button className="chat-message" onClick={() => {
                                 window.open(news1Link)
-                            }}>{news1}</button>
-                            <button className="chat-message" onClick={() => {
+                            }}>{news1}</button>}
+                            {(news2.length > 0) && <button className="chat-message" onClick={() => {
                                 window.open(news2Link)
-                            }}>{news2}</button>
+                            }}>{news2}</button>}
                         </div>
                     </div>
                     {(isLogin === null) && <div className="comment-form">
@@ -145,7 +232,7 @@ export default function ModalView({ onClose, issueId, icon, name, symbol, price,
                             placeholder="새로운 글을 입력하세요"
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}/>
-                        <button type="submit" className="send-btn"/>
+                        <button type="submit" className="send-btn" onClick={() => {commentPost()}}/>
                     </form>}
                 </>}
 

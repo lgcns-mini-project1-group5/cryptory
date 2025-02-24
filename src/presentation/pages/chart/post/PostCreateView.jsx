@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import "../../../styles/post-style.css"
 import {useLocation, useNavigate, useParams} from "react-router-dom";
+import axios from "axios";
 
 export default function PostCreateView() {
 
+    const rest_api_host = import.meta.env.VITE_REST_API_HOST;
+    const rest_api_port = import.meta.env.VITE_REST_API_PORT;
+
     const location = useLocation()
-    const { name, symbol, icon, price, change } = location.state || {}
+    const { coinId, name, symbol, icon, price, change } = location.state || {}
 
     const navigate = useNavigate();
 
@@ -14,8 +18,26 @@ export default function PostCreateView() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert(`제목: ${title}\n내용: ${content}`);
+
+        const formData = new FormData();
+        formData.append("post", { "title": title, "content": content });
+        axios
+            .post(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/posts`,
+                {
+                    formData,
+                    headers: { "Content-Type": "multipart/form-data", "Authorization": `Bearer ${sessionStorage.getItem("token")}`}
+                })
+            .then(res => {
+                alert("등록되었습니다.")
+            })
+            .catch((err) => {
+
+            })
     };
+
+    const post = () => {
+
+    }
 
     return (
         <div className="write-container">
