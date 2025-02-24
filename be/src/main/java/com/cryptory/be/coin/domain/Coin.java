@@ -25,6 +25,10 @@ public class Coin extends BaseTimeEntity {
 
     private String code;    // 마켓 코드(KRW-BTC, KRW-ETH, KRW-XRP)
 
+    public void setIsDisplayed(boolean isDisplayed){
+        this.isDisplayed = isDisplayed;
+    }
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "coin_symbol_id")
     private CoinSymbol coinSymbol;  // 코인 심볼 관련 정보

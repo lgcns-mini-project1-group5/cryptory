@@ -39,6 +39,9 @@ public class User extends BaseTimeEntity {
 
     private boolean isDenied;
 
+    @Column(nullable = true) // 관리자용 패스워드
+    private String password;
+
     @Builder
     public User(String nickname, String imageUrl, String providerId, String providerName) {
         this.role = Role.USER;
@@ -49,6 +52,17 @@ public class User extends BaseTimeEntity {
         this.imageUrl = imageUrl;
         this.providerId = providerId;
         this.providerName = providerName;
+    }
+
+    // 관리자 생성시 사용되는 정적 팩토리 메서드
+    public static User createAdmin(String userId, String encodedPassword, String nickname) {
+        User admin = new User();
+        admin.isDenied = false;
+        admin.userId = userId;
+        admin.nickname = nickname;
+        admin.password = encodedPassword;
+        admin.role = Role.ADMIN;
+        return admin;
     }
 
     public void deny() {
