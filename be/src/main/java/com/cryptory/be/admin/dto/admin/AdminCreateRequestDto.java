@@ -22,6 +22,6 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class AdminCreateRequestDto {
     private String nickname;
-    private String id; // 일반 로그인 ID
+    private String userId; // 일반 로그인 ID
     private String password;
 }

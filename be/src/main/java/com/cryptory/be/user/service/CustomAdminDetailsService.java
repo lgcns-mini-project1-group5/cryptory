@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -17,19 +18,23 @@ import org.springframework.stereotype.Service;
 public class CustomAdminDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.debug("username: {}", username);
+        log.info("userId: {}", username);
 
         User admin = userRepository.findByUserId(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Not Found Admin"));
 
-        if (admin.getRole() == Role.ADMIN) {
-            return new PrincipalUserDetails(admin);
-        } else {
+        log.info("adminId: {}, adminPassword: {}", admin.getUserId(), admin.getPassword());
+
+        if (admin.getRole() != Role.ADMIN) {
             log.error("Not Admin");
             throw new UsernameNotFoundException("Not Admin");
+
         }
+
+        return new PrincipalUserDetails(admin);
     }
 }

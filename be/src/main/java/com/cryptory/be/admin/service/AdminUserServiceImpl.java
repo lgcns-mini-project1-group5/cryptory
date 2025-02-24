@@ -84,15 +84,15 @@ public class AdminUserServiceImpl implements AdminUserService{
     @Override
     public Long createAdmin(AdminCreateRequestDto requestDto) {
         // ID 중복 확인
-        if(userRepository.findByUserId(requestDto.getId()).isPresent()) {
-            throw new IllegalArgumentException("이미 사용 중인 ID입니다: " +  requestDto.getId());
+        if(userRepository.findByUserId(requestDto.getUserId()).isPresent()) {
+            throw new IllegalArgumentException("이미 사용 중인 ID입니다: " +  requestDto.getUserId());
         }
 
         // 암호화
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
         // User 객체 생성
-        User newAdmin = User.createAdminUser(requestDto.getId(), encodedPassword, requestDto.getNickname());
+        User newAdmin = User.createAdminUser(requestDto.getUserId(), encodedPassword, requestDto.getNickname());
 
         try{
             User saveAdmin = userRepository.save(newAdmin);
