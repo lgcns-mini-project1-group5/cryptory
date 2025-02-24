@@ -49,11 +49,11 @@ public class AdminUserController {
     }
 
     // 사용자 차단/차단 해제
-    @PatchMapping("/{userId}/block")
+    @PatchMapping("/{userId}")
     public ResponseEntity<?> blockUser(@PathVariable Long userId, @RequestBody UserBlockRequestDto requestDto) {
         try{
-            adminUserService.blockUser(userId, requestDto);
-            return ResponseEntity.ok().build();
+            boolean isDenied = adminUserService.blockUser(userId, requestDto);
+            return ResponseEntity.ok().build(Map.of("isDenied", isDenied));
         }catch (NoSuchElementException e){
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("User id: " + userId + "가 존재하지 않습니다.");
         }catch (Exception e){
@@ -61,7 +61,6 @@ public class AdminUserController {
         }
 
     }
-
 
     // 관리자 목록 조회
     @GetMapping("/admins")
@@ -79,11 +78,11 @@ public class AdminUserController {
     }
 
     // 관리자 차단/차단 해제
-    @PatchMapping("/admins/{userId}/block")
+    @PatchMapping("/admins/{userId}")
     public ResponseEntity<?> blockAdmin(@PathVariable Long userId, @RequestBody UserBlockRequestDto requestDto){
         try{
-            adminUserService.blockAdmin(userId, requestDto);
-            return ResponseEntity.ok().build();
+            boolean idDenied = adminUserService.blockAdmin(userId, requestDto);
+            return ResponseEntity.ok().build(Map.of("isDenied", idDenied));
         }catch (NoSuchElementException e){
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("User id: " + userId + "가 존재하지 않습니다.");
         }catch (Exception e){

@@ -65,8 +65,8 @@ public class User extends BaseTimeEntity {
         return admin;
     }
 
-    public void deny() {
-        this.isDenied = true;
+    public void deny(boolean status) {
+        this.isDenied = status;
     }
 
     public void updateNickname(String nickname) {
