@@ -55,7 +55,7 @@ public class PostService {
         return new PostListDto(posts, totalItems, totalPages);
     }
 
-/*
+
     @Transactional
     public PostDto createPost(Long coinId, String userId, CreatePostDto createPostDto, List<MultipartFile> files) {
         User user = userRepository.findByUserId(userId)
@@ -143,5 +143,5 @@ public class PostService {
         long totalItems = getTotalItems(coinId);  // 전체 아이템 개수
         return (int) Math.ceil((double) totalItems / size);  // 전체 아이템 수로 총 페이지 수 계산
     }
-*/
+
 }

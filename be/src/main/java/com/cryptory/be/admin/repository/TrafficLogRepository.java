@@ -42,9 +42,9 @@ public interface TrafficLogRepository extends JpaRepository<TrafficLog, Long> {
     List<Object[]> findTotalStats();
 
     // 코인별 트래픽 (특정 기간) - JPQL 수정
-    @Query("SELECT new com.example.project.admin.dto.dashboard.CoinTrafficDto(t.coin.id, t.coin.koreanName, t.coin.coinSymbol.symbol, SUM(t.pageViews) + SUM(t.users) + SUM(t.apiCalls)) " +
-            "FROM TrafficLog t " +
-            "WHERE t.date BETWEEN :startDate AND :endDate AND t.coin.isDisplayed = TRUE " +
-            "GROUP BY t.coin.id, t.coin.koreanName, t.coin.coinSymbol.symbol")
-    List<CoinTrafficDto> findTrafficByCoin(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+//    @Query("SELECT new com.cryptory.be.coin.domain.admin.dto.dashboard.CoinTrafficDto(t.coin.id, t.coin.koreanName, t.coin.code, SUM(t.pageViews + t.users, t.apiCalls) + SUM(t.users) + SUM(t.apiCalls)) " +
+//            "FROM TrafficLog t " +
+//            "WHERE t.date BETWEEN :startDate AND :endDate AND t.coin.isDisplayed = TRUE " +
+//            "GROUP BY t.coin.id, t.coin.koreanName, t.coin.code")
+//    List<CoinTrafficDto> findTrafficByCoin(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }
