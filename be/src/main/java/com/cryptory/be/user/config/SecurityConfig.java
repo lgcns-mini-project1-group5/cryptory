@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -57,6 +58,15 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(whitelist).permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/coins",
+                                "/api/v1/coins/*",
+                                "/api/v1/coins/*/news",
+                                "/api/v1/coins/*/issues/*/comments",
+                                "/api/v1/coins/*/posts",
+                                "/api/v1/coins/*/posts/*",
+                                "/api/v1/news"
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 

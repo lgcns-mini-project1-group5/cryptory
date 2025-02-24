@@ -14,7 +14,8 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
 
     Coin findByCode(String market);
 
-    @Query("SELECT c FROM Coin c WHERE c.koreanName LIKE %:keyword% OR c.coinSymbol.symbol LIKE %:keyword%")
+    // symbol대신 englishName으로 검색 수정
+    @Query("SELECT c FROM Coin c WHERE c.koreanName LIKE %:keyword% OR c.englishName LIKE %:keyword%")
     Page<Coin> searchCoins(@Param("keyword") String keyword, Pageable pageable);
 
     long countByIsDisplayedTrue();
