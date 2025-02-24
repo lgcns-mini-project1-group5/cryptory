@@ -2,6 +2,8 @@ package com.cryptory.be.user.config;
 
 import com.cryptory.be.user.handler.OAuth2FailureHandler;
 import com.cryptory.be.user.handler.OAuth2SuccessHandler;
+import com.cryptory.be.user.jwt.CustomLoginFilter;
+import com.cryptory.be.user.jwt.JwtExceptionFilter;
 import com.cryptory.be.user.jwt.JwtFilter;
 import com.cryptory.be.user.jwt.JwtProvider;
 import com.cryptory.be.user.service.CustomOAuth2UserService;
@@ -36,12 +38,14 @@ public class SecurityConfig {
     private final OAuth2FailureHandler oAuth2FailureHandler;
 
     private final JwtFilter jwtFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
     private final JwtProvider jwtProvider;
 
     private final AuthenticationConfiguration authenticationConfiguration;
 
     private final String[] whitelist = {
-            "/", "/admin/login",
+            "/api/v1/admin/users/admins",
+            "/", "/login", "/admin/login", "/admin/signup",
             "/oauth2/callback",
             "/attach/files/**",
             "/css/**", "/error"
@@ -67,17 +71,22 @@ public class SecurityConfig {
                                 "/api/v1/coins/*/posts/*",
                                 "/api/v1/news"
                         ).permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // 경로에 admin 붙으면 관리자 페이지라고 가정
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
+
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, jwtFilter.getClass())
 
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .successHandler(oAuth2SuccessHandler)
                         .failureHandler(oAuth2FailureHandler)
-                );
+                )
 
-//                .addFilterBefore(jwtExceptionFilter, jwtAuthFilter.getClass());
-                // todo: 관리자 로그인 추가시 기능 구현
+                // 관리자 로그인하기 위함
+                .addFilterAt(new CustomLoginFilter(authenticationManager(authenticationConfiguration), jwtProvider),
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
