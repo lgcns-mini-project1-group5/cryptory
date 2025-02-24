@@ -45,7 +45,7 @@ public class SecurityConfig {
 
     private final String[] whitelist = {
             "/api/v1/admin/users/admins",
-            "/", "/admin/login", "/admin/signup",
+            "/", "/login", "/admin/login", "/admin/signup",
             "/oauth2/callback",
             "/attach/files/**",
             "/css/**", "/error"
@@ -62,6 +62,15 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(whitelist).permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/coins",
+                                "/api/v1/coins/*",
+                                "/api/v1/coins/*/news",
+                                "/api/v1/coins/*/issues/*/comments",
+                                "/api/v1/coins/*/posts",
+                                "/api/v1/coins/*/posts/*",
+                                "/api/v1/news"
+                        ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN") // 경로에 admin 붙으면 관리자 페이지라고 가정
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
