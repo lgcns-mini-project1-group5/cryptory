@@ -19,16 +19,18 @@ export default function PostListView({ coinId, name, symbol, icon, price, change
         axios
             .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/posts`, {headers: {"Content-Type": "application/json"}})
             .then(res => {
-                console.log(res);
+                const posts = res.data.results[0]?.posts || [];
+                console.log(posts);
+
                 let tempData = [];
-                res.data.map((post) => {
+                posts.forEach(post => {
                     tempData.push({
                         postId: post.id,
                         title: post.title,
                         author: post.nickname,
                         date: post.createdAt
                     });
-                })
+                });
                 setPostData(tempData);
             })
             .catch(err => {

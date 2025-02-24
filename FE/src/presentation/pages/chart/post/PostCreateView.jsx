@@ -26,7 +26,7 @@ export default function PostCreateView() {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append("post", { "title": title, "body": content });
+        formData.append("post", new Blob([JSON.stringify({ "title": title, "body": content })], { type: "application/json" }));
         Object.values(files).forEach((file) => {formData.append("files", file)});
         console.log(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/posts`)
         axios({
@@ -44,7 +44,7 @@ export default function PostCreateView() {
             })
         })
         .catch((err) => {
-
+            console.log(err);
         })
     };
 
