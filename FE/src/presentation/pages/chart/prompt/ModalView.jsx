@@ -34,7 +34,7 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
 
     useEffect(() => {
         axios
-            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/issues/${issueId}`, {headers: {"Content-Type": "application/json"}})
+            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/issues/${issueId}`, {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
             .then(res => {
                 setTitle(res.data.title)
                 setContent(res.data.summaryContent)

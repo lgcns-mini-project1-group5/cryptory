@@ -16,7 +16,7 @@ export default function NewsView({ type }) {
                 .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/1/news`, {headers: {"Content-Type": "application/json"}})
                 .then(res => {
                     let tempNews = []
-                    res.data.newsList.map((item) => {
+                    res.data.results.map((item) => {
                         tempNews.push({
                             title: item.title,
                             description: item.description,
@@ -27,38 +27,7 @@ export default function NewsView({ type }) {
                     setNewsData(tempNews);
                 })
                 .catch((err) => {
-                    setNewsData([
-                        {
-                            title: "美 올해 대형 기준 완화…비트코인 1억4000만원대로 회복",
-                            description: "미국 연준의 완화적 스탠스가 암호화폐 시장에 긍정적인 영향을 미치며...",
-                            date: "2025.02.19",
-                            url: "https://www.naver.com",
-                        },
-                        {
-                            title: "“역사적 전환”...비트코인, 9만6000달러 돌파(그래프)",
-                            description: "비트코인이 사상 최고치를 돌파하며 새로운 국면에 진입...",
-                            date: "2025.02.18",
-                            url: "https://www.naver.com",
-                        },
-                        {
-                            title: "[해설] '이변없는 ETF'...비트코인 업계가 입을 모아 21가지...",
-                            description: "비트코인 ETF의 승인 이후 시장 반응이 뜨겁다. 전문가들은...",
-                            date: "2025.02.18",
-                            url: "https://www.naver.com",
-                        },
-                        {
-                            title: "이제 독점된 트레이딩은 끝..일반 비트코인 투자도 주목",
-                            description: "기존 트레이딩 시장에서 벗어나 일반 투자자들도...",
-                            date: "2025.02.18",
-                            url: "https://www.naver.com",
-                        },
-                        {
-                            title: "‘역사가 비트코인’...“이젠 상승 3년차”vs“과열”",
-                            description: "비트코인 가격 상승이 3년차를 맞이하며 시장의 관심이 집중...",
-                            date: "2025.02.19",
-                            url: "https://www.naver.com",
-                        },
-                    ]);
+
                 })
 
         }
@@ -66,8 +35,9 @@ export default function NewsView({ type }) {
             axios
                 .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${type}/news`, {headers: {"Content-Type": "application/json"}})
                 .then(res => {
+
                     let tempNews = []
-                    res.data.newsList.map((item) => {
+                    res.data.results.map((item) => {
                         tempNews.push({
                             title: item.title,
                             description: item.description,

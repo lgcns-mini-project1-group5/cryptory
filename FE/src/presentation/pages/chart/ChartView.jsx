@@ -46,11 +46,11 @@ export default function ChartView() {
                 </div>
             </div>
             <div style={{display: "flex", justifyContent: "space-between", width: "650px"}}>
-                <div style={{width: '110px', textAlign: 'right'}}>
+                <div style={{width: '110px', justifyContent: "flex-end"}}>
                     <p style={{marginTop: -5, fontSize: '16px', color:"#252525"}}>
                         {price.toLocaleString()}원
                     </p>
-                    <div style={{display: "flex", gap: '10px'}}>
+                    <div style={{display: "flex", gap: '5px'}}>
                         <p style={{marginTop: -15, fontSize: 10}}
                            className={`change ${change >= 0 ? "positive" : "negative"}`}>
                             {change > 0 && <>+</>}
@@ -90,9 +90,9 @@ export default function ChartView() {
                 </button>
                 <button className="chart-btn-on">게시판</button>
             </div>
-            <PostListView coinId={coinId} name={name} symbol={symbol} icon={icon} price={price} change={change}/>
+            <PostListView coinId={coinId} name={name} symbol={symbol} icon={icon} price={price} change={change} changePrice={changePrice}/>
         </>}
 
-        {modalOpen && <ModalView onClose={() => {setModalOpen(false)}} coinId={coinId} issueId={issueId} icon={icon} name={name} symbol={coinId} price={price} change={change} issueDate={issueDate}/>}
+        {modalOpen && <ModalView onClose={() => {setModalOpen(false)}} coinId={coinId} issueId={issueId} icon={icon} name={name} symbol={symbol} price={price} change={change} issueDate={issueDate}/>}
     </div>)
 }
