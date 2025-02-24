@@ -77,7 +77,7 @@ public class PrincipalUserDetails implements OAuth2User, UserDetails {
 
     @Override
     public String getPassword() {
-        return "";
+        return user.getPassword();
     }
 
     // OAuth2: 유니크한 키가 필요한데, 추가 정보를 받지 않아서 uuid인 userId로 대체
