@@ -1,10 +1,12 @@
 package com.cryptory.be.issue.controller;
 
+import com.cryptory.be.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,42 +29,42 @@ public class IssueController {
 
     // 특정 이슈 상세 조회 - 토론방 코멘트 전체 조회
 	@GetMapping("/{issueId}/comments")
-    public ResponseEntity<List<IssueCommentDto>> getIssueComments(@PathVariable("coinId") Long coinId, 
-    																@PathVariable("issueId") Long issueId) {
+    public ApiResponse<IssueCommentDto> getIssueComments(@PathVariable("coinId") Long coinId,
+														  @PathVariable("issueId") Long issueId) {
         
 		List<IssueCommentDto> issueComments = issueService.getIssueComments(issueId);
 
-        return ResponseEntity.ok(issueComments);
+		return new ApiResponse<>(HttpStatus.OK, issueComments);
     }
 
     // 이슈 내 코멘트 등록
 	@PostMapping("/{issueId}/comments")
-	public ResponseEntity<IssueCommentDto> createIssueComment(Principal principal,
+	public ApiResponse<IssueCommentDto> createIssueComment(Principal principal,
 											@PathVariable("coinId") Long coinId,
 											@PathVariable("issueId") Long issueId,
 								            @RequestBody CreateIssueCommentDto createIssueCommentDto) {
 		IssueCommentDto issueComment = issueService.createIssueComment(issueId, principal.getName(), createIssueCommentDto);
-		return ResponseEntity.ok(issueComment);
+		return new ApiResponse<>(HttpStatus.CREATED, issueComment);
 	}
 
     // 이슈 내 코멘트 수정
 	@PatchMapping("/{issueId}/comments/{commentId}")
-    public ResponseEntity<?> updateIssueComment(@PathVariable("coinId") Long coinId,
+    public ApiResponse<?> updateIssueComment(@PathVariable("coinId") Long coinId,
     											@PathVariable("issueId") Long issueId,
                                               @PathVariable("commentId") Long issueCommentId,
                                               @RequestBody UpdateIssueCommentDto updateIssueCommentDto) {
         issueService.updateIssueComment(issueId, issueCommentId, updateIssueCommentDto);
-        return ResponseEntity.ok("코멘트를 업데이트했습니다.");
+        return new ApiResponse<>(HttpStatus.OK, "정상적으로 수정되었습니다.");
     }
 
 
     // 이슈 내 코멘트 삭제
 	@PutMapping("/{issueId}/comments/{commentId}")
-    public ResponseEntity<?> deleteIssueComment(@PathVariable("coinId") Long coinId,
+    public ApiResponse<?> deleteIssueComment(@PathVariable("coinId") Long coinId,
     									@PathVariable("issueId") Long issueId,
                                         @PathVariable("commentId") Long issueCommentId) {
         issueService.deleteIssueComment(issueId, issueCommentId);
-        return ResponseEntity.ok("정상적으로 삭제되었습니다.");
+        return new ApiResponse<>(HttpStatus.OK, "정상적으로 삭제되었습니다.");
     }
 
 

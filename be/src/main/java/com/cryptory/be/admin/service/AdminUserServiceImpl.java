@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +36,7 @@ import java.util.NoSuchElementException;
 @Transactional(readOnly = true)
 public class AdminUserServiceImpl implements AdminUserService{
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public Page<UserListResponseDto> getUserList(String keyword, int page, int size, String sort) {
@@ -91,7 +92,7 @@ public class AdminUserServiceImpl implements AdminUserService{
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
         // User 객체 생성
-        User newAdmin = User.createAdmin(requestDto.getId(), encodedPassword, requestDto.getNickname());
+        User newAdmin = User.createAdminUser(requestDto.getId(), encodedPassword, requestDto.getNickname());
 
         try{
             User saveAdmin = userRepository.save(newAdmin);

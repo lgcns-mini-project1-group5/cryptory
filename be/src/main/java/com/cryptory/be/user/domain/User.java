@@ -54,17 +54,16 @@ public class User extends BaseTimeEntity {
         this.providerName = providerName;
     }
 
-
-    public User(String userId, String password) {
+    public User(String userId, String password, String nickname) {
         this.role = Role.ADMIN; // 관리자 회원가입 시 기본 역할은 ADMIN
         this.isDenied = false;
-        this.nickname = "";
         this.imageUrl = "";
         this.providerId = "";
         this.providerName = "";
 
         this.userId = userId;
         this.password = password;
+        this.nickname = nickname;
     }
 
     @Builder(builderClassName = "OAuth2UserBuilder", builderMethodName = "oauth2UserBuilder")
@@ -74,8 +73,8 @@ public class User extends BaseTimeEntity {
 
     // 관리자 회원가입을 위한 빌더
     @Builder(builderClassName = "AdminUserBuilder", builderMethodName = "adminUserBuilder")
-    public static User createAdminUser(String userId, String password) {
-        return new User(userId, password);
+    public static User createAdminUser(String userId, String password, String nickname) {
+        return new User(userId, password, nickname);
     }
 
     public void deny() {
