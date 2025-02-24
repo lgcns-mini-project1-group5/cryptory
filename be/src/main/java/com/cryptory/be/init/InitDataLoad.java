@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -29,23 +30,36 @@ public class InitDataLoad {
     // 애플리케이션 시작 시 자동 db 저장
     @PostConstruct
     public void fetchInitialData() {
+
+        Set<String> hiddenKeys = Set.of(
+                "MTL", "XRP", "GRS", "IOST", "HI", "ONG", "CB", "ELF", "QTUM",
+                "BTT", "MOC", "ARGO", "TT", "GMB", "MBL", "MLK", "STPT", "STMX", "DKA",
+                "AHT", "BORA", "JST", "CRO", "TON", "SOLA", "HUNT", "DOT", "STRAT",
+                "AQT", "GLM", "META", "FCT", "KOB", "SAND", "HPO", "STRK", "NPXS",
+                "STX", "MATIC", "T", "GMT", "EGLD", "GRT", "BLUR"
+        );
+
         // 업비트에서 KRW로 거래되는 코인 목록 조회
-        List<Market> coins = upbitService.getCoinsFromUpbit();
+        List<Market> coinsByUpbit = upbitService.getCoinsFromUpbit();
 
         // 코인 목록 저장
-        coinRepository.saveAll(coins.stream()
+        List<Coin> coins = coinsByUpbit.stream()
                 .map(coin -> {
                     CoinSymbolEnum coinSymbolEnum = CoinSymbolEnum.fromMarket(coin.getMarket());
                     CoinSymbol coinSymbol = coinSymbolEnum.toCoinSymbol();
+                    boolean isDisplayed = !hiddenKeys.contains(coin.getMarket().substring(4)); // 숨길 코인 확인
 
                     return Coin.builder()
                             .koreanName(coin.getKoreanName())
                             .englishName(coin.getEnglishName())
                             .code(coin.getMarket())
                             .coinSymbol(coinSymbol)
+                            .isDisplayed(isDisplayed)
                             .build();
                 })
-                .toList());
+                .toList();
+
+        coinRepository.saveAll(coins);
 
         /*
          * 차트 데이터 가져오는 작업(원래는 저장되는 코인에 대한 차트를 모두 저장해야 함)
