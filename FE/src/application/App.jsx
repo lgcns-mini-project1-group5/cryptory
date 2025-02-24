@@ -46,9 +46,9 @@ const Layout = () => {
             axios
                 .get(`http://${rest_api_host}:${rest_api_port}/api/v1/users/me`, {headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
                 .then(res => {
-                    setNickname(res.data.userId);
-                    setProfile(res.data.imageUrl)
-                    sessionStorage.setItem("name", res.data.userId)
+                    setNickname(res.data.results[0].nickname);
+                    setProfile(res.data.results[0].imageUrl);
+                    sessionStorage.setItem("name", res.data.nickname)
                 })
                 .catch(err => {
                     setNickname("UserName")
@@ -56,7 +56,7 @@ const Layout = () => {
                 });
 
         }
-    }, []);
+    }, [sessionStorage.getItem("isLogin")]);
 
     return (<div style={websiteForm}>
         <banner className="banner">
@@ -66,7 +66,7 @@ const Layout = () => {
                     <img src={profile} alt={nickname} className="coin-icon"/>
                     <span className="username" onClick={() => {
                         navigate("/mypage")
-                    }}>UserName</span>
+                    }}>{nickname}</span>
                     <button className="logout-btn" onClick={() => {
                         navigate("/kakaologout")
                     }}>Logout

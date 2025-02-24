@@ -13,8 +13,9 @@ export default function CoinView() {
         axios
             .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins`, {headers: {"Content-Type": "application/json"}})
             .then(res => {
+                console.log(res)
                 let temp = []
-                res.data.coinList.map((coin) => {
+                res.data.results.map((coin) => {
                     temp.push({coinId: coin.coinId, icon: coin.coinSymbol.logoUrl, name: coin.koreanName, symbol: coin.code, price: coin.tradePrice, change: coin.signedChangeRate, changePrice: coin.signedChangePrice});
                 })
                 setCoinData(temp);

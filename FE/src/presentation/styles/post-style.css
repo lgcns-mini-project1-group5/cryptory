@@ -320,3 +320,20 @@
     font-size: 16px;
     cursor: pointer;
 }
+
+.file-upload-label {
+    display: flex;
+    gap: 8px;
+    cursor: pointer;
+    width: 120px;
+    height: 40px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.file-list {
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}

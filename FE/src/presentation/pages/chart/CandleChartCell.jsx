@@ -379,16 +379,17 @@ export default function CandleChartCell({ coinId, modalOpenFunc }) {
             .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}`, {headers: {"Content-Type": "application/json"}})
             .then(res => {
                 let tempChart = []
-                res.data.chartList.map((item) => {
-                    tempChart.push({"date":item.date,"open":item.openingPrice,"close":item.tradePrice,"high":item.highPrice,"low":item.lowPrice});
+                res.data.results[0].chartList.slice().reverse().map((item) => {
+                    tempChart.push({"date":item.date.slice(0, 10),"open":item.openingPrice,"close":item.tradePrice,"high":item.highPrice,"low":item.lowPrice});
                 })
-                setOriginalData(tempChart)
+                setOriginalData(generateData(tempChart))
+
 
                 let tempIssue = []
                 res.data.issueList.map((item) => {
 
                 })
-                setMarkers(tempIssue)
+                setMarkers(generateMarker(tempIssue))
                 setMaxLength(tempIssue.length)
 
             })

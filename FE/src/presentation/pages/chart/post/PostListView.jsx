@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import PostCard from "./PostCard.jsx";
 import {useNavigate} from "react-router-dom";
 
-export default function PostListView({ coinId, name, symbol, icon, price, change }) {
+export default function PostListView({ coinId, name, symbol, icon, price, change, changePrice }) {
 
     const rest_api_host = import.meta.env.VITE_REST_API_HOST;
     const rest_api_port = import.meta.env.VITE_REST_API_PORT;
@@ -15,11 +15,13 @@ export default function PostListView({ coinId, name, symbol, icon, price, change
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/posts`)
         axios
-            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/posts?page=1&size=10`, {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
+            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/posts`, {headers: {"Content-Type": "application/json"}})
             .then(res => {
+                console.log(res);
                 let tempData = [];
-                res.posts.map((post) => {
+                res.data.map((post) => {
                     tempData.push({
                         postId: post.id,
                         title: post.title,
@@ -30,19 +32,12 @@ export default function PostListView({ coinId, name, symbol, icon, price, change
                 setPostData(tempData);
             })
             .catch(err => {
-                setPostData([
-                    {
-                        postId: 1,
-                        title: "비트코인 게시판 제목 1",
-                        author: "User1",
-                        date: "2025.02.19",
-                    },
-                ]);
+
             });
     }, [])
 
     return (<>
-        {(isLogin !== null) && <button className="write-btn" onClick={() => {navigate("/post", {state: {coinId:coinId, name:name, symbol:symbol, icon:icon, price:price, change:change}})}}>
+        {(isLogin !== null) && <button className="write-btn" onClick={() => {navigate("/post", {state: {coinId:coinId, name:name, symbol:symbol, icon:icon, price:price, change:change, changePrice:changePrice, prior:"post"}})}}>
             <img src="/public/write_post.png" alt="write post"/>
             글쓰기
         </button>}
