@@ -71,7 +71,7 @@ public class CoinServiceImpl implements CoinService {
                             .coinId(coin.getId())
                             .koreanName(coin.getKoreanName())
                             .englishName(coin.getEnglishName())
-                            .code(coin.getCode())
+                            .code(coin.getCode().substring(4)) // KRW- 제거
                             .coinSymbol(coin.getCoinSymbol())
                             .tradePrice(tickerMap.get(coin.getCode()).getTradePrice())
                             .signedChangePrice(tickerMap.get(coin.getCode()).getSignedChangePrice())
@@ -128,7 +128,7 @@ public class CoinServiceImpl implements CoinService {
                 .coinId(coin.getId())
                 .koreanName(coin.getKoreanName())
                 .englishName(coin.getEnglishName())
-                .code(coin.getCode())
+                .code(coin.getCode().substring(4)) // KRW- 제거
                 .coinSymbol(coin.getCoinSymbol())
                 .tradePrice(coinTicker.getTradePrice())
                 .signedChangeRate(coinTicker.getSignedChangeRate())
