@@ -28,7 +28,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@DependsOn("envConfig")
+//@DependsOn("envConfig")
 public class JwtProvider {
 
     @Value("${jwt.secret}")

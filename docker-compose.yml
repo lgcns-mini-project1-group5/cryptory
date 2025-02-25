@@ -1,0 +1,65 @@
+services:
+  mysql:
+    container_name: cryptory_db
+    image: mysql:8.0
+    env_file:
+      - .env
+    restart: always
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - my_network
+
+  springboot:
+    container_name: cryptory_be
+    env_file:
+      - .env
+    build:
+      context: ./be
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    ports:
+      - "8080:8080"
+    volumes:
+      - uploads:/app/uploads
+    networks:
+      - my_network
+
+  react:
+    container_name: cryptory_fe
+    build:
+      context: ./fe
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - springboot
+    env_file:
+      - .env
+    environment:
+      VITE_REST_API_HOST: ${VITE_REST_API_HOST}
+      VITE_REST_API_PORT: ${VITE_REST_API_PORT}
+    ports:
+      - "3000:80"
+    networks:
+      - my_network
+
+volumes:
+  mysql_data:
+  uploads:
+
+networks:
+  my_network:

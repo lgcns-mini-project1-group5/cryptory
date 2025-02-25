@@ -32,7 +32,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         response.addCookie(cookie);
 
-        String redirectUrl = "http://localhost:5173/oauth2/callback";
+        String redirectUrl = "http://localhost:3000/oauth2/callback";
         response.sendRedirect(redirectUrl);
     }
 }
