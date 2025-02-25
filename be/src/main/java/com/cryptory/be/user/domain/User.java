@@ -37,7 +37,7 @@ public class User extends BaseTimeEntity {
     // 리소스 서버 이름
     private String providerName;
 
-    private boolean isDenied;
+    private boolean isDenied = false;
 
     @Column // 관리자용 패스워드
     private String password;

@@ -27,11 +27,11 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Long viewCnt;
+    private Long viewCnt = 0L;
 
-    private Long likeCnt;
+    private Long likeCnt = 0L;
 
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coin_id")

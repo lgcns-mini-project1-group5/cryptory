@@ -30,8 +30,8 @@ public class IssueComment extends BaseTimeEntity {
     private Long id;
 
     private String content;
-    
-    private boolean isDeleted;
+
+    private boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
