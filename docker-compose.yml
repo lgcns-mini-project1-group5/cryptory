@@ -47,6 +47,7 @@ services:
       args:
         VITE_REST_API_HOST: ${VITE_REST_API_HOST}
         VITE_REST_API_PORT: ${VITE_REST_API_PORT}
+        VITE_GPT_API_PORT: ${VITE_GPT_API_PORT}
     restart: always
     depends_on:
       - springboot

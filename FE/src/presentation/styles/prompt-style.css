@@ -55,6 +55,44 @@
     align-items: center;
 }
 
+.prompt-response {
+    width: 85%;
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #FFFFFF;
+    margin-bottom: 20px;
+}
+
+.prompt-input {
+    margin-left: 11%;
+    width: 85%;
+    background: white;
+    padding: 3px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #C2C2C2;
+    margin-bottom: 20px;
+    display: flex;
+
+}
+
+.prompt-content {
+    width: 600px;
+    font-size: 18px;
+    color: #6C757D;
+}
+
+.prompt-content-input {
+    width: 600px;
+    font-size: 18px;
+    color: #6C757D;
+    text-align: right;
+    margin-right: 20px;
+}
+
+
 .coin-info {
     display: flex;
     align-items: center;
@@ -90,10 +128,9 @@
 }
 
 .prompt-section {
-    height: 560px;
     background: #F7F7F7;
     border-radius: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 0;
     padding: 20px;
     overflow: auto;
 }

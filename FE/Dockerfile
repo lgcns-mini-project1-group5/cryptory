@@ -5,9 +5,11 @@ WORKDIR /app
 # VITE는 빌드할 때 변수를 지정한다고 한다...
 ARG VITE_REST_API_HOST
 ARG VITE_REST_API_PORT
+ARG VITE_GPT_API_PORT
 
 ENV VITE_REST_API_HOST=${VITE_REST_API_HOST}
 ENV VITE_REST_API_PORT=${VITE_REST_API_PORT}
+ENV VITE_GPT_API_PORT=${VITE_GPT_API_PORT}
 
 # package.json이랑 package-lock.json 복사해서 의존성 설치(필요한거 가져옴)
 COPY package.json package-lock.json ./

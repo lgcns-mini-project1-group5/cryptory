@@ -172,3 +172,14 @@
     margin-top: -15px;
     color: #6C757D;
 }
+
+.mini-modal-content {
+    background: #FFFFFF;
+    padding: 30px;
+    border-radius: 8px;
+    width: 200px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

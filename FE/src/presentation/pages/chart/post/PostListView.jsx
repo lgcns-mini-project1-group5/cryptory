@@ -40,7 +40,7 @@ export default function PostListView({ coinId, name, symbol, icon, price, change
 
     return (<>
         {(isLogin !== null) && <button className="write-btn" onClick={() => {navigate("/post", {state: {coinId:coinId, name:name, symbol:symbol, icon:icon, price:price, change:change, changePrice:changePrice, prior:"post"}})}}>
-            <img src="/public/write_post.png" alt="write post"/>
+            <img src="/write_post.png" alt="write post"/>
             글쓰기
         </button>}
         <div className="board">
