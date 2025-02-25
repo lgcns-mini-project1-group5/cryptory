@@ -14,6 +14,7 @@ package com.cryptory.be.admin.dto.issue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
 import java.time.LocalDate;
 
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @Jacksonized
+@ToString
 public class IssueCreateRequestDto { //이슈 등록
     private LocalDate date;
     private String title;

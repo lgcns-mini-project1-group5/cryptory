@@ -3,6 +3,7 @@ package com.cryptory.be.admin.controller;
 import com.cryptory.be.admin.dto.issue.*;
 import com.cryptory.be.admin.service.AdminIssueService;
 import com.cryptory.be.admin.service.AdminPostCommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -51,12 +52,12 @@ public class AdminIssueController {
 
     // 특정 코인의 이슈 생성
     @PostMapping("/coins/{coinId}/issues")
-    public ResponseEntity<?> createIssue(@PathVariable Long coinId, @RequestBody IssueCreateRequestDto requestDto) {
+    public ResponseEntity<?> createIssue(@PathVariable Long coinId, @Valid @RequestBody IssueCreateRequestDto requestDto) {
         try {
             Long newIssueId = adminIssueService.createIssue(coinId, requestDto);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.status(HttpStatus.CREATED).body("생성된 이슈의 ID :" + newIssueId);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -84,7 +85,7 @@ public class AdminIssueController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // 400 Bad Request, 에러 메시지
         }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다."+ e.getMessage());
         }
     }
 

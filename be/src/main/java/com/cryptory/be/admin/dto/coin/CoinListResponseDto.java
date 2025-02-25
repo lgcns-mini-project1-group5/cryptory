@@ -22,7 +22,8 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class CoinListResponseDto {
     private Long cryptoId;
-    private String name;
+    private String koreanName;
+    private String englishName;
     private String symbol;
     private String logoUrl;
     private boolean isDisplayed;

@@ -37,7 +37,24 @@ public class AdminCoinServiceImpl implements AdminCoinService{
         Sort sorting = parseSort(sort);
         Pageable pageable = PageRequest.of(page, size, sorting);
 
-        Page<Coin> coins = coinRepository.searchCoins(keyword, pageable);
+        //Page<Coin> coins = coinRepository.searchCoins("%bit%", pageable);
+        System.out.println(keyword);
+        System.out.println("ssss");
+
+        String parsedKeyword;
+        if (keyword == null || keyword.trim().isEmpty()) {
+            parsedKeyword = null; // 또는 ""
+        } else {
+            parsedKeyword = "%" + keyword.toLowerCase().trim() + "%";
+        }
+        System.out.println(parsedKeyword);
+
+        Page<Coin> coins;
+        if( parsedKeyword == null ){
+            coins = coinRepository.findAll(pageable);
+        } else {
+            coins = coinRepository.searchCoins(parsedKeyword, pageable);
+        }
 
         return coins.map(this::convertToCoinListResponseDto);
     }
@@ -68,7 +85,8 @@ public class AdminCoinServiceImpl implements AdminCoinService{
     private CoinListResponseDto convertToCoinListResponseDto(Coin coin) {
         return CoinListResponseDto.builder()
                 .cryptoId(coin.getId())
-                .name(coin.getKoreanName())
+                .koreanName(coin.getKoreanName())
+                .englishName(coin.getEnglishName())
                 .symbol(coin.getCode())
                 .logoUrl(coin.getCoinSymbol().getLogoUrl())
                 .isDisplayed(coin.isDisplayed())

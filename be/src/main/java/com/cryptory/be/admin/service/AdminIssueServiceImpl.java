@@ -12,6 +12,7 @@ import com.cryptory.be.issue.repository.IssueRepository;
 import com.cryptory.be.user.domain.User;
 import com.cryptory.be.user.dto.PrincipalUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +36,7 @@ import java.util.NoSuchElementException;
  * -----------------------------------------------------------
  * 2/22/25         조영상        최초 생성
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -62,13 +64,14 @@ public class AdminIssueServiceImpl implements AdminIssueService {
                 .orElseThrow(() -> new NoSuchElementException("해당 코인을 찾을 수 없습니다. ID: " + coinId));
 
         // date와 coinId로 chart 조회
-        Chart chart = chartRepository.findByDateAndCoinId(requestDto.getDate().toString(), coinId.longValue())
-                .orElseThrow(() -> new NoSuchElementException("해당 날짜와 코인에 대한 차트를 찾을 수 없습니다. Date: " + requestDto.getDate() + ", Coin ID: " + coinId));
+        Chart chart = chartRepository.findByDateSubstringAndCoinId(String.valueOf(requestDto.getDate()), coinId)
+                .orElseThrow(() -> new NoSuchElementException("해당 날짜와 코인에 대한 차트를 찾을 수 없습니다. Date: " + requestDto.getDate().toString() + ", Coin ID: " + coinId));
 
         // 일반 로그인으로 로그인한 관리자 객체 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PrincipalUserDetails principalDetails = (PrincipalUserDetails) authentication.getPrincipal(); // PrincipalUserDetails로 캐스팅
         User adminUser = principalDetails.getUser();
+
 
         Issue newIssue = Issue.builder()
                 .date(requestDto.getDate())
@@ -83,6 +86,7 @@ public class AdminIssueServiceImpl implements AdminIssueService {
                 .requestCount(0L)
                 .isDeleted(false)
                 .build();
+
 
         // issueRepository 생성 필요, 현재 기준 없음
         return issueRepository.save(newIssue).getId();
