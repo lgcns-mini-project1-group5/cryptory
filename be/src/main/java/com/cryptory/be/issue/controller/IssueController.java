@@ -1,6 +1,7 @@
 package com.cryptory.be.issue.controller;
 
 import com.cryptory.be.global.response.ApiResponse;
+import com.cryptory.be.issue.dto.IssueDetailDto;
 import lombok.RequiredArgsConstructor;
 
 import java.security.Principal;
@@ -23,9 +24,13 @@ public class IssueController {
 	
 	private final IssueService issueService;
 	
-	// 특정 이슈 상세 조회 - 이슈 기본 정보
-	
-	// 특정 이슈 상세 조회 - AI 관련
+	// 특정 이슈 상세 조회 - 이슈 기본 정보 (GPT, 토론방 클릭 창)
+	@GetMapping("/{issueId}")
+	public ApiResponse<IssueDetailDto> getIssueDetail(@PathVariable("coinId") Long coinId,
+												  @PathVariable("issueId") Long issueId) {
+		IssueDetailDto issueDetail = issueService.getIssueDetail(coinId, issueId);
+		return new ApiResponse<>(HttpStatus.OK, issueDetail);
+	}
 
     // 특정 이슈 상세 조회 - 토론방 코멘트 전체 조회
 	@GetMapping("/{issueId}/comments")

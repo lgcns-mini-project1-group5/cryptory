@@ -3,7 +3,7 @@ import axios from "axios";
 
 import "../../../styles/admin-style.css"
 import "../../../styles/admin-coin-style.css"
-import AdminCoinCard from "./adminCoinCard";
+import AdminCoinCard from "./AdminCoinCard"
 
 export default function AdminCoinView() {
 
