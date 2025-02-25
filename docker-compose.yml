@@ -17,7 +17,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
-      - my_network
+      - cryptory_network
 
   springboot:
     container_name: cryptory_be
@@ -37,29 +37,30 @@ services:
     volumes:
       - uploads:/app/uploads
     networks:
-      - my_network
+      - cryptory_network
 
   react:
     container_name: cryptory_fe
     build:
       context: ./fe
       dockerfile: Dockerfile
+      args:
+        VITE_REST_API_HOST: ${VITE_REST_API_HOST}
+        VITE_REST_API_PORT: ${VITE_REST_API_PORT}
     restart: always
     depends_on:
       - springboot
     env_file:
       - .env
-    environment:
-      VITE_REST_API_HOST: ${VITE_REST_API_HOST}
-      VITE_REST_API_PORT: ${VITE_REST_API_PORT}
     ports:
       - "3000:80"
     networks:
-      - my_network
+      - cryptory_network
 
 volumes:
   mysql_data:
   uploads:
 
 networks:
-  my_network:
+  cryptory_network:
+    driver: bridge
