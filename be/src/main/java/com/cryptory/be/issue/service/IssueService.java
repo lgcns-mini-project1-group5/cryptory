@@ -1,7 +1,11 @@
 package com.cryptory.be.issue.service;
 
 import com.cryptory.be.issue.domain.Issue;
+import com.cryptory.be.issue.exception.IssueErrorCode;
+import com.cryptory.be.issue.exception.IssueException;
 import com.cryptory.be.issue.repository.IssueRepository;
+import com.cryptory.be.user.exception.UserErrorCode;
+import com.cryptory.be.user.exception.UserException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -28,7 +32,6 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final IssueCommentRepository issueCommentRepository;
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
 
     // 특정 이슈 상세 조회 - 토론방 코멘트 전체 조회
     public List<IssueCommentDto> getIssueComments(Long issueId) {
@@ -42,16 +45,18 @@ public class IssueService {
                         DateFormat.formatDate(issueComment.getCreatedAt())
                 ))
                 .toList();
+
     }
 
     // 이슈 내 코멘트 등록
     @Transactional
     public IssueCommentDto createIssueComment(Long issueId, String userId, CreateIssueCommentDto createIssueCommentDto) {
+
         User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UserException(UserErrorCode.NOT_EXIST_USER));
 
         Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 이슈를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IssueException(IssueErrorCode.NOT_EXIST_ISSUE));
 
         IssueComment issueComment = issueCommentRepository.save(IssueComment.builder()
                 .content(createIssueCommentDto.getContent())
@@ -71,7 +76,7 @@ public class IssueService {
     @Transactional
     public void updateIssueComment(Long issueId, Long issueCommentId, UpdateIssueCommentDto updateIssueCommentDto) {
         IssueComment issueComment = issueCommentRepository.findById(issueCommentId)
-                .orElseThrow(() -> new IllegalArgumentException("코멘트를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IssueException(IssueErrorCode.NOT_EXIST_ISSUE_COMMENT));
 
         issueComment.update(updateIssueCommentDto.getContent());
     }
@@ -80,7 +85,7 @@ public class IssueService {
     @Transactional
     public void deleteIssueComment(Long issueId, Long issueCommentId) {
         IssueComment issueComment = issueCommentRepository.findById(issueCommentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 코멘트를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IssueException(IssueErrorCode.NOT_EXIST_ISSUE_COMMENT));
 
         issueComment.delete();
     }

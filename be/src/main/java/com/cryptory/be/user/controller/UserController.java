@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping("/me")
     public ApiResponse<UserInfoDto> getUser(Principal principal) {
-        log.info("principal: {}", principal);
+//        log.info("principal: {}", principal);
         UserInfoDto userInfoDto = userService.getUser(principal.getName());
         return new ApiResponse<>(HttpStatus.OK, userInfoDto);
     }
@@ -36,7 +36,7 @@ public class UserController {
 
     @PatchMapping("/me/nickname")
     public ApiResponse<?> updateNickname(Principal principal, @RequestBody UpdateUserDto updateUserDto) {
-        log.info("principal: {}", principal);
+//        log.info("principal: {}", principal);
         userService.updateNickname(principal.getName(), updateUserDto.getNickname());
         return new ApiResponse<>(HttpStatus.OK, "유저 정보를 업데이트했습니다.");
     }

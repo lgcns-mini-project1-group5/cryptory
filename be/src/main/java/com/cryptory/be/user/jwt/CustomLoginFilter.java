@@ -71,8 +71,6 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        log.error("로그인 실패: {}", failed.getMessage());
         response.getWriter().write("로그인 실패");
-
     }
 }

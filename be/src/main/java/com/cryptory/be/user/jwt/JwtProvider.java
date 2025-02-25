@@ -1,5 +1,6 @@
 package com.cryptory.be.user.jwt;
 
+import com.cryptory.be.user.exception.UserException;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.cryptory.be.user.exception.UserErrorCode.INVALID_SIGNATURE;
+import static com.cryptory.be.user.exception.UserErrorCode.INVALID_TOKEN;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-//@DependsOn("envConfig")
 public class JwtProvider {
 
     @Value("${jwt.secret}")
@@ -36,7 +38,6 @@ public class JwtProvider {
 
     @Value("${jwt.expiration.access}")
     private Long ACCESS_TOKEN_EXPIRE_TIME;
-
 
     private SecretKey secretKey;
 
@@ -47,7 +48,7 @@ public class JwtProvider {
                 Jwts.SIG.HS512.key().build().getAlgorithm());
     }
 
-    // 생성
+    // accessToken 생성
     public String generateAccessToken(Authentication authentication) {
         return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME, "access");
     }
@@ -82,12 +83,12 @@ public class JwtProvider {
                     .parseSignedClaims(token);
 
             return true;
-        } catch (SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
+        } catch (SecurityException e) {
+            throw new UserException(INVALID_SIGNATURE);
+        } catch (MalformedJwtException | UnsupportedJwtException e) {
+            throw new UserException(INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT Token", e);
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
         } catch (IllegalArgumentException e) {
             log.info("JWT claims string is empty.", e);
         }
@@ -111,7 +112,7 @@ public class JwtProvider {
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(claims.get("authorities").toString());
 
         User userPrincipal = new User(claims.getSubject(), "", authorities);
-        log.debug("User: {}", userPrincipal);
+//        log.debug("User: {}", userPrincipal);
 
         // credentials: token
         return new UsernamePasswordAuthenticationToken(userPrincipal, token, authorities);
