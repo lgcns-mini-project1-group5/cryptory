@@ -100,8 +100,4 @@ public class AdminUserController {
         return new ApiResponse<>(HttpStatus.CREATED, "관리자를 생성했습니다.");
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<?> hello() {
-        return ResponseEntity.ok("hello");
-    }
 }
