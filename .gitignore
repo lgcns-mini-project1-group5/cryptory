@@ -11,3 +11,4 @@ uploads/
 .env
 .DS_Store
 be/.DS_Store
+.project
