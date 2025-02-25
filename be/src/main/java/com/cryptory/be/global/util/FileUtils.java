@@ -18,17 +18,30 @@ public class FileUtils {
 
     // window, mac 바탕화면 경로 지정
     // S3 등 외부 저장소 사용 시 yml에 경로 설정
-     public static String getBaseDir() {
-        String userHome = System.getProperty("user.home");
-        String os = System.getProperty("os.name").toLowerCase();
+//     public static String getBaseDir() {
+//        String userHome = System.getProperty("user.home");
+//        String os = System.getProperty("os.name").toLowerCase();
+//
+//        if (os.contains("win")) {
+//            return Paths.get(userHome, "Desktop", "cryptory_files").toString();
+//        } else if (os.contains("mac")) {
+//            return Paths.get(userHome, "Desktop", "cryptory_files").toString();
+//        } else {
+//            throw new UnsupportedOperationException("지원되지 않는 운영 체제입니다.");
+//        }
+//    }
 
-        if (os.contains("win")) {
-            return Paths.get(userHome, "Desktop", "cryptory_files").toString();
-        } else if (os.contains("mac")) {
-            return Paths.get(userHome, "Desktop", "cryptory_files").toString();
-        } else {
-            throw new UnsupportedOperationException("지원되지 않는 운영 체제입니다.");
-        }
+    // 환경 변수 사용
+//    @Value("${BASE_UPLOAD_DIR}")
+//    private String BASE_UPLOAD_DIR;
+
+    public static String getBaseDir() {
+//        String baseDir = System.getenv(BASE_UP); // 환경 변수에서 가져오기
+//        if (baseDir == null || baseDir.isEmpty()) {
+//            baseDir = "/app/uploads"; // 기본값 설정
+//        }
+//        return baseDir;
+        return "/app/uploads";
     }
 
     public String saveFile(MultipartFile file) {

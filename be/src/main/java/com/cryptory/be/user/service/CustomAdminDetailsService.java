@@ -22,16 +22,13 @@ public class CustomAdminDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("userId: {}", username);
+//        log.info("userId: {}", username);
 
         User admin = userRepository.findByUserId(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Not Found Admin"));
+                .orElseThrow(() -> new UsernameNotFoundException("Can't find Admin User"));
 
-        log.info("adminId: {}, adminPassword: {}", admin.getUserId(), admin.getPassword());
-
-        if (admin.getRole() != Role.ADMIN) {
-            log.error("Not Admin");
-            throw new UsernameNotFoundException("Not Admin");
+        if (!admin.getRole().equals(Role.ADMIN)) {
+            throw new UsernameNotFoundException("Only Admin can login to access the service");
 
         }
 

@@ -1,0 +1,13 @@
+.idea/
+*.iml
+
+build/
+target/
+
+mysql-data/
+
+uploads/
+
+.env
+.DS_Store
+be/.DS_Store

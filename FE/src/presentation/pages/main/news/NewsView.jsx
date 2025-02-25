@@ -13,7 +13,7 @@ export default function NewsView({ type }) {
     useEffect(() => {
         if (type === "main") {
             axios
-                .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/1/news`, {headers: {"Content-Type": "application/json"}})
+                .get(`http://${rest_api_host}:${rest_api_port}/api/v1/news`, {headers: {"Content-Type": "application/json"}})
                 .then(res => {
                     let tempNews = []
                     res.data.results.map((item) => {

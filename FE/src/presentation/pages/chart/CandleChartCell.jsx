@@ -240,6 +240,9 @@ const tempMarker = [
 
 export default function CandleChartCell({ coinId, modalOpenFunc }) {
 
+    const isLogin = sessionStorage.getItem("isLogin")
+    const [isModalOpen, setModalOpen] = useState(false)
+
     const rest_api_host = import.meta.env.VITE_REST_API_HOST;
     const rest_api_port = import.meta.env.VITE_REST_API_PORT;
 
@@ -264,9 +267,10 @@ export default function CandleChartCell({ coinId, modalOpenFunc }) {
                 x: new Date(marker.date).getTime(),
                 y: marker.high,
                 image: {
-                    path: '/public/prompt_purple.png',
-                    width: 33,
-                    height: 33,
+                    path: '/mark.png',
+                    width: 25,
+                    height: 25,
+
                 },
                 marker: {
                     size: 16,
@@ -276,7 +280,15 @@ export default function CandleChartCell({ coinId, modalOpenFunc }) {
                 },
                 issueId: marker.issueId,
                 click: function (e) {
-                    modalOpenFunc(e.issueId);
+                    if (isLogin || e.issueId !== "new") {
+                        modalOpenFunc(e.issueId);
+                    } else {
+                        setModalOpen(true);
+                        setTimeout(() => {
+                            setModalOpen(false);
+                        }, 2000)
+                    }
+
                 }
             })
         })
@@ -287,11 +299,6 @@ export default function CandleChartCell({ coinId, modalOpenFunc }) {
     const [markers, setMarkers] = useState(generateMarker(tempMarker))
     const [maxLength, setMaxLength] = useState(tempMarker.length);
     const [originalData, setOriginalData] = useState(generateData(tempData))
-
-    const last30DaysStart = new Date(originalData[150].date).getTime();
-    const last30DaysEnd = new Date(originalData[179].date).getTime();
-
-    const [selectedMarker, setSelectedMarker] = useState(null);
 
     const options = {
         chart: {
@@ -398,9 +405,14 @@ export default function CandleChartCell({ coinId, modalOpenFunc }) {
             });
     }, [])
 
-    return (
+    return (<>
         <div id="chart">
             <Chart options={options} series={options.series} type="candlestick" height={350} />
         </div>
-    );
+        {(isModalOpen) && <div className="modal-overlay">
+            <div className="mini-modal-content">
+                로그인 후 이용 가능합니다.
+            </div>
+        </div>}
+    </>);
 }

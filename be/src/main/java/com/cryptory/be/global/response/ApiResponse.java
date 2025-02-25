@@ -1,6 +1,8 @@
 package com.cryptory.be.global.response;
 
 
+import com.cryptory.be.global.exception.CustomException;
+import com.cryptory.be.global.exception.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,9 +42,9 @@ public class ApiResponse<T> {
     }
 
     // 에러 처리
-//    public ApiResponse(CustomException e) {
-//        this.status = new Status(e.getErrorCode());
-//    }
+    public ApiResponse(CustomException e) {
+        this.status = new Status(e.getErrorCode());
+    }
 
     @Getter
     private class Status {
@@ -50,10 +52,10 @@ public class ApiResponse<T> {
         private final String message;
 
         // 커스텀 에러 코드 처리
-//        public Status(ErrorCode errorCode) {
-//            this.code = errorCode.getHttpStatus().value();
-//            this.message = errorCode.getMessage();
-//        }
+        public Status(ErrorCode errorCode) {
+            this.code = errorCode.getHttpStatus().value();
+            this.message = errorCode.getMessage();
+        }
 
         // 일반 응답 반환(OK, CREATED, ACCEPTED 등)
         public Status(HttpStatus httpStatus) {

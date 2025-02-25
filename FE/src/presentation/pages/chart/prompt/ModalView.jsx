@@ -3,11 +3,14 @@ import "../../../styles/prompt-style.css"
 import CommentCell from "../post/CommentCell.jsx";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import InputCell from "./InputCell.jsx";
+import ResponseCell from "./ResponseCell.jsx";
 
-export default function ModalView({ onClose, coinId, issueId, icon, name, symbol, price, change, issueDate }) {
+export default function ModalView({ onClose, coinId, issueId, icon, name, symbol, price, change, issueDate, isNew }) {
 
     const rest_api_host = import.meta.env.VITE_REST_API_HOST;
     const rest_api_port = import.meta.env.VITE_REST_API_PORT;
+    const gpt_api_port = import.meta.env.VITE_GPT_API_PORT;
 
     const isLogin = sessionStorage.getItem("isLogin");
     const navigate = useNavigate();
@@ -24,6 +27,8 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
 
     const [commentList, setCommentList] = useState([])
 
+    const [responseList, setResponseList] = useState([])
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (prompt.trim()) {
@@ -33,28 +38,63 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
     };
 
     useEffect(() => {
-        axios
-            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/issues/${issueId}`, {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
-            .then(res => {
-                setTitle(res.data.title)
-                setContent(res.data.summaryContent)
-                setNews1(res.data.newsTitle)
-                setNews1Link(res.data.source)
+
+        if (issueId === "new") {
+            axios({
+                method: "POST",
+                url: `http://${rest_api_host}:${gpt_api_port}/api/v1/issue`,
+                data: {
+                    "name": name,
+                    "date": issueDate,
+                },
+                headers: { "Content-Type": "application/json"}
             })
-            .catch(err => {
-                setTitle("트럼프 대통령 당선, 비트코인 가격 상승 촉발")
-                setContent("도널드 트럼프 전 미국 대통령의 당선이 공식 인증된 1월 6일, 비트코인 " +
-                    "가격은 10만 달러 선을 재돌파하며 큰 폭의 상승을 보였습니다. 트럼프 " +
-                    "당선인은 선거 기간 동안 미국을 '암호화폐의 수도'로 만들겠다는 공약을 " +
-                    "내세웠으며, 이러한 친암호화폐 정책 기대감이 투자자들의 심리를 " +
-                    "자극했습니다. 그러나 취임 이후 구체적인 정책 부재와 경제 불확실성으로 인해 비트코인 가격은 하락세로 전환되어, 2월 18일 기준 9만5,507달러로 최고점 대비 14% 하락하였습니다.")
-                setNews1("'트럼프 당선' 공식 인증에 비트코인 상승…10만달러선 탈환")
-                setNews1Link("https://www.naver.com")
-                setNews2("이제 '트럼프 트레이드'는 금?…달러·비트코인은 주춤")
-                setNews2Link("https://www.naver.com")
-            });
+                .then(res => {
+                    console.log(res)
+                    setTitle(res.data.title)
+                    setContent(res.data.content)
+                    setNews1(res.data.news1_title)
+                    setNews1Link(res.data.news1_link)
+                    setNews2(res.data.news2_title)
+                    setNews2Link(res.data.news2_link)
+                })
+                .catch((err) => {
 
-
+                })
+        }
+        else {
+            axios
+                .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/issues/${issueId}`, {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
+                .then(res => {
+                    console.log(res)
+                    setTitle("트럼프 대통령 당선, 비트코인 가격 상승 촉발")
+                    setContent("도널드 트럼프 전 미국 대통령의 당선이 공식 인증된 1월 6일, 비트코인 " +
+                        "가격은 10만 달러 선을 재돌파하며 큰 폭의 상승을 보였습니다. 트럼프 " +
+                        "당선인은 선거 기간 동안 미국을 '암호화폐의 수도'로 만들겠다는 공약을 " +
+                        "내세웠으며, 이러한 친암호화폐 정책 기대감이 투자자들의 심리를 " +
+                        "자극했습니다. 그러나 취임 이후 구체적인 정책 부재와 경제 불확실성으로 인해 비트코인 가격은 하락세로 전환되어, 2월 18일 기준 9만5,507달러로 최고점 대비 14% 하락하였습니다.")
+                    setNews1("'트럼프 당선' 공식 인증에 비트코인 상승…10만달러선 탈환")
+                    setNews1Link("https://www.naver.com")
+                    setNews2("이제 '트럼프 트레이드'는 금?…달러·비트코인은 주춤")
+                    setNews2Link("https://www.naver.com")
+                    // setTitle(res.data.title)
+                    // setContent(res.data.summaryContent)
+                    // setNews1(res.data.newsTitle)
+                    // setNews1Link(res.data.source)
+                })
+                .catch(err => {
+                    setTitle("트럼프 대통령 당선, 비트코인 가격 상승 촉발")
+                    setContent("도널드 트럼프 전 미국 대통령의 당선이 공식 인증된 1월 6일, 비트코인 " +
+                        "가격은 10만 달러 선을 재돌파하며 큰 폭의 상승을 보였습니다. 트럼프 " +
+                        "당선인은 선거 기간 동안 미국을 '암호화폐의 수도'로 만들겠다는 공약을 " +
+                        "내세웠으며, 이러한 친암호화폐 정책 기대감이 투자자들의 심리를 " +
+                        "자극했습니다. 그러나 취임 이후 구체적인 정책 부재와 경제 불확실성으로 인해 비트코인 가격은 하락세로 전환되어, 2월 18일 기준 9만5,507달러로 최고점 대비 14% 하락하였습니다.")
+                    setNews1("'트럼프 당선' 공식 인증에 비트코인 상승…10만달러선 탈환")
+                    setNews1Link("https://www.naver.com")
+                    setNews2("이제 '트럼프 트레이드'는 금?…달러·비트코인은 주춤")
+                    setNews2Link("https://www.naver.com")
+                });
+        }
     }, []);
 
     const getCommentList = () => {
@@ -140,6 +180,30 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
             })
     }
 
+    const getGPTResponse = () => {
+        axios({
+            method: "POST",
+            url: `http://${rest_api_host}:${gpt_api_port}/api/v1/prompt`,
+            data: {
+                "name": name,
+                "date": issueDate,
+                "title": title,
+                "content": content,
+                "prompt": prompt,
+                "skip": "search"
+            },
+            headers: { "Content-Type": "application/json"}
+        })
+        .then(res => {
+            console.log(res.data.content)
+            setResponseList([...responseList, {"input": prompt, "response": res.data.content}])
+            setPrompt("")
+        })
+        .catch((err) => {
+
+        })
+    }
+
     return (
         <div className="modal-overlay">
             <div className="modal-content">
@@ -191,6 +255,14 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                             }}>{news2}</button>}
                         </div>
                     </div>
+
+                    {(responseList.length > 0) && <div className="prompt-section">
+                        {responseList.map((response) => {return (<>
+                            <InputCell content={response.input} />
+                            <ResponseCell content={response.response} />
+                        </>)})}
+                    </div>}
+
                     {(isLogin === null) && <div className="comment-form">
                         <p className="un-login-prompt"><a className="un-login-prompt-toLogin" onClick={() => {navigate("/login")}}>로그인</a> 후 이용할 수 있습니다</p>
                     </div>}
@@ -201,7 +273,7 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                                 placeholder="궁금한 내용을 입력하세요!"
                                 value={prompt}
                                 onChange={(e) => setPrompt(e.target.value)}/>
-                        <button type="submit" className="gpt-send-btn"/>
+                        <button type="submit" className="gpt-send-btn" onClick={() => {getGPTResponse()}}/>
                     </form>}
                 </>
                 }
