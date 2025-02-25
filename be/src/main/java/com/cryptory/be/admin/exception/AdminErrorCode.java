@@ -1,4 +1,4 @@
-package com.cryptory.be.post.exception;
+package com.cryptory.be.admin.exception;
 
 import com.cryptory.be.global.exception.ErrorCode;
 import lombok.Getter;
@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum PostErrorCode implements ErrorCode {
+public enum AdminErrorCode implements ErrorCode {
 
-    NOT_EXIST_POST(HttpStatus.NOT_FOUND, "존재하지 않는 게시글입니다.");
+    UNAUTHORIZED_ROLE(HttpStatus.BAD_REQUEST, "작업을 수행할 권한이 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

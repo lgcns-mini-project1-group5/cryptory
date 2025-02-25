@@ -3,6 +3,8 @@ package com.cryptory.be.user.service;
 import com.cryptory.be.user.domain.User;
 import com.cryptory.be.user.dto.OAuth2UserDto;
 import com.cryptory.be.user.dto.PrincipalUserDetails;
+import com.cryptory.be.user.exception.UserErrorCode;
+import com.cryptory.be.user.exception.UserException;
 import com.cryptory.be.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,22 +28,24 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         Map<String, Object> attributes = super.loadUser(userRequest).getAttributes();
-
-        log.info("OAuth2User loadUser attributes: {}", attributes);
+//        log.info("OAuth2User loadUser attributes: {}", attributes);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        log.info("OAuth2User loadUser registrationId: {}", registrationId);
+//        log.info("OAuth2User loadUser registrationId: {}", registrationId);
 
         OAuth2UserDto oAuth2UserDto = OAuth2UserDto.of(attributes, registrationId);
 
         Optional<User> findUser = userRepository.findByProviderIdAndProviderName(oAuth2UserDto.getProviderId(), oAuth2UserDto.getProviderName());
 
-        if(findUser.isEmpty()) {
+        if (findUser.isEmpty()) {
             User user = userRepository.save(oAuth2UserDto.toUser());
             return new PrincipalUserDetails(user, attributes);
         }
 
-        // todo: isDenied == true 일 때 예외처리
+        if(findUser.get().isDenied()) {
+            throw new UserException(UserErrorCode.DENIED_USER);
+        }
+
         return new PrincipalUserDetails(findUser.get(), attributes);
     }
 

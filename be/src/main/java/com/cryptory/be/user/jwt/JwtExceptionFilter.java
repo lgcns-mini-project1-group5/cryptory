@@ -1,5 +1,6 @@
 package com.cryptory.be.user.jwt;
 
+import com.cryptory.be.user.exception.UserException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,8 +23,8 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (Exception e) {
-            log.error("예외 발생: {}", e.getMessage());
+        } catch (UserException e) {
+            response.sendError(e.getErrorCode().getHttpStatus().value(), e.getMessage());
         }
     }
 }
