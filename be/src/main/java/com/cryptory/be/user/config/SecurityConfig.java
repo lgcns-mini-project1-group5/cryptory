@@ -68,6 +68,7 @@ public class SecurityConfig {
                                 "/api/v1/coins",
                                 "/api/v1/coins/*",
                                 "/api/v1/coins/*/news",
+                                "/api/v1/coins/*/issues/*",
                                 "/api/v1/coins/*/issues/*/comments",
                                 "/api/v1/coins/*/posts",
                                 "/api/v1/coins/*/posts/*",

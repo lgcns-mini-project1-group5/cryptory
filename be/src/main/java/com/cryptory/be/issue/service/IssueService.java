@@ -1,9 +1,16 @@
 package com.cryptory.be.issue.service;
 
+import com.cryptory.be.coin.domain.Coin;
+import com.cryptory.be.coin.exception.CoinErrorCode;
+import com.cryptory.be.coin.exception.CoinException;
+import com.cryptory.be.coin.repository.CoinRepository;
 import com.cryptory.be.issue.domain.Issue;
+import com.cryptory.be.issue.dto.IssueDetailDto;
 import com.cryptory.be.issue.exception.IssueErrorCode;
 import com.cryptory.be.issue.exception.IssueException;
 import com.cryptory.be.issue.repository.IssueRepository;
+import com.cryptory.be.openapi.dto.Ticker;
+import com.cryptory.be.openapi.service.UpbitService;
 import com.cryptory.be.user.exception.UserErrorCode;
 import com.cryptory.be.user.exception.UserException;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +39,8 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final IssueCommentRepository issueCommentRepository;
     private final UserRepository userRepository;
+
+    private final int END_OF_KRW = 4;
 
     // 특정 이슈 상세 조회 - 토론방 코멘트 전체 조회
     public List<IssueCommentDto> getIssueComments(Long issueId) {
@@ -90,4 +99,14 @@ public class IssueService {
         issueComment.delete();
     }
 
+    public IssueDetailDto getIssueDetail(Long coinId, Long issueId) {
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() -> new IssueException(IssueErrorCode.NOT_EXIST_ISSUE));
+
+        if(issue.isDeleted()) {
+            throw new IssueException(IssueErrorCode.NOT_EXIST_ISSUE);
+        }
+
+        return new IssueDetailDto(issue.getTitle(), issue.getContent(), issue.getNewsTitle(), issue.getSource());
+    }
 }
