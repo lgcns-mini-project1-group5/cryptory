@@ -48,3 +48,69 @@ body {
     margin-top: 0px; /* 위쪽 여백 추가 */
     margin-bottom: 40px;
 }
+
+/* 📌 대시보드 컨테이너 */
+.dashboard-container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* 📌 Overview 카드 스타일 */
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.overview-card {
+    padding: 20px;
+    border-radius: 8px;
+    color: #333;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-value {
+    font-size: 24px;
+    margin: 8px 0;
+}
+
+.dashboard-change {
+    font-size: 14px;
+}
+
+
+/* 📌 Overview 카드 색상 */
+.blue-light {
+    background-color: #e0f2fe;
+}
+
+.blue-medium {
+    background-color: #bfdbfe;
+}
+
+.purple-light {
+    background-color: #e9d5ff;
+}
+
+/* 📌 차트 컨테이너 */
+.charts-container {
+    display: flex;
+    gap: 16px;
+}
+
+.chart-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+/* 📌 트래픽 바 차트 */
+.traffic-box {
+    margin-top: 20px;
+}
