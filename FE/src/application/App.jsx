@@ -83,7 +83,11 @@ const Layout = () => {
 
 const AdminLayout = () => {
 
+    const rest_api_host = import.meta.env.VITE_REST_API_HOST;
+    const rest_api_port = import.meta.env.VITE_REST_API_PORT;
+
     const navigate = useNavigate();
+    const login = true; // TODO
 
     const websiteForm = {
         width: 1920,
@@ -92,14 +96,54 @@ const AdminLayout = () => {
         margin: 'auto',
     }
 
+    const [nickname, setNickname] = useState("")
+    const [profile, setProfile] = useState("")
+
+    useEffect(() => {
+
+        if (login) {
+            axios
+                .get(`http://${rest_api_host}:${rest_api_port}/api/v1/users/me`, {headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
+                .then(res => {
+                    setNickname(res.data.results[0].nickname);
+                    setProfile(res.data.results[0].imageUrl);
+                    sessionStorage.setItem("name", res.data.nickname)
+                })
+                .catch(err => {
+                    setNickname("AdminName")
+                    setProfile("https://cryptologos.cc/logos/bitcoin-btc-logo.png")
+                });
+
+        }
+    }, [sessionStorage.getItem("isLogin")]);
+
     return (<div style={websiteForm}>
         <banner className="banner">
             <header className="header">
                 <h1 className="title" onClick={() => {navigate("/admin")}}>Cryptory</h1>
+
+                {/*
                 <div className="user-info">
                     <span className="username" onClick={() => {navigate("/mypage")}}>UserName</span>
                     <button className="logout-btn">Logout</button>
                 </div>
+                */}
+
+                {(login) && <div className="user-info">
+                    <img src={profile} alt={nickname} className="coin-icon"/>
+                    <span className="username" onClick={() => {
+                        navigate("/mypage") // 관리자도 사용자와 동일한 마이페이지 사용?
+                    }}>{nickname}</span>
+                    <button className="logout-btn" onClick={() => {
+                        navigate("/kakaologout")
+                    }}>Logout
+                    </button>
+                </div>}
+
+                {(!login) && <div className="user-info">
+                    <button className="logout-btn" onClick={() => {navigate("/login")}}>Login</button>
+                </div>}
+
             </header>
         </banner>
         <Outlet/>
