@@ -104,7 +104,7 @@ public class AdminCoinServiceImpl implements AdminCoinService{
     private Sort parseSort(String sort) {
         if(sort == null || sort.isEmpty()){
             // 정렬 조건이 없다면 기본적으로 한국어 이름 오름차순으로 정렬함
-            return Sort.by("cryptoId").ascending();
+            return Sort.by("id").ascending();
         }
 
         String[] parts = sort.split(",");
