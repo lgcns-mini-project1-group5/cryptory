@@ -87,7 +87,7 @@ const AdminLayout = () => {
     const rest_api_port = import.meta.env.VITE_REST_API_PORT;
 
     const navigate = useNavigate();
-    const login = true; // TODO
+    const login = sessionStorage.getItem("isLogin"); // 관리자-유저 구분 가능?
 
     const websiteForm = {
         width: 1920,

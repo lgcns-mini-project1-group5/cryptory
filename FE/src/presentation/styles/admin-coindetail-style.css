@@ -1,4 +1,4 @@
-.content {
+.admin-coindetail-content {
     max-width: 600px;
     margin: 30px auto;
 }
@@ -42,7 +42,7 @@
 
 
 .admin-coindetail-info {
-    flex-grow: 1;
+    margin-right: 40px;
     margin-top: -16px;
     margin-left: 10px;
 }
@@ -56,4 +56,12 @@
     margin-top: -15px;
     font-size: 12px;
     color: #6C757D;
+}
+
+.admin-coin-is-displayed-btn {
+    padding: 1px 30px;
+    background-color: #F7931A;
+    border: none;
+    border-radius: 8px;
+    color: white;
 }

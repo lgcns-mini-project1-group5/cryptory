@@ -8,7 +8,7 @@ export default function AdminCoinCard({cryptoId, name, symbol, logoUrl, isDispla
 
     return (
         <div className={`admin-coin-item ${isDisplayed ? "displayed" : ""}`}
-            onClick={() => {navigate(`/admin/coin/${cryptoId}`, {state: {name:name, symbol:symbol, logoUrl:logoUrl}})}}
+            onClick={() => {navigate(`/admin/coin/${cryptoId}`, {state: {name:name, symbol:symbol, logoUrl:logoUrl, isDisplayedFront:isDisplayed}})}}
         >
             
             <img src={logoUrl} alt={name} className="admin-coin-logo" />

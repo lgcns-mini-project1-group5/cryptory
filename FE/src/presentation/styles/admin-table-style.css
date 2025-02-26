@@ -83,21 +83,25 @@
 
 /* 관리자 추가 버튼 */
 .admin-add-btn {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 15px;
+    background-color: #f7f7f7;
+    color: #575757;
+    border: 1px solid #7C7C7C;
+    padding: 5px 10px;
     cursor: pointer;
     border-radius: 5px;
     font-size: 14px;
+    margin-left: 10px;
 }
 
 .admin-add-btn:hover {
-    background-color: #45a049;
+    background-color: #ebebeb;
 }
 
+
+
 /* 모달 스타일 */
-.modal-overlay {
+
+.admin-add-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -109,29 +113,29 @@
     align-items: center;
 }
 
-.modal-content {
+.admin-add-modal-content {
     background: white;
     padding: 20px;
     border-radius: 8px;
     width: 371px;
-    height: 375px;
     text-align: center;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     font-family: 'ABeeZee', sans-serif;
     color: #7A7C7F;
 }
 
-.modal-input-lines {
-    display: flex;
+.admin-add-modal-input-lines {
+    width: 300px;
+    margin-left: 30px;
 }
 
-.modal-input-line {
+.admin-add-modal-input-line {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.modal-content input {
+.admin-add-modal-content input {
     width: 167px;
     height: 30px;
     padding: 8px;
@@ -140,13 +144,13 @@
     border-radius: 8px;
 }
 
-.modal-buttons {
+.admin-add-modal-buttons {
     display: flex;
     justify-content: space-evenly;
     margin-top: 10px;
 }
 
-.cancel-btn, .confirm-btn {
+.admin-add-cancel-btn, .admin-add-confirm-btn {
     padding: 8px 12px;
     border: none;
     cursor: pointer;
@@ -154,20 +158,20 @@
     font-size: 14px;
 }
 
-.cancel-btn {
+.admin-add-cancel-btn {
     background-color: #ccc;
     color: black;
 }
 
-.cancel-btn:hover {
+.admin-add-cancel-btn:hover {
     background-color: #b0b0b0;
 }
 
-.confirm-btn {
+.admin-add-confirm-btn {
     background-color: #4CAF50;
     color: white;
 }
 
-.confirm-btn:hover {
+.admin-add-confirm-btn:hover {
     background-color: #45a049;
 }

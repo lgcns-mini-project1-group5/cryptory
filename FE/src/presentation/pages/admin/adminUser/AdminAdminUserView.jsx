@@ -144,26 +144,26 @@ export default function AdminAdminUserView() {
 
             {/* 관리자 추가 모달 */}
             {showModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
+                <div className="admin-add-modal-overlay">
+                    <div className="admin-add-modal-content">
                         <h3>관리자 추가</h3>
-                        <div className="modla-input-lines">
-                            <div className="modal-input-line">
+                        <div className="admin-add-modal-input-lines">
+                            <div className="admin-add-modal-input-line">
                                 <label>Nickname</label>
                                 <input type="text" value={newAdmin.nickname} onChange={e => setNewAdmin({ ...newAdmin, nickname: e.target.value })} />
                             </div>
-                            <div className="modal-input-line">
+                            <div className="admin-add-modal-input-line">
                                 <label>ID</label>
                                 <input type="text" value={newAdmin.id} onChange={e => setNewAdmin({ ...newAdmin, id: e.target.value })} />
                             </div>
-                            <div className="modal-input-line">
+                            <div className="admin-add-modal-input-line">
                                 <label>Password</label>
                                 <input type="password" value={newAdmin.password} onChange={e => setNewAdmin({ ...newAdmin, password: e.target.value })} />
                             </div>
                         </div>
-                        <div className="modal-buttons">
-                            <button className="cancel-btn" onClick={() => setShowModal(false)}>취소</button>
-                            <button className="confirm-btn" onClick={handleAddAdmin}>추가</button>
+                        <div className="admin-add-modal-buttons">
+                            <button className="admin-add-cancel-btn" onClick={() => setShowModal(false)}>취소</button>
+                            <button className="admin-add-confirm-btn" onClick={handleAddAdmin}>추가</button>
                         </div>
                     </div>
                 </div>
