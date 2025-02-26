@@ -16,5 +16,5 @@ import java.time.LocalDate;
  * 2/22/25         조영상        최초 생성
  */
 public interface AdminDashboardService {
-    AdminDashboardResponseDTO getDashboardStatistics(LocalDate startDate, LocalDate endDate);
+    AdminDashboardResponseDTO getDashboardStatistics(LocalDate startDate, LocalDate endDate, String period);
 }

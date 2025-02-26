@@ -19,7 +19,21 @@ public class AdminDashboardServiceImpl implements AdminDashboardService{
     private final TrafficLogRepository trafficLogRepository;
 
     @Override
-    public AdminDashboardResponseDTO getDashboardStatistics(LocalDate startDate, LocalDate endDate) {
+    public AdminDashboardResponseDTO getDashboardStatistics(LocalDate startDate, LocalDate endDate, String period) {
+        if (period != null) {
+            // period 값에 따라 startDate와 endDate를 계산
+            if (period.equals("daily")) {
+                startDate = LocalDate.now();
+                endDate = LocalDate.now();
+            } else if (period.equals("weekly")) {
+                startDate = LocalDate.now().minusWeeks(1);
+                endDate = LocalDate.now();
+            } else if (period.equals("monthly")) {
+                startDate = LocalDate.now().minusMonths(1);
+                endDate = LocalDate.now();
+            }
+        }
+
         // TrafficLog 기반 통계
         Statistics visits = trafficLogRepository.getVisitStatistics(startDate, endDate);
         Statistics pageViews = trafficLogRepository.getPageViewStatistics(startDate, endDate);

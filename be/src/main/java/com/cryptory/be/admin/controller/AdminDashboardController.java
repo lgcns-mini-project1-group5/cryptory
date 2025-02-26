@@ -36,9 +36,10 @@ public class AdminDashboardController {
     @GetMapping
     public ResponseEntity<AdminDashboardResponseDTO> getDashboardStatistics(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) String period) {
 
-       AdminDashboardResponseDTO statistics = adminDashboardService.getDashboardStatistics(startDate, endDate);
+       AdminDashboardResponseDTO statistics = adminDashboardService.getDashboardStatistics(startDate, endDate, period);
        return ResponseEntity.ok(statistics);
     }
 }
