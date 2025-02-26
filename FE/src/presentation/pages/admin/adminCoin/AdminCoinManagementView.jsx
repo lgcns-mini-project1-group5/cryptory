@@ -52,6 +52,7 @@ export default function AdminCoinManagementView() {
         axios
             .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/coins/${coinId}/issues`, {headers: {"Authorization": `${sessionStorage.getItem("token")}`}})
             .then(res => {
+                console.log("코인 이슈 목록 조회:", res.data);
                 const issues = res.data.results[0]?.content || [];
                 console.log(issues);
 

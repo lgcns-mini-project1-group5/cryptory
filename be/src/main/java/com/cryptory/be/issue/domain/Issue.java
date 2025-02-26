@@ -57,7 +57,7 @@ public class Issue extends BaseTimeEntity {
     @JoinColumn(name = "chart_id", unique = true, nullable = true)
     private Chart chart;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "coin_id")
     private Coin coin;
 
