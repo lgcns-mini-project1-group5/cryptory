@@ -200,16 +200,16 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
             .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/issues/${issueId}/comments`, {headers: {"Content-Type": "application/json"}})
             .then(res => {
                 let tempList = [];
-                res.data.comments.map(item => {
+                res.data.results.map(item => {
                     tempList.push({ content: item.content, author: item.nickname, date: item.createdAt})
                 });
                 setCommentList(tempList);
             })
             .catch((err) => {
                 setCommentList([
-                    { content: "비트코인 게시판 내용 1", author: "User1", date: "2025.02.18"},
-                    { content: "비트코인 게시판 내용 2", author: "User2", date: "2025.02.19"},
-                    { content: "내가 쓴 비트코인 게시판 내용 1", author: "my", date: "2025.02.19"},
+                    { content: "이슈 관련 의견1", author: "User1", date: "2025.02.18"},
+                    { content: "이슈 관련 의견2", author: "User2", date: "2025.02.19"},
+                    { content: "내가 쓴 이슈에 대한 내용", author: "my", date: "2025.02.19"},
                 ])
             })
     }
@@ -223,13 +223,14 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                 })
             .then(res => {
                 alert("등록되었습니다.")
-                setCommentList([...commentList, { content: res.data.content, author: res.data.nickname, date: res.data.createdAt, commentId: res.data.id}]);
+                const comment = res.data.results[0];
+                setCommentList([...commentList, { content: comment.content, author: comment.nickname, date: comment.createdAt, commentId: comment.id}]);
             })
             .catch((err) => {
                 setCommentList([
-                    { content: "비트코인 게시판 내용 1", author: "User1", date: "2025.02.18", commentId: 1},
-                    { content: "비트코인 게시판 내용 2", author: "User2", date: "2025.02.19", commentId: 2},
-                    { content: "내가 쓴 비트코인 게시판 내용 1", author: "my", date: "2025.02.19", commentId: 3},
+                    { content: "이슈 관련 의견1", author: "User1", date: "2025.02.18"},
+                    { content: "이슈 관련 의견2", author: "User2", date: "2025.02.19"},
+                    { content: "내가 쓴 이슈에 대한 내용", author: "my", date: "2025.02.19"},
                 ])
             })
     }

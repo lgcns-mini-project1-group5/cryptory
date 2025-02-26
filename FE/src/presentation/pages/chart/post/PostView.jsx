@@ -17,6 +17,10 @@ export default function PostView() {
 
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
+    const [viewCnt, setViewCnt] = useState(0)
+    const [likeCnt, setLikeCnt] = useState(0)
+    const [files, setFiles] = useState([])
+
     const [commentList, setCommentList] = useState([])
 
     const [comment, setComment] = useState("");
@@ -35,8 +39,11 @@ export default function PostView() {
         axios
             .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/posts/${postId}`, {headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
             .then(res => {
-                setTitle(res.data.title);
-                setContent(res.data.body);
+                setTitle(res.data.results[0].title);
+                setContent(res.data.results[0].body);
+                setViewCnt(res.data.results[0].viewCnt);
+                setLikeCnt(res.data.results[0].likeCnt);
+                setFiles(res.data.results[0].files);
             })
             .catch(err => {
                 setTitle("비트코인 게시판 제목 1")
@@ -92,6 +99,17 @@ export default function PostView() {
 
         <h2 className="post-title">{title}</h2>
         <p className="post-content">{content}</p>
+        <div className="post-files">
+            {files.map((file, index) => (
+                <div key={index} className="post-file">
+                    <img 
+                        src={`http://${rest_api_host}:${rest_api_port}/attach/files${file.storedDir}`} 
+                        alt={file.originalFileName} 
+                        style={{ maxWidth: '100%', height: 'auto' }} 
+                    />
+                </div>
+            ))}
+        </div>
 
         <div className="comment-list">
             <h3 className="comment-title">댓글</h3>
