@@ -63,13 +63,15 @@ public class InitDataLoad {
                             .englishName(coin.getEnglishName())
                             .code(coin.getMarket())
                             .coinSymbol(coinSymbol)
-                            .isDisplayed(isDisplayed)
+                            .isDisplayed(false)
                             .build();
                 })
                 .toList();
 
         coinRepository.saveAll(coins);
         coinRepository.deleteCoinsByIdIn(ids);
+        coinRepository.updateCoinDisplaySettings();
+
 
         /*
          * 차트 데이터 가져오는 작업(원래는 저장되는 코인에 대한 차트를 모두 저장해야 함)

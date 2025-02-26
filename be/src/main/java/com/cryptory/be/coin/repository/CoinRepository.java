@@ -33,4 +33,9 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
     @Query("SELECT COUNT(i) FROM Coin i WHERE i.isDisplayed = true")
     long countByIsDisplayedTrue();
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE Coin c SET c.isDisplayed = true WHERE c.id BETWEEN 1 AND 10")
+    void updateCoinDisplaySettings();
+
 }
