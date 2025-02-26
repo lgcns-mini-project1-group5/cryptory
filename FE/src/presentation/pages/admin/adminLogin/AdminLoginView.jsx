@@ -17,7 +17,7 @@ export default function AdminLoginView() {
     const navigate = useNavigate();
 
     const handleAdminLogin = () => {
-        axios.get(`http://${rest_api_host}:${rest_api_port}/admin/login`, {username: adminId, password: adminPassword})
+        axios.post(`http://${rest_api_host}:${rest_api_port}/admin/login`, {username: adminId, password: adminPassword})
         .then(response => {
 
             sessionStorage.setItem("token", cookies.accessToken);
