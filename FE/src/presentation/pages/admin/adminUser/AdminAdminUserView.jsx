@@ -19,8 +19,8 @@ export default function AdminAdminUserView() {
     }, [currentPage]);
 
     const fetchUsers = (page) => {
-        axios.get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/admins`, {
-            headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
+        axios.get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/users/admins`, {
+            headers: { "Authorization": `${sessionStorage.getItem("token")}` }
         })
             .then(res => {
                 setUsers(res.data.content);
@@ -54,7 +54,7 @@ export default function AdminAdminUserView() {
             { isDenied: newStatus },
             {
                 headers: {
-                    "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                    "Authorization": `${sessionStorage.getItem("token")}`,
                     "Content-Type": "application/json"
                 }
             }
@@ -78,7 +78,7 @@ export default function AdminAdminUserView() {
         try {
             await axios.post(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/admins`, newAdmin, {
                 headers: {
-                    "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                    "Authorization": `${sessionStorage.getItem("token")}`,
                     "Content-Type": "application/json"
                 }
             });

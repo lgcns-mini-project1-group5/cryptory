@@ -35,19 +35,22 @@ export default function AdminCoinManagementView() {
 
 
     useEffect(() => {
+        setIsDisplayed(isDisplayedFront);
         // 코인 기본 정보 조회
         axios
-            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/coins/${coinId}`, {headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
+            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/coins/${coinId}`, {headers: {"Authorization": `${sessionStorage.getItem("token")}`}})
             .then(res => {
-                setIsDisplayed(res.data.isDisplayed);
+                console.log("코인 기본 정보:", res.data);
+                //setIsDisplayed(res.data.isDisplayed);
             })
             .catch(err => {
+                console.error("코인 기본 정보 조회 실패:", err);
                 setIsDisplayed(isDisplayedFront);
             });
 
         // 코인 이슈 목록 조회
         axios
-            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/coins/${coinId}/issues`, {headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
+            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/coins/${coinId}/issues`, {headers: {"Authorization": `${sessionStorage.getItem("token")}`}})
             .then(res => {
                 const issues = res.data.results[0]?.content || [];
                 console.log(issues);
@@ -67,6 +70,7 @@ export default function AdminCoinManagementView() {
                 setIssueData(tempData);
             })
             .catch(err => {
+                console.error("코인 이슈 목록 조회 에러:", err);
                 const issues = [
                     {
                         "issueId": 1,
@@ -104,7 +108,7 @@ export default function AdminCoinManagementView() {
 
         // 코인 게시글 목록 조회
         axios
-            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/posts`, {headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`, "Content-Type": "application/json"}})
+            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/posts`, {headers: {"Authorization": `${sessionStorage.getItem("token")}`, "Content-Type": "application/json"}})
             .then(res => {
                 const posts = res.data.results[0]?.posts || [];
                 console.log(posts);
@@ -121,6 +125,7 @@ export default function AdminCoinManagementView() {
                 setPostData(tempData);
             })
             .catch(err => {
+                console.error("코인 게시글 목록 조회 에러:", err);
                 const posts = [
                     {
                         "id": 1,
@@ -153,10 +158,10 @@ export default function AdminCoinManagementView() {
         const newStatus = !isCurrentlyDisplayed;
 
         axios.patch(
-            `http://${rest_api_host}:${rest_api_port}/api/v1/admin/coins/${coinId}/display?isDisplayed=${!isDisplayed}`,
+            `http://${rest_api_host}:${rest_api_port}/api/v1/admin/coins/${coinId}/display?isDisplayed=${isDisplayed}`,
             {
                 headers: {
-                    "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                    "Authorization": `${sessionStorage.getItem("token")}`,
                     "Content-Type": "application/json"
                 }
             }
@@ -200,7 +205,7 @@ export default function AdminCoinManagementView() {
             { isDeleted: true },
             {
                 headers: {
-                    "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                    "Authorization": `${sessionStorage.getItem("token")}`,
                     "Content-Type": "application/json"
                 }
             }
@@ -220,13 +225,13 @@ export default function AdminCoinManagementView() {
     const handleIssueClick = async (issueId) => {
 
         axios
-            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/issues/${issueId}`, {headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
+            .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/issues/${issueId}`, {headers: {"Authorization": `${sessionStorage.getItem("token")}`}})
             .then(res => {
                 let tempData = {
                     issueId: res.data.issueId,
                     date: res.data.date,
                     title: res.data.title,
-                    summaryContent: res.data.summaryContent,
+                    summaryContent: res.data.content,
                     createdBy: res.data.createdBy,
                     createdAt: res.data.createdAt,
                     updatedAt: res.data.updatedAt,
@@ -262,13 +267,13 @@ export default function AdminCoinManagementView() {
             `http://${rest_api_host}:${rest_api_port}/api/v1/admin/issues/${selectedIssue.issueId}`,
             {
               title: selectedIssue.title,
-              summaryContent: selectedIssue.summaryContent,
+              content: selectedIssue.summaryContent,
               newsTitle: selectedIssue.newsTitle,
               source: selectedIssue.source,
             },
             {
               headers: {
-                "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                "Authorization": `${sessionStorage.getItem("token")}`,
                 "Content-Type": "application/json"
               },
             }
@@ -288,10 +293,16 @@ export default function AdminCoinManagementView() {
     const handleIssueCreate = async () => {
         try {
             await axios.post(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/coins/${coinId}/issues`,
-            newIssue,
+            {
+                date: newIssue.date,
+                title: newIssue.title,
+                content: newIssue.summaryContent,
+                newsTitle: newIssue.newsTitle,
+                source: newIssue.source,
+            },
             {
                 headers: {
-                    "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                    "Authorization": `${sessionStorage.getItem("token")}`,
                     "Content-Type": "application/json"
                 }
             });
@@ -330,7 +341,7 @@ export default function AdminCoinManagementView() {
             { isDeleted: true },
             {
                 headers: {
-                    "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                    "Authorization": `${sessionStorage.getItem("token")}`,
                     "Content-Type": "application/json"
                 }
             }

@@ -17,7 +17,7 @@ export default function AdminGeneralUserView() {
 
     const fetchUsers = (page) => {
         axios.get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/users`, {
-            headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
+            headers: { "Authorization": `${sessionStorage.getItem("token")}` }
         })
             .then(res => {
                 setUsers(res.data.content);
@@ -53,7 +53,7 @@ export default function AdminGeneralUserView() {
             { isDenied: newStatus },
             {
                 headers: {
-                    "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                    "Authorization": `${sessionStorage.getItem("token")}`,
                     "Content-Type": "application/json"
                 }
             }
