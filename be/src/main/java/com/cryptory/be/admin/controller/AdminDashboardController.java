@@ -24,7 +24,7 @@ import java.time.LocalDate;
  * -----------------------------------------------------------
  * 2/22/25         조영상        최초 생성
  */
-@Tag
+
 @RestController
 @RequestMapping("/api/v1/admin/dashboard")
 @RequiredArgsConstructor
