@@ -142,7 +142,7 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                 method: "POST",
                 url: `http://${rest_api_host}:${gpt_api_port}/api/v1/issue`,
                 data: {
-                    "name": name,
+                    "name": symbol,
                     "date": issueDate,
                 },
                 headers: { "Content-Type": "application/json"}
@@ -297,7 +297,7 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
             method: "POST",
             url: `http://${rest_api_host}:${gpt_api_port}/api/v1/prompt`,
             data: {
-                "name": name,
+                "name": symbol,
                 "date": issueDate,
                 "title": title,
                 "content": content + tempRes,
