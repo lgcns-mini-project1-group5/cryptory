@@ -1,5 +1,5 @@
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import "../../../styles/admin-coindetail-style.css"
@@ -9,6 +9,7 @@ export default function AdminCoinManagementView() {
 
     const rest_api_host = import.meta.env.VITE_REST_API_HOST;
     const rest_api_port = import.meta.env.VITE_REST_API_PORT;
+    const gpt_api_port = import.meta.env.VITE_GPT_API_PORT;
 
     const params = useParams();
     const coinId = params.coinId;
@@ -29,7 +30,9 @@ export default function AdminCoinManagementView() {
 
     const [postData, setPostData] = useState([]);
     const [checkedPosts, setCheckedPosts] = useState([]);
-    
+
+    const [GPTloading, setGPTLoading] = useState(false);
+
 
     useEffect(() => {
         // 코인 기본 정보 조회
@@ -272,7 +275,7 @@ export default function AdminCoinManagementView() {
           )
           .then(res => {
             alert("이슈가 수정되었습니다.");
-            setIsModalOpen(false); // 모달 닫기
+            // setIsModalOpen(false); // 모달 닫기
             // 목록 새로고침
           })
           .catch(err => {
@@ -343,6 +346,28 @@ export default function AdminCoinManagementView() {
 
       };
 
+    const getGPTIssue = () => {
+        console.log(symbol);
+        console.log(newIssue.date)
+        setGPTLoading(true);
+        axios({
+            method: "POST",
+            url: `http://${rest_api_host}:${gpt_api_port}/api/v1/issue`,
+            data: {
+                "name": symbol,
+                "date": newIssue.date,
+            },
+            headers: { "Content-Type": "application/json"}
+        })
+            .then(res => {
+                setGPTLoading(false);
+                console.log(res)
+                setNewIssue({...newIssue, title: res.data.title, summaryContent: res.data.content, newsTitle: res.data.news1_title, source: res.data.news1_link})
+            })
+            .catch((err) => {
+                setGPTLoading(false);
+            })
+    }
 
     return (
         <div className="admin-coindetail-content">
@@ -374,20 +399,20 @@ export default function AdminCoinManagementView() {
             </header>
 
             {/* 이슈 리스트 */}
-            <div className="admin-header">
+            <div className="coin-header">
                 <h3>ISSUE</h3>
                 <div className="admin-add-btns">
                     <button className="admin-add-btn" onClick={() => setShowIssueCreateModal(true)}>생성</button>
                     <button className="admin-add-btn" onClick={() => handleDeleteCheckedIssues()}>삭제</button>
                 </div>
             </div>
-            <table className="admin-user-table">
+            <table className="admin-coin-table">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" onChange={handleSelectAllIssues} /></th>
-                        <th>DATE</th>
-                        <th>TITLE</th>
-                        <th>CREATE DATE</th>
+                        <th className="admin-check"><input type="checkbox" onChange={handleSelectAllIssues} /></th>
+                        <th className="admin-date">DATE</th>
+                        <th className="admin-coin-title">TITLE</th>
+                        <th className="admin-createDt">CREATE DATE</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -409,17 +434,17 @@ export default function AdminCoinManagementView() {
             </table>
 
             {/* 게시글 리스트 */}
-            <div className="admin-header">
+            <div className="coin-header">
                 <h3>게시판</h3>
                 <button className="admin-add-btn" onClick={() => handleDeleteCheckedPosts()}>삭제</button>
             </div>
-            <table className="admin-user-table">
+            <table className="admin-coin-table">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" onChange={handleSelectAllPosts} /></th>
-                        <th>TITLE</th>
-                        <th>작성자</th>
-                        <th>CREATE DATE</th>
+                        <th className="admin-check"><input type="checkbox" onChange={handleSelectAllPosts} /></th>
+                        <th className="admin-coin-title">제목</th>
+                        <th className="admin-date">작성자</th>
+                        <th className="admin-createDt">CREATE DATE</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -482,42 +507,51 @@ export default function AdminCoinManagementView() {
             {/* 이슈 생성 모달 */}
             {showIssueCreateModal && (
                 <div className="admin-add-modal-overlay">
-                    <div className="admin-add-modal-content">
-                        <h3>ISSUE 생성</h3>
-                        <div className="admin-add-modal-input-lines">
+                    <div className="admin-issue-add-modal-content">
+                        <h3 style={{fontSize:"30px", fontWeight:"lighter"}}>ISSUE 추가</h3>
+                        <button className="admin-write-btn" onClick={() => {getGPTIssue()}}>
+                            AI 자동완성
+                        </button>
+                        <div className="admin-issue-add-modal-input-lines">
                             <div className="admin-add-modal-input-line">
                                 <label>DATE</label>
                                 <input type="date" value={newIssue.date} onChange={e => setNewIssue({ ...newIssue, date: e.target.value })} />
                             </div>
-                            <div className="admin-add-modal-input-line">
+                            <div className="admin-issue-add-modal-input-line">
                                 <label>Title</label>
                                 <input type="text" value={newIssue.title} onChange={e => setNewIssue({ ...newIssue, title: e.target.value })} />
                             </div>
-                            <div className="admin-add-modal-input-line">
+                            <div style={{display: 'flex', flexDirection: 'column', alignItems:'flex-start', marginBottom:"40px"}}>
                                 <label>Content</label>
-                                <textarea value={newIssue.summaryContent} onChange={e => setNewIssue({ ...newIssue, summaryContent: e.target.value })} />
+                                <textarea className="admin-content-input" value={newIssue.summaryContent} onChange={e => setNewIssue({ ...newIssue, summaryContent: e.target.value })} />
                             </div>
-                            <div className="admin-add-modal-input-line">
+                            <div className="admin-issue-add-modal-input-line">
                                 <label>News</label>
                                 <input type="hidden" />
                             </div>
-                            <div className="admin-add-modal-input-line">
+                            <div className="admin-issue-add-modal-input-line">
                                 <label>Title</label>
                                 <input type="text" value={newIssue.newsTitle} onChange={e => setNewIssue({ ...newIssue, newsTitle: e.target.value })} />
                             </div>
-                            <div className="admin-add-modal-input-line">
+                            <div className="admin-issue-add-modal-input-line">
                                 <label>Link</label>
                                 <input type="text" value={newIssue.source} onChange={e => setNewIssue({ ...newIssue, source: e.target.value })} />
                             </div>
                         </div>
                         <div className="admin-add-modal-buttons">
                             <button className="admin-add-cancel-btn" onClick={() => setShowIssueCreateModal(false)}>취소</button>
-                            <button className="admin-add-confirm-btn" onClick={() => handleIssueCreate()}>생성</button>
+                            <button className="admin-add-confirm-btn" onClick={() => handleIssueCreate()}>추가</button>
                         </div>
                     </div>
                 </div>
             )}
 
+            {(GPTloading) && <div className="admin-add-modal-overlay">
+                <div className="loading-container">
+                    <div className="spinner"></div>
+                    <p>GPT 응답을 기다리는 중...</p>
+                </div>
+            </div>}
         </div>
     )
 }

@@ -76,16 +76,16 @@ export default function AdminGeneralUserView() {
     return (
         <div>
             <div className="admin-header">
-                <h3>USER</h3>
+                <h3 style={{ fontWeight: "normal" }}>USER</h3>
             </div>
             <table className="admin-user-table">
                 <thead>
                     <tr>
-                        <th>User ID</th>
-                        <th>닉네임</th>
-                        <th>Login Type</th>
-                        <th>역할</th>
-                        <th>관리</th>
+                        <th className="user-id">User ID</th>
+                        <th className="nickname">닉네임</th>
+                        <th className="login-type">Login Type</th>
+                        <th className="role">역할</th>
+                        <th className="manage">관리</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -109,19 +109,21 @@ export default function AdminGeneralUserView() {
             </table>
 
             {/* 페이지네이션 */}
-            <div className="admin-pagination">
-                <button 
+            <div className="pagination">
+                <button
+                    className="prev"
                     onClick={() => setCurrentPage(currentPage - 1)}
                     disabled={currentPage === 1}
                 >
-                    이전
+                    〈 이전
                 </button>
                 <span>{currentPage} / {totalPages}</span>
-                <button 
+                <button
+                    className="next"
                     onClick={() => setCurrentPage(currentPage + 1)}
                     disabled={currentPage === totalPages}
                 >
-                    다음
+                    다음 〉
                 </button>
             </div>
         </div>
