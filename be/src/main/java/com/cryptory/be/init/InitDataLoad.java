@@ -9,6 +9,9 @@ import com.cryptory.be.coin.repository.CoinRepository;
 import com.cryptory.be.openapi.dto.Candle;
 import com.cryptory.be.openapi.dto.Market;
 import com.cryptory.be.openapi.service.UpbitService;
+import com.cryptory.be.user.domain.User;
+import com.cryptory.be.user.repository.UserRepository;
+import com.cryptory.be.user.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,7 @@ public class InitDataLoad {
 
     private final UpbitService upbitService;
 
+    private final UserRepository userRepository;
     private final CoinRepository coinRepository;
     private final ChartRepository chartRepository;
 
@@ -85,6 +89,10 @@ public class InitDataLoad {
                             .build())
                     .toList());
         }
+
+        // 관리자 초기 데이터 저장
+        User admin = User.createAdminUser("admin", "1234", "관리자");
+        userRepository.save(admin);
 
     }
 }
