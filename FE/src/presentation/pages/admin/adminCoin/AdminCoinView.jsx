@@ -19,15 +19,10 @@ export default function AdminCoinView() {
         try {
             const response = await axios.get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/coins`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                },
-                params: {
-                    keyword: keyword,
-                    page: 0,
-                    size: 10,
-                    sort: "name,asc",
-                },
+                    Authorization: `${sessionStorage.getItem("token")}`,
+                }
             });
+            console.log(response.data);
             setCoins(response.data.content);
             setFilteredCoins(response.data.content);
         } catch (error) {
@@ -95,7 +90,7 @@ export default function AdminCoinView() {
         }
         };
         fetchCoins();
-    }, []);
+    }, [sessionStorage.getItem("token")]);
 
     const handleSearch = (event) => {
         setKeyword(event.target.value);

@@ -33,7 +33,7 @@ public class AdminCoinController {
     public ResponseEntity<?> getCoinList(
             @RequestParam(required = false) String keyword,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "159") int size,
             @RequestParam(required = false) String sort){
 
         try{

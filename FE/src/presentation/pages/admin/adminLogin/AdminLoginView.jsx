@@ -16,11 +16,19 @@ export default function AdminLoginView() {
     const [cookies] = useCookies();
     const navigate = useNavigate();
 
-    const handleAdminLogin = () => {
-        axios.post(`http://${rest_api_host}:${rest_api_port}/admin/login`, {username: adminId, password: adminPassword})
-        .then(response => {
+    const handleAdminLogin = (e) => {
+        const params = new URLSearchParams();
+        params.append('username', adminId);
+        params.append('password', adminPassword);
 
-            sessionStorage.setItem("token", cookies.accessToken);
+        axios.post(`http://${rest_api_host}:${rest_api_port}/admin/login`, params, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+         })
+        .then(response => {
+            console.log(response.headers.authorization);
+            sessionStorage.setItem("token", response.headers.authorization);
             sessionStorage.setItem("isLogin", true);
             navigate('/admin');
 
