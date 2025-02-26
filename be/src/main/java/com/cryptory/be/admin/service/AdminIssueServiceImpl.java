@@ -53,9 +53,8 @@ public class AdminIssueServiceImpl implements AdminIssueService {
     private final UserRepository userRepository;
 
     @Override
-    public Page<IssueListResponseDto> getIssueList(Long coinId, int page, int size, String sort) {
-        Sort sorting = parseSort(sort);
-        Pageable pageable = PageRequest.of(page, size, sorting);
+    public Page<IssueListResponseDto> getIssueList(Long coinId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
         // 특정 코인에 대한 이슈만 조회, 삭제되지 않은 ISSUE만 조회
         Page<Issue> issues = issueRepository.findByCoinIdAndIsDeletedFalse(coinId, pageable);
@@ -130,9 +129,8 @@ public class AdminIssueServiceImpl implements AdminIssueService {
     }
 
     @Override
-    public Page<IssueCommentListResponseDto> getIssueComments(Long issueId, int page, int size, String sort) {
-        Sort sorting = parseSort(sort);
-        Pageable pageable = PageRequest.of(page, size, sorting);
+    public Page<IssueCommentListResponseDto> getIssueComments(Long issueId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<IssueComment> comments = issueCommentRepository.findCommentsByIssueId(issueId, pageable);
         return comments.map(this::convertToIssueCommentListResponseDto);
     }
@@ -156,7 +154,7 @@ public class AdminIssueServiceImpl implements AdminIssueService {
                 .issueId(issue.getId())
                 .date(issue.getDate())
                 .title(issue.getTitle())
-                .createdBy(adminUser.getId())
+                .createdBy(adminUser.getNickname())
                 .createdAt(issue.getCreatedAt())
                 .updatedAt(issue.getUpdatedAt())
                 .build();
@@ -187,22 +185,7 @@ public class AdminIssueServiceImpl implements AdminIssueService {
                 .createdAt(comment.getCreatedAt())
                 .isDeleted(comment.isDeleted())
                 .userId(comment.getUser().getId())
+                .userNickname(comment.getUser().getNickname())
                 .build();
-    }
-
-
-    private Sort parseSort(String sort) {
-        if (sort == null || sort.isEmpty()) {
-            return Sort.by("createdAt").descending(); // 기본 정렬 (생성일 내림차순)
-        }
-
-        String[] parts = sort.split(",");
-        String property = parts[0];
-        Sort.Direction direction = Sort.Direction.ASC;
-        if (parts.length > 1 && "desc".equalsIgnoreCase(parts[1])) {
-            direction = Sort.Direction.DESC;
-        }
-
-        return Sort.by(direction, property);
     }
 }

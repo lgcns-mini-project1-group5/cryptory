@@ -26,4 +26,5 @@ public class IssueCommentListResponseDto { //이슈 코멘트
     private LocalDateTime createdAt;
     private boolean isDeleted;
     private Long userId; // 또는 String userNickname
+    private String userNickname;
 }

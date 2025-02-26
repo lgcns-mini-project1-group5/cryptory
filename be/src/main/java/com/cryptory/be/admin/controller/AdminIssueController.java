@@ -42,11 +42,10 @@ public class AdminIssueController {
     public ResponseEntity<?> getIssueList(
             @PathVariable Long coinId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String sort) {
+            @RequestParam(defaultValue = "5") int size) {
 
         try {
-            Page<IssueListResponseDto> issues = adminIssueService.getIssueList(coinId, page, size, sort);
+            Page<IssueListResponseDto> issues = adminIssueService.getIssueList(coinId, page, size);
             return ResponseEntity.ok(issues);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");
@@ -113,10 +112,9 @@ public class AdminIssueController {
     public ResponseEntity<?> getIssueComments(
             @PathVariable Long issueId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String sort) {
+            @RequestParam(defaultValue = "10") int size) {
         try {
-            Page<IssueCommentListResponseDto> comments = adminIssueService.getIssueComments(issueId, page, size, sort);
+            Page<IssueCommentListResponseDto> comments = adminIssueService.getIssueComments(issueId, page, size);
             return ResponseEntity.ok(comments);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");

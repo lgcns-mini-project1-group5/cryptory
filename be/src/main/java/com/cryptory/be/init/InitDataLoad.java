@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -46,9 +47,10 @@ public class InitDataLoad {
                 "STX", "MATIC", "T", "GMT", "EGLD", "GRT", "BLUR"
         );
 
+        List<Long> ids = Arrays.asList(1L, 2L, 3L, 6L, 8L, 9L, 10L, 11L, 12L, 13L, 14L, 15L, 16L, 18L, 19L, 20L, 21L, 22L, 23L, 24L, 25L, 26L, 27L, 28L, 29L, 30L, 32L, 33L, 34L, 37L, 40L, 41L, 42L, 46L, 47L, 48L, 50L, 54L, 55L, 56L, 59L, 60L, 61L, 64L, 65L, 67L, 68L, 72L, 73L, 76L, 77L, 81L, 82L, 85L, 86L, 87L, 88L, 89L, 91L, 92L, 94L, 95L, 96L, 97L, 98L, 100L, 102L, 103L, 104L, 105L, 107L, 110L);
+
         // 업비트에서 KRW로 거래되는 코인 목록 조회
         List<Market> coinsByUpbit = upbitService.getCoinsFromUpbit();
-
         // 코인 목록 저장
         List<Coin> coins = coinsByUpbit.stream()
                 .map(coin -> {
@@ -67,6 +69,7 @@ public class InitDataLoad {
                 .toList();
 
         coinRepository.saveAll(coins);
+        coinRepository.deleteCoinsByIdIn(ids);
 
         /*
          * 차트 데이터 가져오는 작업(원래는 저장되는 코인에 대한 차트를 모두 저장해야 함)

@@ -26,7 +26,7 @@ public class IssueListResponseDto { //이슈 목록
     private Long issueId;
     private LocalDate date;
     private String title;
-    private Long createdBy; // 또는 String createdBy (닉네임)
+    private String createdBy; // 또는 String createdBy (닉네임)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
