@@ -21,8 +21,8 @@ export default function MypageView() {
         axios
             .get(`http://${rest_api_host}:${rest_api_port}/api/v1/users/me`, {headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`}})
             .then(res => {
-                setNickname(res.data.userId);
-                setProfile(res.data.imageUrl)
+                setNickname(res.data.results[0].nickname);
+                setProfile(res.data.results[0].imageUrl)
             })
             .catch(err => {
                 setNickname("UserName")
@@ -33,7 +33,8 @@ export default function MypageView() {
     const handleProfileImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
-            const imageUrl = URL.createObjectURL(file);
+            const imageUrl = `http://${rest_api_host}:${rest_api_port}/attach/files/` + file;
+            console.log(imageUrl);
             setProfile(imageUrl);
             setEditProfile(true)
         }
@@ -48,6 +49,7 @@ export default function MypageView() {
                     headers: {"Authorization": `Bearer ${sessionStorage.getItem("token")}`}
                 })
             .then(res => {
+                console.log(res.data);
                 alert("프로필 이미지를 변경했습니다.")
                 setEditProfile(false)
             })

@@ -95,8 +95,10 @@ export default function PostView() {
 
         <div className="comment-list">
             <h3 className="comment-title">댓글</h3>
-            {commentList.map((comment, index) =>
-                <CommentCell key={index} {...comment} />
+            {commentList.length === 0 ? (
+                <p>등록된 댓글이 없습니다</p>
+            ) : (
+                commentList.map((comment, index) => <CommentCell key={index} {...comment} />)
             )}
         </div>
 

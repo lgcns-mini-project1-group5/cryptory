@@ -301,7 +301,7 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                 "title": title,
                 "content": content + tempRes,
                 "prompt": prompt,
-                "skip": "search"
+                "skip": "check"
             },
             headers: { "Content-Type": "application/json"}
         })

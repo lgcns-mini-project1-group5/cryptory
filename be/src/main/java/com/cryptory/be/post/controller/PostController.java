@@ -61,4 +61,11 @@ public class PostController {
         postService.updatePost(coinId, postId, updatePostDto);
         return new ApiResponse<>(HttpStatus.OK, "게시글을 수정했습니다.");
     }
+
+    @GetMapping("/{postId}/comments")
+    public ApiResponse<?> getComments(@PathVariable("coinId") Long coinId,
+                                      @PathVariable("postId") Long postId) {
+
+        return new ApiResponse<>(HttpStatus.OK, "등록된 댓글이 없습니다.");
+    }
 }
