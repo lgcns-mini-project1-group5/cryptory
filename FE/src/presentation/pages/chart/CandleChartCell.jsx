@@ -279,9 +279,12 @@ export default function CandleChartCell({ coinId, modalOpenFunc }) {
                     shape: 'circle',
                 },
                 issueId: marker.issueId,
+                date: marker.date,
+                openPrice: marker.open,
+                closePrice: marker.close,
                 click: function (e) {
                     if (isLogin || e.issueId !== "new") {
-                        modalOpenFunc(e.issueId);
+                        modalOpenFunc(e);
                     } else {
                         setModalOpen(true);
                         setTimeout(() => {
@@ -325,7 +328,6 @@ export default function CandleChartCell({ coinId, modalOpenFunc }) {
                     const month = String(tempDate.getMonth() + 1).padStart(2, '0');
                     const day = String(tempDate.getDate()).padStart(2, '0');
                     const formattedDate = `${year}-${month}-${day}`;
-                    console.log("Clicked X:", formattedDate);
 
                     let temp = true
                     markers.forEach((marker) => {

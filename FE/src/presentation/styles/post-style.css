@@ -105,6 +105,7 @@
     font-size: 14px;
     margin-left: 15px;
     color: #252525;
+    outline: none;
 }
 
 .content-input {
@@ -116,6 +117,7 @@
     font-size: 14px;
     color: #6C757D;
     resize: none;
+    outline: none;
 }
 
 /* 버튼 그룹 */
@@ -306,9 +308,10 @@
 .comment-input {
     flex-grow: 1;
     border: none;
-    font-size: 14px;
+    font-size: 18px;
     resize: none;
-    color: #C2C2C2;
+    color: #212529;
+    outline: none;
 }
 
 .send-btn {
