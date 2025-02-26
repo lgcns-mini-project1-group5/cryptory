@@ -74,10 +74,12 @@ export default function PostView() {
             }}>Coin
             </button>
             <button className="post-btn" onClick={() => {
-                navigate("/")
+                navigate("/", {state:{path:"news"}})
             }}>News
             </button>
         </div>
+
+
 
         <div className="post-header">
             <div className="user-info-section">

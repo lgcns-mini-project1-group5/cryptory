@@ -1,13 +1,22 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import "../../styles/main-style.css"
 import AdminCoinView from "./adminCoin/AdminCoinView";
 import AdminDashboardView from "./adminDashboard/AdminDashboardView";
 import AdminUserView from "./adminUser/AdminUserView";
+import {useLocation} from "react-router-dom";
 
 export default function AdminMainView() {
 
+    const location = useLocation();
+    const { path } = location.state || {}
+
     const [type, setType] = useState("coin");
 
+    useEffect(() => {
+        if (path) {
+            setType(path);
+        }
+    }, []);
 
     return (<div className="content">
         {(type === 'coin') && <>

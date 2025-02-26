@@ -47,8 +47,10 @@ export default function AdminCoinManagementView() {
                 console.error("코인 기본 정보 조회 실패:", err);
                 setIsDisplayed(isDisplayedFront);
             });
+    }, [])
 
-        // 코인 이슈 목록 조회
+    useEffect(() => {
+    // 코인 이슈 목록 조회
         axios
             .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/coins/${coinId}/issues`, {headers: {"Authorization": `${sessionStorage.getItem("token")}`}})
             .then(res => {
@@ -105,7 +107,9 @@ export default function AdminCoinManagementView() {
                 });
                 setIssueData(tempData);
             });
+    }, [showIssueCreateModal])
 
+    useEffect(() => {
         // 코인 게시글 목록 조회
         axios
             .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}/posts`, {headers: {"Authorization": `${sessionStorage.getItem("token")}`, "Content-Type": "application/json"}})
@@ -151,7 +155,7 @@ export default function AdminCoinManagementView() {
                 });
                 setPostData(tempData);
             });
-    }, [postData, issueData])
+    }, [])
 
     /* 코인 노출 여부 변경 함수 */
     const handleToggleDisplayCoin = (coinId, isCurrentlyDisplayed) => {
@@ -307,6 +311,7 @@ export default function AdminCoinManagementView() {
                 }
             });
             setShowIssueCreateModal(false);
+            alert("이슈를 추가했습니다.")
             // 목록 갱신
         } catch (error) {
             console.error("이슈 추가 실패:", error);
@@ -389,11 +394,11 @@ export default function AdminCoinManagementView() {
                 }}>Coin
                 </button>
                 <button className="admin-coindetail-btn" onClick={() => {
-                    navigate("/admin")
+                    navigate("/admin", {state:{path:"dashboard"}})
                 }}>Dash Board
                 </button>
                 <button className="admin-coindetail-btn" onClick={() => {
-                    navigate("/admin")
+                    navigate("/admin", {state:{path:"user"}})
                 }}>User
                 </button>
             </div>
@@ -479,9 +484,9 @@ export default function AdminCoinManagementView() {
             {/* 이슈 상세조회/수정 모달 */}
             {showIssueUpdateModal && (
                 <div className="admin-add-modal-overlay">
-                    <div className="admin-add-modal-content">
+                    <div className="admin-issue-add-modal-content">
                         <h3>ISSUE 수정</h3>
-                        <div className="admin-add-modal-input-lines">
+                        <div className="admin-issue-add-modal-input-lines">
                             <div className="admin-add-modal-input-line">
                                 <label>DATE</label>
                                 <input type="date" value={selectedIssue.date} onChange={e => setSelectedIssue({ ...selectedIssue, date: e.target.value })} />
@@ -490,9 +495,9 @@ export default function AdminCoinManagementView() {
                                 <label>Title</label>
                                 <input type="text" value={selectedIssue.title} onChange={e => setSelectedIssue({ ...selectedIssue, title: e.target.value })} />
                             </div>
-                            <div className="admin-add-modal-input-line">
+                            <div style={{display: 'flex', flexDirection: 'column', alignItems:'flex-start', marginBottom:"40px"}}>
                                 <label>Content</label>
-                                <textarea value={selectedIssue.summaryContent} onChange={e => setSelectedIssue({ ...selectedIssue, summaryContent: e.target.value })} />
+                                <textarea className="admin-content-input" value={selectedIssue.summaryContent} onChange={e => setSelectedIssue({ ...selectedIssue, summaryContent: e.target.value })} />
                             </div>
                             <div className="admin-add-modal-input-line">
                                 <label>News</label>

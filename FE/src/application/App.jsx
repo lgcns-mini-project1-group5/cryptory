@@ -21,6 +21,7 @@ import KakaoLoginLoad from "../presentation/pages/login/KakaoLoginLoad.jsx";
 import KakaoLogout from "../presentation/pages/login/KakaoLogout.jsx";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import AdminLogout from "../presentation/pages/admin/adminLogin/AdminLogout.jsx";
 
 const Layout = () => {
 
@@ -90,7 +91,7 @@ const AdminLayout = () => {
     const rest_api_port = import.meta.env.VITE_REST_API_PORT;
 
     const navigate = useNavigate();
-    const login = sessionStorage.getItem("isLogin"); // 관리자-유저 구분 가능?
+    const login = sessionStorage.getItem("isLoginAdmin");
 
     const websiteForm = {
         width: 1920,
@@ -121,14 +122,14 @@ const AdminLayout = () => {
         else {
             navigate("/admin/login")
         }
-    }, [sessionStorage.getItem("isLogin")]);
+    }, [sessionStorage.getItem("isLoginAdmin")]);
 
     return (<div style={websiteForm}>
         <banner className="banner">
             <header className="header">
                 <div style={{display: "flex", alignItems: "center", gap:"10px"}}>
                     <img src="/mark.png" style={{width:"30px"}}></img>
-                    <h1 className="title" onClick={() => {navigate("/admin")}}>Cryptory</h1>
+                    <h1 className="title" onClick={() => {login && navigate("/admin")}}>Cryptory</h1>
                 </div>
 
                 {/*
@@ -187,6 +188,7 @@ const router = createBrowserRouter([
             { path: "dashboard", element: <AdminDashboardView/> },
             { path: "user", element: <AdminUserView/> },
             { path: "login", element: <AdminLoginView/> },
+            { path: "logout", element: <AdminLogout/> },
         ]
     },
 ])

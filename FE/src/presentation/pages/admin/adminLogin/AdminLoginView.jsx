@@ -29,7 +29,7 @@ export default function AdminLoginView() {
         .then(response => {
             console.log(response.headers.authorization);
             sessionStorage.setItem("token", response.headers.authorization);
-            sessionStorage.setItem("isLogin", true);
+            sessionStorage.setItem("isLoginAdmin", true);
             navigate('/admin');
 
         })

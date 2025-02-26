@@ -35,7 +35,7 @@ export default function ChartView() {
             }}>Coin
             </button>
             <button className="chart-btn" onClick={() => {
-                navigate("/")
+                navigate("/", {state:{path:"news"}})
             }}>News
             </button>
         </div>

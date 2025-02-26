@@ -31,7 +31,7 @@ export default function PostEditView() {
                 }}>Coin
                 </button>
                 <button className="post-btn" onClick={() => {
-                    navigate("/")
+                    navigate("/", {state:{path:"news"}})
                 }}>News
                 </button>
             </div>
