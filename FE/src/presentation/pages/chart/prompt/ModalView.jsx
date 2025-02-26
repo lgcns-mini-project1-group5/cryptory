@@ -170,10 +170,10 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                         throw new Error("존재하지 않는 이슈입니다."); // 강제로 catch()로 이동
                     }
 
-                    setTitle(res.data.title)
-                    setContent(res.data.summaryContent)
-                    setNews1(res.data.newsTitle)
-                    setNews1Link(res.data.source)
+                    setTitle(res.data.results[0].title)
+                    setContent(res.data.results[0].summaryContent)
+                    setNews1(res.data.results[0].newsTitle)
+                    setNews1Link(res.data.results[0].source)
 
                     // 현재 두 번째 뉴스는 임의로 넣어둠
                     // setNews2("이제 '트럼프 트레이드'는 금?…달러·비트코인은 주춤")
