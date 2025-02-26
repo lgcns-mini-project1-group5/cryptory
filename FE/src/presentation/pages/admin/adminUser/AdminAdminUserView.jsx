@@ -92,17 +92,17 @@ export default function AdminAdminUserView() {
     return (
         <div>
             <div className="admin-header">
-                <h3>ADMIN</h3>
+                <h3 style={{ fontWeight: "normal" }}>ADMIN</h3>
                 <button className="admin-add-btn" onClick={() => setShowModal(true)}>관리자 추가</button>
             </div>
             <table className="admin-user-table">
                 <thead>
                     <tr>
-                        <th>User ID</th>
-                        <th>닉네임</th>
-                        <th>Login Type</th>
-                        <th>역할</th>
-                        <th>관리</th>
+                        <th className="user-id">User ID</th>
+                        <th className="nickname">닉네임</th>
+                        <th className="login-type">Login Type</th>
+                        <th className="role">역할</th>
+                        <th className="manage">관리</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -126,19 +126,19 @@ export default function AdminAdminUserView() {
             </table>
 
             {/* 페이지네이션 */}
-            <div className="admin-pagination">
-                <button 
+            <div className="pagination">
+                <button className="prev"
                     onClick={() => setCurrentPage(currentPage - 1)}
                     disabled={currentPage === 1}
                 >
-                    이전
+                    〈 이전
                 </button>
                 <span>{currentPage} / {totalPages}</span>
-                <button 
+                <button className="next"
                     onClick={() => setCurrentPage(currentPage + 1)}
                     disabled={currentPage === totalPages}
                 >
-                    다음
+                    다음 〉
                 </button>
             </div>
 
@@ -146,7 +146,7 @@ export default function AdminAdminUserView() {
             {showModal && (
                 <div className="admin-add-modal-overlay">
                     <div className="admin-add-modal-content">
-                        <h3>관리자 추가</h3>
+                        <h3 style={{fontSize:"30px", fontWeight:"lighter"}}>관리자 추가</h3>
                         <div className="admin-add-modal-input-lines">
                             <div className="admin-add-modal-input-line">
                                 <label>Nickname</label>

@@ -51,8 +51,8 @@ body {
 
 /* 📌 대시보드 컨테이너 */
 .dashboard-container {
+    margin-left:0;
     max-width: 1200px;
-    margin: auto;
 }
 
 /* 📌 Overview 카드 스타일 */

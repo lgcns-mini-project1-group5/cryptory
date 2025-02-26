@@ -1,6 +1,6 @@
 /* 표 */
 .admin-user-table {
-    width: 100%;
+    width: 1000px;
     border-collapse: collapse;
     font-size: 12px;
     color: #666E7D;
@@ -14,7 +14,7 @@
 
 .admin-user-table th {
     background-color: #e7e7e7;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .admin-user-table tr:nth-child(even) {
@@ -25,13 +25,37 @@
     background-color: #fff;
 }
 
+/* 너비 조정 */
+.user-id {
+    width: 15%; /* ID 공간 줄이기 */
+}
+
+.nickname {
+    width: 30%; /* 닉네임 공간 늘리기 */
+}
+
+.login-type {
+    width: 15%; /* 로그인 타입 공간 줄이기 */
+}
+
+.role {
+    width: 15%;
+}
+
+.manage {
+    width: 11%;
+}
+
 /* 차단 버튼 */
 .admin-user-action-btn {
+    width: 100%;
     padding: 6px 12px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
+    background-color: #FFFFFF;
+    border: 1px solid #CFD1D1;
 }
 
 .admin-user-action-btn.block {
@@ -74,11 +98,23 @@
 
 /* 관리자 탭 */
 /* 관리자 페이지 기본 스타일 */
-.admin-header {
+.coin-header {
+    width: 1000px;
+    margin-left:-220px;
+    margin-top: 50px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+}
+
+.admin-header {
+    width: 1000px;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* 관리자 추가 버튼 */
@@ -115,7 +151,7 @@
 
 .admin-add-modal-content {
     background: white;
-    padding: 20px;
+    padding: 50px;
     border-radius: 8px;
     width: 371px;
     text-align: center;
@@ -135,10 +171,14 @@
     align-items: center;
 }
 
+.admin-add-modal-input-date {
+    width: 50%;
+}
+
 .admin-add-modal-content input {
     width: 167px;
     height: 30px;
-    padding: 8px;
+    padding: 3px 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -146,16 +186,19 @@
 
 .admin-add-modal-buttons {
     display: flex;
-    justify-content: space-evenly;
-    margin-top: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .admin-add-cancel-btn, .admin-add-confirm-btn {
+    width: 120px;
     padding: 8px 12px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
     font-size: 14px;
+    margin: 10px;
 }
 
 .admin-add-cancel-btn {
@@ -174,4 +217,37 @@
 
 .admin-add-confirm-btn:hover {
     background-color: #45a049;
+}
+
+/* 페이지네이션 컨테이너 스타일 */
+.pagination {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    align-items: center;
+    gap: 10px; /* 버튼과 숫자 간격 */
+    margin-top: 20px;
+}
+
+/* 이전 및 다음 버튼 스타일 */
+.pagination .prev,
+.pagination .next {
+    padding: 8px 12px;
+    border: 1px solid #F8F8F8;
+    background-color: #F8F8F8;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    transition: background 0.3s ease;
+}
+
+.pagination .prev:hover,
+.pagination .next:hover {
+    background-color: #f0f0f0;
+}
+
+/* 현재 페이지 숫자 스타일 */
+.pagination span {
+    font-weight: bold;
+    font-size: 16px;
 }

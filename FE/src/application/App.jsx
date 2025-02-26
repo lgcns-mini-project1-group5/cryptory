@@ -91,7 +91,7 @@ const AdminLayout = () => {
 
     const websiteForm = {
         width: 1920,
-        height: 1080,
+        height: 1260,
         backgroundColor: '#F8F8F8',
         margin: 'auto',
     }

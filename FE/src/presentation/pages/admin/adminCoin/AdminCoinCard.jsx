@@ -12,9 +12,10 @@ export default function AdminCoinCard({cryptoId, name, symbol, logoUrl, isDispla
         >
             
             <img src={logoUrl} alt={name} className="admin-coin-logo" />
-            <span className="admin-coin-name">{name}</span>
-            <small className="admin-coin-symbol">{symbol}</small>
-
+            <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+                <span className="admin-coin-name">{name}</span>
+                <small className="admin-coin-symbol">{symbol}</small>
+            </div>
         </div>
     )
 }
