@@ -45,7 +45,7 @@ public class AdminIssueController {
             @RequestParam(defaultValue = "5") int size) {
 
         try {
-            Page<IssueListResponseDto> issues = adminIssueService.getIssueList(coinId, page, size);
+            List<IssueListResponseDto> issues = adminIssueService.getIssueList(coinId, page, size);
             return ResponseEntity.ok(issues);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버에서 오류가 발생했습니다.");

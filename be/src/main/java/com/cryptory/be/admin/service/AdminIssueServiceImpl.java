@@ -53,12 +53,14 @@ public class AdminIssueServiceImpl implements AdminIssueService {
     private final UserRepository userRepository;
 
     @Override
-    public Page<IssueListResponseDto> getIssueList(Long coinId, int page, int size) {
+    public List<IssueListResponseDto> getIssueList(Long coinId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
         // 특정 코인에 대한 이슈만 조회, 삭제되지 않은 ISSUE만 조회
         Page<Issue> issues = issueRepository.findByCoinIdAndIsDeletedFalse(coinId, pageable);
-        return issues.map(this::convertToIssueListResponseDto);
+        issues.forEach(issue -> log.info("issue {}", issue));
+
+        return issues.stream().map(issue -> new IssueListResponseDto(issue.getId(), issue.getDate(), issue.getTitle(), issue.getUser().getNickname(), issue.getCreatedAt(), issue.getUpdatedAt())).toList();
     }
 
     @Transactional
@@ -66,16 +68,18 @@ public class AdminIssueServiceImpl implements AdminIssueService {
     public Long createIssue(Long coinId, IssueCreateRequestDto requestDto) {
         Coin coin = coinRepository.findById(coinId)
                 .orElseThrow(() -> new NoSuchElementException("해당 코인을 찾을 수 없습니다. ID: " + coinId));
-
+        log.info("coin {}", coin);
         String dateStr = requestDto.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "%";
 
         // date와 coinId로 chart 조회
         Optional<Chart> chart = chartRepository.findByDateAndCoinId(dateStr, coinId);
                 //.orElseThrow(() -> new NoSuchElementException("해당 날짜와 코인에 대한 차트를 찾을 수 없습니다. Date: " + requestDto.getDate() + ", Coin ID: " + coinId));
-
+        log.info("chart {}", chart);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userRepository.findByUserId(authentication.getName());
+        log.info("authentication {}", authentication);
+        log.info("user {}", user);
         // 캐스팅
         //log.info("principalDetails {}", principalDetails);
         //Optional<User> user = userRepository.findFirstByRole(Role.ADMIN);
@@ -94,6 +98,7 @@ public class AdminIssueServiceImpl implements AdminIssueService {
                 .isDeleted(false)
                 .build();
 
+        log.info("newIssue {}", newIssue);
 
         // issueRepository 생성 필요, 현재 기준 없음
         return issueRepository.save(newIssue).getId();

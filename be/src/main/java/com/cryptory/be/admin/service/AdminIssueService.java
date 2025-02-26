@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface AdminIssueService {
     // 이슈 목록 조회
-    Page<IssueListResponseDto> getIssueList(Long coinId, int page, int size);
+    List<IssueListResponseDto> getIssueList(Long coinId, int page, int size);
 
     // 이슈 생성
     Long createIssue(Long coinId, IssueCreateRequestDto requestDto);

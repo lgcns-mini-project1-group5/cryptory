@@ -53,7 +53,7 @@ export default function AdminCoinManagementView() {
             .get(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/coins/${coinId}/issues`, {headers: {"Authorization": `${sessionStorage.getItem("token")}`}})
             .then(res => {
                 console.log("코인 이슈 목록 조회:", res.data);
-                const issues = res.data.results[0]?.content || [];
+                const issues = res.data;
                 console.log(issues);
 
                 let tempData = [];
@@ -64,8 +64,7 @@ export default function AdminCoinManagementView() {
                         title: issue.title,
                         createdBy: issue.createdBy,
                         createdAt: issue.createdAt,
-                        updatedAt: issue.updatedAt,
-                        isDeleted: issue.isDeleted
+                        updatedAt: issue.updatedAt
                     });
                 });
                 setIssueData(tempData);
@@ -152,7 +151,7 @@ export default function AdminCoinManagementView() {
                 });
                 setPostData(tempData);
             });
-    }, [])
+    }, [postData, issueData])
 
     /* 코인 노출 여부 변경 함수 */
     const handleToggleDisplayCoin = (coinId, isCurrentlyDisplayed) => {
