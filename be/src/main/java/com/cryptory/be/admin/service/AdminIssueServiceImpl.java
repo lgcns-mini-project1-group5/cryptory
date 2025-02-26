@@ -9,9 +9,12 @@ import com.cryptory.be.issue.domain.Issue;
 import com.cryptory.be.issue.domain.IssueComment;
 import com.cryptory.be.issue.repository.IssueCommentRepository;
 import com.cryptory.be.issue.repository.IssueRepository;
+import com.cryptory.be.user.domain.Role;
 import com.cryptory.be.user.domain.User;
 import com.cryptory.be.user.dto.PrincipalUserDetails;
+import com.cryptory.be.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +24,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * packageName    : com.cryptory.be.admin.service
@@ -35,6 +40,7 @@ import java.util.NoSuchElementException;
  * -----------------------------------------------------------
  * 2/22/25         조영상        최초 생성
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -44,6 +50,7 @@ public class AdminIssueServiceImpl implements AdminIssueService {
     private final IssueRepository issueRepository;
     private final IssueCommentRepository issueCommentRepository;
     private final ChartRepository chartRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Page<IssueListResponseDto> getIssueList(Long coinId, int page, int size, String sort) {
@@ -61,15 +68,19 @@ public class AdminIssueServiceImpl implements AdminIssueService {
         Coin coin = coinRepository.findById(coinId)
                 .orElseThrow(() -> new NoSuchElementException("해당 코인을 찾을 수 없습니다. ID: " + coinId));
 
+        String dateStr = requestDto.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "%";
+
         // date와 coinId로 chart 조회
-        Chart chart = chartRepository.findByDateAndCoinId(requestDto.getDate().toString(), coinId.longValue())
+        Chart chart = chartRepository.findByDateAndCoinId(dateStr, coinId)
                 .orElseThrow(() -> new NoSuchElementException("해당 날짜와 코인에 대한 차트를 찾을 수 없습니다. Date: " + requestDto.getDate() + ", Coin ID: " + coinId));
 
-        // 일반 로그인으로 로그인한 관리자 객체 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PrincipalUserDetails principalDetails = (PrincipalUserDetails) authentication.getPrincipal(); // PrincipalUserDetails로 캐스팅
-        User adminUser = principalDetails.getUser();
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> user = userRepository.findByUserId(authentication.getName());
+        // 캐스팅
+        //log.info("principalDetails {}", principalDetails);
+        //Optional<User> user = userRepository.findFirstByRole(Role.ADMIN);
+        //user.orElseGet(() -> new User("admin_2", "1234", "admin_2"))
         Issue newIssue = Issue.builder()
                 .date(requestDto.getDate())
                 .title(requestDto.getTitle())
@@ -77,12 +88,13 @@ public class AdminIssueServiceImpl implements AdminIssueService {
                 .newsTitle(requestDto.getNewsTitle())
                 .source(requestDto.getSource())
                 .type("MANUAL") // 관리자가 생성 이슈니까
-                .user(adminUser) // 작성자 설정 (관리자)
+                .user(user.get()) // 작성자 설정 (관리자)
                 .coin(coin)      // coin 설정
                 .chart(chart) // chart 설정
                 .requestCount(0L)
                 .isDeleted(false)
                 .build();
+
 
         // issueRepository 생성 필요, 현재 기준 없음
         return issueRepository.save(newIssue).getId();
@@ -132,6 +144,7 @@ public class AdminIssueServiceImpl implements AdminIssueService {
                 .orElseThrow(() -> new NoSuchElementException("해당 토론방 댓글을 찾을 수 없습니다. ID: " + commentId));
         comment.delete();
     }
+
 
     // Issue -> IssueListResponseDto 변환
     private IssueListResponseDto convertToIssueListResponseDto(Issue issue) {

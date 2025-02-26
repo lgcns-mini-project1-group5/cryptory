@@ -36,15 +36,27 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        String userId = obtainUsername(request);
-        String password = obtainPassword(request);
+        try {
+            // 요청 본문을 AdminLoginRequest 객체로 파싱
+            AdminLoginRequest loginRequest = objectMapper.readValue(request.getInputStream(), AdminLoginRequest.class);
 
-        log.info("userId: {}, password: {}", userId, password);
+            String userId = loginRequest.getUserId();
+            String password = loginRequest.getPassword();
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userId, password, null);
 
-        return getAuthenticationManager().authenticate(authenticationToken);
+            log.info("userId: {}, password: {}", userId, password); //여기 로그가 null로 출력되는지 확인
+
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(userId, password, null);
+
+            return getAuthenticationManager().authenticate(authenticationToken);
+
+        } catch (IOException e) {
+            // JSON 파싱 오류 처리.  로그를 남기고, 예외를 다시 던지거나, 적절한 응답을 반환.
+            log.error("Error parsing login request body: {}", e.getMessage());
+            throw new RuntimeException("Failed to parse login request body", e); // 또는 Bad Request 응답
+        }
+
 
     }
 
