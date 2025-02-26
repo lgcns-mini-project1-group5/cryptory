@@ -76,10 +76,7 @@ public class AdminIssueServiceImpl implements AdminIssueService {
 
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //authentication.getPrincipal();
-        log.info("authentication {} ",authentication);
-        PrincipalUserDetails principalDetails = (PrincipalUserDetails) authentication.getPrincipal();
-        Optional<User> user = userRepository.findByUserId(principalDetails.getUsername());
+        Optional<User> user = userRepository.findByUserId(authentication.getName());
         // 캐스팅
         //log.info("principalDetails {}", principalDetails);
         //Optional<User> user = userRepository.findFirstByRole(Role.ADMIN);
