@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import "../../../styles/prompt-style.css"
 import CommentCell from "../post/CommentCell.jsx";
 import {useNavigate} from "react-router-dom";
@@ -6,7 +6,7 @@ import axios from "axios";
 import InputCell from "./InputCell.jsx";
 import ResponseCell from "./ResponseCell.jsx";
 
-export default function ModalView({ onClose, coinId, issueId, icon, name, symbol, price, change, issueDate, isNew }) {
+export default function ModalView({ onClose, coinId, issueId, icon, name, symbol, price, change, issueDate }) {
 
     const rest_api_host = import.meta.env.VITE_REST_API_HOST;
     const rest_api_port = import.meta.env.VITE_REST_API_PORT;
@@ -15,8 +15,13 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
     const isLogin = sessionStorage.getItem("isLogin");
     const navigate = useNavigate();
 
+    const [issueTime, setIssueTime] = useState("");
+
     const [type, setType] = useState("ChatGPT")
     const [prompt, setPrompt] = useState("")
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isResponseLoading, setIsResponseLoading] = useState(false);
 
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
@@ -29,17 +34,110 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
 
     const [responseList, setResponseList] = useState([])
 
+    const [displayedTitle, setDisplayedTitle] = useState("")
+    const [displayedContent, setDisplayedContent] = useState("")
+
+    const [originalResponse, setOriginResponse] = useState("")
+    const [displayedResponse, setDisplayedResponse] = useState("")
+    const [isDisplayedResponse, setIsDisplayedResponse] = useState(false)
+    const [displayInput, setDisplayInput] = useState("")
+    const [isDisplayedInput, setIsDisplayedInput] = useState("")
+
+    const [displayedNews1, setDisplayedNews1] = useState("")
+    const [displayedNews2, setDisplayedNews2] = useState("")
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (prompt.trim()) {
-            alert(`새 댓글: ${prompt}`);
             setPrompt(""); // 입력 후 초기화
         }
     };
 
+    const indexRef = useRef(0);
+    const intervalRef = useRef(null);
+
+    const indexRef2 = useRef(0);
+    const intervalRef2 = useRef(null);
+
+    const indexRef3 = useRef(0);
+    const intervalRef3 = useRef(null);
+
     useEffect(() => {
+        if (!title) return;
+
+        setDisplayedTitle(""); // 초기화
+        indexRef.current = 0;
+
+        intervalRef.current = setInterval(() => {
+            if (indexRef.current < title.length) {
+                setDisplayedTitle(title.substring(0, indexRef.current + 1)); // ✅ 부분 문자열 사용
+                indexRef.current += 1;
+            } else {
+                clearInterval(intervalRef.current);
+            }
+        }, 40); // 50ms마다 한 글자씩 추가
+
+        return () => clearInterval(intervalRef.current);
+    }, [title]);
+
+    useEffect(() => {
+        if (!content || displayedTitle.length !== title.length) return;
+
+        setDisplayedContent("")
+        indexRef2.current = 0;
+
+        intervalRef2.current = setInterval(() => {
+            if (indexRef2.current < content.length) {
+                setDisplayedContent(content.substring(0, indexRef2.current + 1)); // ✅ 부분 문자열 사용
+                indexRef2.current += 1;
+            } else {
+                clearInterval(intervalRef2.current);
+                setDisplayedNews1(news1);
+                setDisplayedNews2(news2);
+            }
+        }, 30);
+
+        return () => clearInterval(intervalRef2.current);
+    }, [content, displayedTitle]);
+
+    useEffect(() => {
+        if (!originalResponse) return;
+
+        setDisplayedResponse(""); // 초기화
+        indexRef3.current = 0;
+
+        intervalRef3.current = setInterval(() => {
+            if (indexRef3.current < originalResponse.length) {
+                setDisplayedResponse(originalResponse.substring(0, indexRef3.current + 1)); // ✅ 부분 문자열 사용
+                indexRef3.current += 1;
+            } else {
+                clearInterval(intervalRef3.current);
+                setResponseList([...responseList, { "input": displayInput, "response":originalResponse }]);
+                setIsDisplayedResponse(false);
+                setIsDisplayedInput(false);
+            }
+        }, 30); // 50ms마다 한 글자씩 추가
+        console.log(responseList);
+        return () => clearInterval(intervalRef3.current);
+    }, [originalResponse]);
+
+    useEffect(() => {
+        if (issueDate.includes("-")) {
+            const tempDate = new Date(issueDate);
+            const formattedDate = tempDate.toLocaleDateString("ko-KR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            });
+            setIssueTime(formattedDate);
+        } else {
+            setIssueTime(issueDate);
+        }
+
 
         if (issueId === "new") {
+            setIsLoading(true);
             axios({
                 method: "POST",
                 url: `http://${rest_api_host}:${gpt_api_port}/api/v1/issue`,
@@ -50,16 +148,17 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                 headers: { "Content-Type": "application/json"}
             })
                 .then(res => {
+                    setIsLoading(false);
                     console.log(res)
                     setTitle(res.data.title)
                     setContent(res.data.content)
                     setNews1(res.data.news1_title)
                     setNews1Link(res.data.news1_link)
-                    setNews2(res.data.news2_title)
-                    setNews2Link(res.data.news2_link)
+                    // setNews2(res.data.news2_title)
+                    // setNews2Link(res.data.news2_link)
                 })
                 .catch((err) => {
-
+                    setIsLoading(false);
                 })
         }
         else {
@@ -70,25 +169,18 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                     if (res.data.status.code === 404) {
                         throw new Error("존재하지 않는 이슈입니다."); // 강제로 catch()로 이동
                     }
-                    
+
                     setTitle(res.data.title)
                     setContent(res.data.summaryContent)
                     setNews1(res.data.newsTitle)
                     setNews1Link(res.data.source)
-                    // setTitle("트럼프 대통령 당선, 비트코인 가격 상승 촉발")
-                    // setContent("도널드 트럼프 전 미국 대통령의 당선이 공식 인증된 1월 6일, 비트코인 " +
-                    //     "가격은 10만 달러 선을 재돌파하며 큰 폭의 상승을 보였습니다. 트럼프 " +
-                    //     "당선인은 선거 기간 동안 미국을 '암호화폐의 수도'로 만들겠다는 공약을 " +
-                    //     "내세웠으며, 이러한 친암호화폐 정책 기대감이 투자자들의 심리를 " +
-                    //     "자극했습니다. 그러나 취임 이후 구체적인 정책 부재와 경제 불확실성으로 인해 비트코인 가격은 하락세로 전환되어, 2월 18일 기준 9만5,507달러로 최고점 대비 14% 하락하였습니다.")
-                    // setNews1("'트럼프 당선' 공식 인증에 비트코인 상승…10만달러선 탈환")
-                    // setNews1Link("https://www.naver.com")
 
                     // 현재 두 번째 뉴스는 임의로 넣어둠
-                    setNews2("이제 '트럼프 트레이드'는 금?…달러·비트코인은 주춤")
-                    setNews2Link("https://www.naver.com")
+                    // setNews2("이제 '트럼프 트레이드'는 금?…달러·비트코인은 주춤")
+                    // setNews2Link("https://www.naver.com")
                 })
                 .catch(err => {
+                    console.log("error")
                     setTitle("트럼프 대통령 당선, 비트코인 가격 상승 촉발")
                     setContent("도널드 트럼프 전 미국 대통령의 당선이 공식 인증된 1월 6일, 비트코인 " +
                         "가격은 10만 달러 선을 재돌파하며 큰 폭의 상승을 보였습니다. 트럼프 " +
@@ -97,8 +189,8 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                         "자극했습니다. 그러나 취임 이후 구체적인 정책 부재와 경제 불확실성으로 인해 비트코인 가격은 하락세로 전환되어, 2월 18일 기준 9만5,507달러로 최고점 대비 14% 하락하였습니다.")
                     setNews1("'트럼프 당선' 공식 인증에 비트코인 상승…10만달러선 탈환")
                     setNews1Link("https://www.naver.com")
-                    setNews2("이제 '트럼프 트레이드'는 금?…달러·비트코인은 주춤")
-                    setNews2Link("https://www.naver.com")
+                    // setNews2("이제 '트럼프 트레이드'는 금?…달러·비트코인은 주춤")
+                    // setNews2Link("https://www.naver.com")
                 });
         }
     }, []);
@@ -187,6 +279,19 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
     }
 
     const getGPTResponse = () => {
+        setIsResponseLoading(true);
+
+        let tempRes = ""
+        if (responseList.length > 0) {
+            responseList.map((item) => {
+                tempRes += "user query: "
+                tempRes += item.input
+                tempRes += "\nResponse: "
+                tempRes += item.response
+                tempRes += "\n"
+            })
+        }
+
         axios({
             method: "POST",
             url: `http://${rest_api_host}:${gpt_api_port}/api/v1/prompt`,
@@ -194,25 +299,35 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                 "name": name,
                 "date": issueDate,
                 "title": title,
-                "content": content,
+                "content": content + tempRes,
                 "prompt": prompt,
                 "skip": "search"
             },
             headers: { "Content-Type": "application/json"}
         })
         .then(res => {
-            console.log(res.data.content)
-            setResponseList([...responseList, {"input": prompt, "response": res.data.content}])
+            setDisplayInput(prompt)
+            setOriginResponse(res.data.content);
+            setIsResponseLoading(false);
+            setIsDisplayedInput(true)
+            setIsDisplayedResponse(true)
             setPrompt("")
         })
         .catch((err) => {
-
+            setIsResponseLoading(false);
         })
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            getGPTResponse();
+        }
+    };
+
     return (
         <div className="modal-overlay">
-            <div className="modal-content">
+            <div
+                className="modal-modal-content">
                 <button className="close-btn" onClick={onClose}/>
                 <div style={{display: "flex"}}>
                     <div className="user-info-section">
@@ -236,7 +351,7 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                         </p>
                     </div>
                 </div>
-                <p style={{marginTop: -20, marginLeft:10, color:"#6C757D", fontSize:18}}>{issueDate}</p>
+                <p style={{marginTop: -20, marginLeft:10, color:"#6C757D", fontSize:18}}>{issueTime}</p>
 
                 {(type === "ChatGPT") && <>
                     {(issueId !== "new") && <div className="prompt-nav">
@@ -247,18 +362,24 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                         }}>토론방
                         </button>
                     </div>}
+
+                    {(isLoading) && <div className="loading-container">
+                        <div className="spinner"></div>
+                        <p>GPT 응답을 기다리는 중...</p>
+                    </div>}
+
                     <div className="prompt-section">
                         <div className="news-section">
-                            <h2 className="prompt-news-title">{title}</h2>
-                            <p className="prompt-news-content">{content}</p>
+                            <h2 className="prompt-news-title">{displayedTitle}</h2>
+                            <p className="prompt-news-content">{displayedContent}</p>
                         </div>
                         <div className="chat-messages">
-                            {(news1.length > 0) && <button className="chat-message" onClick={() => {
+                            {(displayedNews1.length > 0) && <button className="chat-message" onClick={() => {
                                 window.open(news1Link)
-                            }}>{news1}</button>}
-                            {(news2.length > 0) && <button className="chat-message" onClick={() => {
+                            }}>{displayedNews1}</button>}
+                            {(displayedNews2.length > 0) && <button className="chat-message" onClick={() => {
                                 window.open(news2Link)
-                            }}>{news2}</button>}
+                            }}>{displayedNews2}</button>}
                         </div>
                     </div>
 
@@ -269,6 +390,19 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                         </>)})}
                     </div>}
 
+                    {(isDisplayedInput) && <div className="prompt-section">
+                        <InputCell content={displayInput} />
+                    </div>}
+
+                    {(isDisplayedResponse) && <div className="prompt-section">
+                        <ResponseCell content={displayedResponse} />
+                    </div>}
+
+                    {(isResponseLoading) && <div className="loading-container">
+                        <div className="spinner"></div>
+                        <p>GPT 응답을 기다리는 중...</p>
+                    </div>}
+
                     {(isLogin === null) && <div className="comment-form">
                         <p className="un-login-prompt"><a className="un-login-prompt-toLogin" onClick={() => {navigate("/login")}}>로그인</a> 후 이용할 수 있습니다</p>
                     </div>}
@@ -277,6 +411,7 @@ export default function ModalView({ onClose, coinId, issueId, icon, name, symbol
                             <textarea
                                 className="comment-input"
                                 placeholder="궁금한 내용을 입력하세요!"
+                                onKeyDown={handleKeyDown}
                                 value={prompt}
                                 onChange={(e) => setPrompt(e.target.value)}/>
                         <button type="submit" className="gpt-send-btn" onClick={() => {getGPTResponse()}}/>

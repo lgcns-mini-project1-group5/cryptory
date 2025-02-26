@@ -17,6 +17,8 @@ export default function ChartView() {
     const [issueId, setIssueId] = useState(0);
     const [issueDate, setIssueDate] = useState("2025년 1월 6일");
     const [modalOpen, setModalOpen] = useState(false);
+    const [issueChange, setIssueChange] = useState(0);
+    const [issuePrice, setIssuePrice] = useState(0);
 
     const navigate = useNavigate();
 
@@ -67,7 +69,11 @@ export default function ChartView() {
         </header>
 
         <CandleChartCell coinId={coinId} modalOpenFunc={(e) => {
-            setIssueId(e);
+            console.log(e)
+            setIssueId(e.issueId);
+            setIssueDate(e.date);
+            setIssuePrice(e.closePrice)
+            setIssueChange((e.openPrice - e.closePrice) / e.openPrice * 100);
             setModalOpen(true);
         }}/>
 
@@ -93,6 +99,6 @@ export default function ChartView() {
             <PostListView coinId={coinId} name={name} symbol={symbol} icon={icon} price={price} change={change} changePrice={changePrice}/>
         </>}
 
-        {modalOpen && <ModalView onClose={() => {setModalOpen(false)}} coinId={coinId} issueId={issueId} icon={icon} name={name} symbol={symbol} price={price} change={change} issueDate={issueDate}/>}
+        {modalOpen && <ModalView onClose={() => {setModalOpen(false)}} coinId={coinId} issueId={issueId} icon={icon} name={name} symbol={symbol} price={issuePrice} change={issueChange} issueDate={issueDate}/>}
     </div>)
 }
