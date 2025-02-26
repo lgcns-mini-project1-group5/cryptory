@@ -1,6 +1,8 @@
 package com.cryptory.be.admin.service;
 
-import com.cryptory.be.admin.dto.dashboard.DashboardStatsResponseDto;
+import com.cryptory.be.admin.dto.dashboard.AdminDashboardResponseDTO;
+
+import java.time.LocalDate;
 
 /**
  * packageName    : com.cryptory.be.admin.service
@@ -14,5 +16,5 @@ import com.cryptory.be.admin.dto.dashboard.DashboardStatsResponseDto;
  * 2/22/25         조영상        최초 생성
  */
 public interface AdminDashboardService {
-    DashboardStatsResponseDto getDashboardStats(String period, String startDate, String endDate);
+    AdminDashboardResponseDTO getDashboardStatistics(LocalDate startDate, LocalDate endDate);
 }
