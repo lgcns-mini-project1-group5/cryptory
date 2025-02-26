@@ -28,4 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // role이 "ADMIN"인 User 조회 (페이징)
     Page<User> findByRole(Role role, Pageable pageable);
+
+    Optional<User> findFirstByRole(Role role);
 }

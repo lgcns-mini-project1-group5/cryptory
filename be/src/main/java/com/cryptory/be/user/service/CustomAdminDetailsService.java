@@ -22,6 +22,7 @@ public class CustomAdminDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("CustomAdminDetailsService.loadUserByUsername: {}", username);
         log.info("userId: {}", username);
 
         User admin = userRepository.findByUserId(username)
@@ -30,11 +31,11 @@ public class CustomAdminDetailsService implements UserDetailsService {
         log.info("adminId: {}, adminPassword: {}", admin.getUserId(), admin.getPassword());
 
         if (admin.getRole() != Role.ADMIN) {
-            log.error("Not Admin");
+            log.error("User is not an Admin: {}", username);
             throw new UsernameNotFoundException("Not Admin");
 
         }
-
+        log.info("Returning PrincipalUserDetails for user: {}", username); // 반환 타입 로그
         return new PrincipalUserDetails(admin);
     }
 }

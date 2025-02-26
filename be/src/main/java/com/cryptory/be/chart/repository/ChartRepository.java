@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +14,9 @@ import java.util.Optional;
 public interface ChartRepository extends JpaRepository<Chart, Long> {
     List<Chart> findAllByCoinId(Long coinId);
 
-    Optional<Chart> findByDateAndCoinId(String date, Long coinId);
+    //Optional<Chart> findByDateAndCoinId(String date, Long coinId);
 
-    @Query("SELECT c FROM Chart c WHERE SUBSTRING(c.date, 1, 10) = :dateString AND c.coin.id = :coinId")
-    Optional<Chart> findByDateSubstringAndCoinId(@Param("dateString") String dateString, @Param("coinId") Long coinId);
+    @Query("SELECT c FROM Chart c WHERE c.date LIKE :dateStr AND c.coin.id = :coinId")
+    Optional<Chart> findByDateAndCoinId(@Param("dateStr") String dateStr, @Param("coinId") Long coinId);
 
 }

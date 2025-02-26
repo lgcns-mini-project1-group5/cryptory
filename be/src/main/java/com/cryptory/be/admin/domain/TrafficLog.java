@@ -49,11 +49,11 @@ public class TrafficLog {
 
     private LocalDate date; // 통계 기준 날짜
 
-    private Long pageViews;
+    private Long pageViews = 0L;
 
-    private Long users; // 회원 + 비회원
+    private Long users = 0L; // 회원 + 비회원
 
-    private Long apiCalls;
+    private Long apiCalls = 0L;
 
     @CreatedDate
     private LocalDateTime createdAt;

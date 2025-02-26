@@ -1,7 +1,9 @@
 package com.cryptory.be.coin.domain;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 public enum CoinSymbolEnum {
 
@@ -178,7 +180,14 @@ public enum CoinSymbolEnum {
             return CoinSymbolEnum.INCH;  // KRW-1INCH인 경우만 INCH로 매핑
         }
 
-        return CoinSymbolEnum.valueOf(market.replace("KRW-", ""));
+        try {
+            return CoinSymbolEnum.valueOf(market.replace("KRW-", ""));
+        } catch (IllegalArgumentException e) {
+            // 존재하지 않는 코인인 경우 우선 BTC 매핑(계속 최신화가 돼서 새로운 코인이 추가될 수 있음)
+            log.error("존재하지 않는 코인: {}", market);
+            return CoinSymbolEnum.BTC;
+        }
+
     }
 
     public CoinSymbol toCoinSymbol() {

@@ -45,7 +45,7 @@ public class Issue extends BaseTimeEntity {
     private Long requestCount;
 
     // 삭제 여부
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 
     // 회원ID (Many to One 관계)
     @ManyToOne(fetch = FetchType.LAZY)

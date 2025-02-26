@@ -5,6 +5,8 @@ import com.cryptory.be.admin.service.AdminIssueService;
 import com.cryptory.be.admin.service.AdminPostCommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class AdminIssueController {
 
+    private static final Logger log = LoggerFactory.getLogger(AdminIssueController.class);
     private final AdminIssueService adminIssueService;
     private final AdminPostCommentService adminPostCommentService; // 게시글/댓글 삭제를 위한 서비스
 
@@ -57,6 +60,7 @@ public class AdminIssueController {
             Long newIssueId = adminIssueService.createIssue(coinId, requestDto);
             return ResponseEntity.status(HttpStatus.CREATED).body("생성된 이슈의 ID :" + newIssueId);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }

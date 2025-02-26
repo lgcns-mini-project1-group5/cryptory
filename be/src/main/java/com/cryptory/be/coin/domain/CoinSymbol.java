@@ -17,6 +17,7 @@ public class CoinSymbol {
     private Long id;
 
     private String color;
+    @Column(columnDefinition = "TEXT")
     private String logoUrl;
 
     @Builder
