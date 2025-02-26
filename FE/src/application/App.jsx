@@ -115,6 +115,9 @@ const AdminLayout = () => {
                 });
 
         }
+        else {
+            navigate("/admin/login")
+        }
     }, [sessionStorage.getItem("isLogin")]);
 
     return (<div style={websiteForm}>
@@ -132,16 +135,16 @@ const AdminLayout = () => {
                 {(login) && <div className="user-info">
                     <img src={profile} alt={nickname} className="coin-icon"/>
                     <span className="username" onClick={() => {
-                        navigate("/mypage") // 관리자도 사용자와 동일한 마이페이지 사용?
+                        navigate("/mypage") // 관리자도 사용자와 동일한 마이페이지 사용? 모르겠네요..
                     }}>{nickname}</span>
                     <button className="logout-btn" onClick={() => {
-                        navigate("/kakaologout")
+                        navigate("/admin")
                     }}>Logout
                     </button>
                 </div>}
 
                 {(!login) && <div className="user-info">
-                    <button className="logout-btn" onClick={() => {navigate("/login")}}>Login</button>
+                    <button className="logout-btn" onClick={() => {navigate("/admin/login")}}>Login</button>
                 </div>}
 
             </header>

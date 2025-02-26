@@ -1,7 +1,9 @@
 package com.cryptory.be.admin.domain;
 
 import com.cryptory.be.coin.domain.Coin;
+import com.cryptory.be.user.domain.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,43 +37,29 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "traffic_logs")
-@EntityListeners(AuditingEntityListener.class)
 public class TrafficLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coin_id")
-    private Coin coin;
+    @JoinColumn(name = "user_id")
+    private User user; // null 허용 (비회원 방문)
 
-    private LocalDate date; // 통계 기준 날짜
+    private String ipAddress;
+    private String userAgent;
+    private String path;
+    private LocalDateTime timestamp; // 통계 기준 날짜
 
-    private Long pageViews = 0L;
-
-    private Long users = 0L; // 회원 + 비회원
-
-    private Long apiCalls = 0L;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
 
     @Builder
-    public TrafficLog(Coin coin, LocalDate date, Long pageViews, Long users, Long apiCalls) {
-        this.coin = coin;
-        this.date = date;
-        this.pageViews = pageViews;
-        this.users = users;
-        this.apiCalls = apiCalls;
-    }
-
-    public void incrementPageViews() {
-        this.pageViews++;
-    }
-
-    public void incrementApiCalls() {
-        this.apiCalls++;
+    public TrafficLog(User user, String ipAddress, String userAgent, String path, LocalDateTime timestamp){
+        this.user = user;
+        this.ipAddress = ipAddress;
+        this.userAgent = userAgent;
+        this.path = path;
+        this.timestamp = timestamp;
     }
 }
