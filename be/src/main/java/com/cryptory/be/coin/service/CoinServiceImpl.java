@@ -122,6 +122,10 @@ public class CoinServiceImpl implements CoinService {
                         .issueId(issue.getId())
                         .chartId(issue.getChart().getId())
                         .date(issue.getChart().getDate())
+                        .openingPrice(issue.getChart().getOpeningPrice())
+                        .highPrice(issue.getChart().getHighPrice())
+                        .lowPrice(issue.getChart().getLowPrice())
+                        .tradePrice(issue.getChart().getTradePrice())
                         .build())
                 .toList();
 
