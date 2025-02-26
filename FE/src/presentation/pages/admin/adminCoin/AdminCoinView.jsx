@@ -95,7 +95,7 @@ export default function AdminCoinView() {
     const handleSearch = (event) => {
         setKeyword(event.target.value);
         const filtered = coins.filter((coin) =>
-            coin.name.includes(event.target.value)
+            coin.koreanName.includes(event.target.value)
         );
         setFilteredCoins(filtered);
     };

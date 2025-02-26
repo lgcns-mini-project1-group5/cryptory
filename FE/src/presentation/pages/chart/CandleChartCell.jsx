@@ -385,6 +385,7 @@ export default function CandleChartCell({ coinId, modalOpenFunc }) {
         axios
             .get(`http://${rest_api_host}:${rest_api_port}/api/v1/coins/${coinId}`, {headers: {"Content-Type": "application/json"}})
             .then(res => {
+                console.log(res.data)
                 let tempChart = []
                 res.data.results[0].chartList.slice().reverse().map((item) => {
                     tempChart.push({"date":item.date.slice(0, 10),"open":item.openingPrice,"close":item.tradePrice,"high":item.highPrice,"low":item.lowPrice});
