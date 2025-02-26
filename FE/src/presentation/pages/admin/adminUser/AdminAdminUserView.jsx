@@ -50,7 +50,7 @@ export default function AdminAdminUserView() {
         const newStatus = !isCurrentlyDenied;
 
         axios.patch(
-            `http://${rest_api_host}:${rest_api_port}/api/v1/admin/admins/${userId}`,
+            `http://${rest_api_host}:${rest_api_port}/api/v1/admin/users/admins/${userId}`,
             { isDenied: newStatus },
             {
                 headers: {
@@ -76,7 +76,7 @@ export default function AdminAdminUserView() {
 
     const handleAddAdmin = async () => {
         try {
-            await axios.post(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/admins`, newAdmin, {
+            await axios.post(`http://${rest_api_host}:${rest_api_port}/api/v1/admin/users/admins`, newAdmin, {
                 headers: {
                     "Authorization": `${sessionStorage.getItem("token")}`,
                     "Content-Type": "application/json"

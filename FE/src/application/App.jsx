@@ -61,7 +61,10 @@ const Layout = () => {
     return (<div style={websiteForm}>
         <banner className="banner">
             <header className="header">
-                <h1 className="title" onClick={() => {navigate("/")}}>Cryptory</h1>
+                <div style={{display: "flex", alignItems: "center", gap:"10px"}}>
+                    <img src="/mark.png" style={{width:"30px"}}></img>
+                    <h1 className="title" onClick={() => {navigate("/")}}>Cryptory</h1>
+                </div>
                 {(login) && <div className="user-info">
                     <img src={profile} alt={nickname} className="coin-icon"/>
                     <span className="username" onClick={() => {
@@ -123,7 +126,10 @@ const AdminLayout = () => {
     return (<div style={websiteForm}>
         <banner className="banner">
             <header className="header">
-                <h1 className="title" onClick={() => {navigate("/admin")}}>Cryptory</h1>
+                <div style={{display: "flex", alignItems: "center", gap:"10px"}}>
+                    <img src="/mark.png" style={{width:"30px"}}></img>
+                    <h1 className="title" onClick={() => {navigate("/admin")}}>Cryptory</h1>
+                </div>
 
                 {/*
                 <div className="user-info">

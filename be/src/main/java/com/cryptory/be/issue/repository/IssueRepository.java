@@ -18,7 +18,7 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
 
 	List<Issue> findAllByCoinId(Long coinId);
 
-	@Query("SELECT i FROM Issue i WHERE i.coinId = :coinId AND i.isDeleted = false")
+	@Query("SELECT i FROM Issue i WHERE i.coin.id = :coinId AND i.isDeleted = false")
 	Page<Issue> findByCoinIdAndIsDeletedFalse(@Param("coinId") Long coinId, Pageable pageable);
 
 	// isDeleted 필드만 업데이트하는 논리적 삭제를 위해 JPQL 사용
