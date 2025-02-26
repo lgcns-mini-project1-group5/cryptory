@@ -234,8 +234,6 @@ const tempData = [
 ]
 
 const tempMarker = [
-    {"date":"2024-12-01","open":138114000,"close":137423250,"high":140109000,"low":135256500, "issueId": 1},
-    {"date":"2024-12-26","open":127179750,"close":126171750,"high":130054500,"low":124848000, "issueId": 2},
 ];
 
 export default function CandleChartCell({ coinId, modalOpenFunc }) {
@@ -395,8 +393,9 @@ export default function CandleChartCell({ coinId, modalOpenFunc }) {
 
 
                 let tempIssue = []
-                res.data.issueList.map((item) => {
 
+                res.data.results[0].issueList.map((item) => {
+                    tempIssue.push({"date":item.date.slice(0, 10), "open":item.openingPrice,"close":item.tradePrice,"high":item.highPrice,"low":item.lowPrice, "issueId": item.issueId})
                 })
                 setMarkers(generateMarker(tempIssue))
                 setMaxLength(tempIssue.length)

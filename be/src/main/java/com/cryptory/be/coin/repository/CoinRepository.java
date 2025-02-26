@@ -19,6 +19,6 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
     @Query("SELECT c FROM Coin c WHERE LOWER(c.koreanName) LIKE :keyword OR LOWER(c.englishName) LIKE :keyword")
     Page<Coin> searchCoins(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT COUNT(i) FROM Issue i WHERE i.isDisplayed = true")
+    @Query("SELECT COUNT(i) FROM Coin i WHERE i.isDisplayed = true")
     long countByIsDisplayedTrue();
 }
