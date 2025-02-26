@@ -63,6 +63,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(setCorsConfigurationSource()))
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // 경로에 admin 붙으면 관리자 페이지라고 가정
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers(whitelist).permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/coins",
@@ -74,8 +76,6 @@ public class SecurityConfig {
                                 "/api/v1/coins/*/posts/*",
                                 "/api/v1/news"
                         ).permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // 경로에 admin 붙으면 관리자 페이지라고 가정
-                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
 
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

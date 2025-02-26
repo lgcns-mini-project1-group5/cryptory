@@ -15,6 +15,7 @@ import com.cryptory.be.user.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -30,6 +31,8 @@ public class InitDataLoad {
     private final UserRepository userRepository;
     private final CoinRepository coinRepository;
     private final ChartRepository chartRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder;
 
     // 애플리케이션 시작 시 자동 db 저장
     @PostConstruct
@@ -91,7 +94,7 @@ public class InitDataLoad {
         }
 
         // 관리자 초기 데이터 저장
-        User admin = User.createAdminUser("admin", "1234", "관리자");
+        User admin = User.createAdminUser("admin", passwordEncoder.encode("1234"), "관리자");
         userRepository.save(admin);
 
     }
