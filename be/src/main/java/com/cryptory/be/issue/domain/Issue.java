@@ -54,7 +54,7 @@ public class Issue extends BaseTimeEntity {
 
     // 하나의 차트에 대해 이슈 한 개만 등록
     @OneToOne(fetch = FetchType.EAGER)  // 즉시 로딩
-    @JoinColumn(name = "chart_id", unique = true, nullable = false)
+    @JoinColumn(name = "chart_id", unique = true, nullable = true)
     private Chart chart;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -71,8 +71,8 @@ public class AdminIssueServiceImpl implements AdminIssueService {
         String dateStr = requestDto.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "%";
 
         // date와 coinId로 chart 조회
-        Chart chart = chartRepository.findByDateAndCoinId(dateStr, coinId)
-                .orElseThrow(() -> new NoSuchElementException("해당 날짜와 코인에 대한 차트를 찾을 수 없습니다. Date: " + requestDto.getDate() + ", Coin ID: " + coinId));
+        Optional<Chart> chart = chartRepository.findByDateAndCoinId(dateStr, coinId);
+                //.orElseThrow(() -> new NoSuchElementException("해당 날짜와 코인에 대한 차트를 찾을 수 없습니다. Date: " + requestDto.getDate() + ", Coin ID: " + coinId));
 
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -90,7 +90,7 @@ public class AdminIssueServiceImpl implements AdminIssueService {
                 .type("MANUAL") // 관리자가 생성 이슈니까
                 .user(user.get()) // 작성자 설정 (관리자)
                 .coin(coin)      // coin 설정
-                .chart(chart) // chart 설정
+                .chart(chart.get()) // chart 설정
                 .requestCount(0L)
                 .isDeleted(false)
                 .build();

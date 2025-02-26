@@ -38,9 +38,6 @@ public class AdminCoinServiceImpl implements AdminCoinService{
         Pageable pageable = PageRequest.of(page, size, sorting);
 
         //Page<Coin> coins = coinRepository.searchCoins("%bit%", pageable);
-        System.out.println(keyword);
-        System.out.println("ssss");
-
         String parsedKeyword;
         if (keyword == null || keyword.trim().isEmpty()) {
             parsedKeyword = null; // 또는 ""
@@ -107,7 +104,7 @@ public class AdminCoinServiceImpl implements AdminCoinService{
     private Sort parseSort(String sort) {
         if(sort == null || sort.isEmpty()){
             // 정렬 조건이 없다면 기본적으로 한국어 이름 오름차순으로 정렬함
-            return Sort.by("koreanName").ascending();
+            return Sort.by("cryptoId").ascending();
         }
 
         String[] parts = sort.split(",");
