@@ -30,10 +30,10 @@
 
 
 ## 시작하기
+- 루트 디렉토리에서 아래 명령어 입력하여 컨테이너 실행
 
 ```docker
-docker-compose down
-docker-compose build --no-cache
+docker-compose pull
 docker-compose up -d
 ```
 
